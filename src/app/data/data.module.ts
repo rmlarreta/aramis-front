@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -9,4 +9,4 @@ import { NgModule } from '@angular/core';
     CommonModule
   ]
 })
-export class SharedModule { }
+export class DataModule { }

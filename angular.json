@@ -87,8 +87,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/scss/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/scss"
+              ]
+            },
             "scripts": []
           }
         }

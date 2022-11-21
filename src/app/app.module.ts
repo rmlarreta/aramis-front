@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
 import { NavigationComponent } from './layout/navigation/navigation.component';
 import { SkeletonComponent } from './layout/skeleton/skeleton.component';
 import { SharedModule } from './shared/shared.module';
@@ -16,7 +17,8 @@ import { SharedModule } from './shared/shared.module';
     AppComponent,
     SkeletonComponent,
     FooterComponent,
-    NavigationComponent
+    NavigationComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
