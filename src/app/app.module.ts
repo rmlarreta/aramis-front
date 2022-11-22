@@ -1,37 +1,18 @@
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
-import { FooterComponent } from './layout/footer/footer.component';
-import { HeaderComponent } from './layout/header/header.component';
-import { NavigationComponent } from './layout/navigation/navigation.component';
-import { SkeletonComponent } from './layout/skeleton/skeleton.component';
-import { SharedModule } from './shared/shared.module';
-
 
 @NgModule({
   declarations: [
-    AppComponent,
-    SkeletonComponent,
-    FooterComponent,
-    NavigationComponent,
-    HeaderComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    CoreModule,
-    SharedModule
+    AppRoutingModule
   ],
-  providers: [
-    {
-      provide: LocationStrategy,
-      useClass: PathLocationStrategy
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

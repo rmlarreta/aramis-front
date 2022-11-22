@@ -87,20 +87,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/scss/styles.scss"
+              "src/styles.css"
             ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/assets/scss"
-              ]
-            },
             "scripts": []
           }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "45ab26f8-3b4a-4c85-8c31-ddacc5a75c2d"
   }
 }
