@@ -1,10 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AboutComponent } from './pages/about/about.component';
-import { HelpComponent } from './pages/help/help.component';
-import { HomeComponent } from './pages/home/home.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { ProfileComponent } from './pages/profile/profile.component';
+import { RouterModule, Routes } from '@angular/router';  
 
 const routes: Routes = [
   {
@@ -14,23 +9,11 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent,
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-  },
-  {
-    path: 'about',
-    component: AboutComponent,
-  },
-  {
-    path: 'help',
-    component: HelpComponent,
-  },
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+  } ,
   {
     path: '**',
-    component: NotFoundComponent,
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
 ];
 
@@ -38,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
