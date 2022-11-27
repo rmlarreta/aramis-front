@@ -8,9 +8,13 @@ const routes: Routes = [
     redirectTo: 'home',
   },
   {
+    path: 'security',
+    loadChildren: () => import('./security/security.module').then(m => m.SecurityModule)
+  },
+  {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
-  } ,
+  },
   {
     path: '**',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
