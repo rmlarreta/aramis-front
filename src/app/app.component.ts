@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { delay, filter } from 'rxjs/operators';  
+import { delay, filter } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -15,7 +15,7 @@ import { delay, filter } from 'rxjs/operators';
 export class AppComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
- 
+
   constructor(private observer: BreakpointObserver, private router: Router) { }
 
   ngAfterViewInit() {
@@ -43,4 +43,5 @@ export class AppComponent {
         }
       });
   }
+
 }
