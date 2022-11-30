@@ -1,19 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './pages/login/login.component';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SecurityRoutingModule } from './security-routing.module'; 
+import { PrimeModule } from '../shared/prime/prime.module';
+import { LoginComponent } from './pages/login/login.component';
+import { SecurityRoutingModule } from './security-routing.module';
+import { ChangepasswordComponent } from './pages/changepassword/changepassword.component';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    ChangepasswordComponent
   ],
   imports: [
     CommonModule ,
     ReactiveFormsModule ,
-    SecurityRoutingModule 
+    SecurityRoutingModule ,
+    PrimeModule
   ]
 })
 export class SecurityModule { }

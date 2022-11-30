@@ -5,12 +5,11 @@ import { first } from 'rxjs';
 import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-
+  selector: 'app-changepassword',
+  templateUrl: './changepassword.component.html',
+  styleUrls: ['./changepassword.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class ChangepasswordComponent implements OnInit {
   loginForm!: FormGroup;
   loading = false;
   submitted = false;
@@ -31,8 +30,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: [null, Validators.required],
-      password: [null, [Validators.required, Validators.minLength(4)]]
+      password: [null, [Validators.required, Validators.minLength(4)]],
+      npassword: [null, [Validators.required, Validators.minLength(4)]]
     });
+
   }
 
   // convenience getter for easy access to form fields
@@ -40,7 +41,11 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    if (this.f['password'].value === this.f['npassword'].value) {
+      this.error = 'La nueva contraseña debe ser diferente a la anterior';
+      this.loading = false;
+      return;
+    }
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
@@ -48,14 +53,14 @@ export class LoginComponent implements OnInit {
 
     this.error = '';
     this.loading = true;
-    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+    this.authenticationService.changepassword(this.f['username'].value, this.f['password'].value, this.f['npassword'].value)
       .pipe(first())
       .subscribe({
         next: (user) => {
           // get return url from route parameters or default to '/' 
           if (user == null) {
             this.loading = false;
-            this.error = 'Verifique los datos ingresados'; 
+            this.error = 'Verifique los datos ingresados';
             return;
           }
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';

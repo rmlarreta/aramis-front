@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -6,6 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SecurityModule } from './security/security.module';
+import { ErrorInterceptor } from './security/service/error-interceptor.service';
+import { JwtInterceptor } from './security/service/jwt-interceptor.service';
 
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
@@ -21,7 +23,9 @@ import { PrimeModule } from './shared/prime/prime.module';
     SecurityModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {
