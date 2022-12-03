@@ -4,8 +4,8 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { delay, filter } from 'rxjs/operators';
-import { User } from './security/model/user.interface';
-import { AuthenticationService } from './security/service/authentication.service';
+import { User } from './security/model/user.interface'; 
+import { AuthenticationService } from './service/security/authentication.service';
 
 @UntilDestroy()
 @Component({
@@ -27,7 +27,7 @@ export class AppComponent {
     this.authenticationService.user.subscribe(x => this.user = x);
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit() { 
     this.observer
       .observe(['(max-width: 800px)'])
       .pipe(delay(1), untilDestroyed(this))

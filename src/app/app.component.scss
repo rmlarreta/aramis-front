@@ -32,8 +32,8 @@ mat-sidenav-container {
 .menu-button {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: start;
   font-size: 1rem;
 
   mat-icon {
@@ -55,6 +55,13 @@ mat-sidenav-container {
 
 .designation {
   margin-top: 2px;
+  font-size: 0.7rem;
+  color: lightgrey;
+}
+
+.user {
+  margin-top: 2px;
+  align-content: flex-start;
   font-size: 0.7rem;
   color: lightgrey;
 }

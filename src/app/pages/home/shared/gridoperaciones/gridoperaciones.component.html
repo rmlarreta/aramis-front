@@ -1,0 +1,33 @@
+<p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left"> 
+        <button pButton pRipple type="button" icon="pi pi-plus"
+            class="p-button-rounded p-button-success p-button-text"
+            (click)="nuevaoperacion()" 
+            >
+        </button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+    </ng-template>
+    <app-tipodropdown></app-tipodropdown>
+</p-toolbar>
+<p-table #dt1 [value]="operaciones" dataKey="id">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>{{operaciones}}</td>
+            <td>{{operaciones}}</td>
+            <td>{{operaciones}}</td>
+            <td>{{operaciones}}</td>
+        </tr>
+    </ng-template>
+</p-table>

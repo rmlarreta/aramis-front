@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './home-routing.module'; 
-
+import { HomeComponent } from './home.component';
+import { PrimeModule } from 'src/app/shared/prime/prime.module';
+import { TipodropdownComponent } from './shared/tipodropdown/tipodropdown.component';
+import { GridoperacionesComponent } from './shared/gridoperaciones/gridoperaciones.component';    
 
 
 @NgModule({
-  declarations: [],
+  declarations: [HomeComponent, TipodropdownComponent, GridoperacionesComponent],
   imports: [
     CommonModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    PrimeModule 
   ]
 })
-export class HomeModule { }
+export class HomeModule {    
+}

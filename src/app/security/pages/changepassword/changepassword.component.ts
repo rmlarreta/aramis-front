@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs';
-import { AuthenticationService } from '../../service/authentication.service';
+import { first } from 'rxjs'; 
+import { AuthenticationService } from 'src/app/service/security/authentication.service';
 
 @Component({
   selector: 'app-changepassword',
