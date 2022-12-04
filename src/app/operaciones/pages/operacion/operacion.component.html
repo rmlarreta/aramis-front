@@ -1,0 +1,70 @@
+<div *ngIf="operacion">
+    {{operacion.cui}}
+    {{operacion.razon}}
+    {{operacion.resp}}
+</div>
+<div *ngIf="operacion">
+    {{operacion.total}}
+    {{operacion.fecha}}
+    {{operacion.tipoDocName}}
+    {{operacion.numero}}
+</div>
+<div *ngIf="operacion">
+    Generar Orden
+    Cobrar
+</div>
+<div *ngIf="operacion">
+    Agregar item
+    Borrar item
+    Editar Items
+    Editar Observaciones
+    Borar Observaciones
+    Nuevas Observaciones
+</div>
+<div class="grid">
+    <div class="col-12 md:col-6 drag-column">
+        <div *ngFor="let product of products">
+            <p-dialog class="product-item" pDraggable="products" (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()"
+            [(visible)]="displaystock" [position]="'top-right'" [modal]="true" [style]="{width: '50vw'}"
+            >
+               
+                <div class="product-list-detail">
+                    <h5 class="mb-2">{{product.descripcion}}</h5>
+                    <i class="pi pi-tag product-category-icon"></i>
+                    <span class="product-category">{{product.rubroName}}</span>
+                </div>
+                <div class="product-list-action">
+                    <h6 class="mb-2">${{product.unitario}}</h6>
+                     
+                </div>
+            </p-dialog>
+        </div>
+    </div>
+    <div class="col-12 md:col-6 drop-column" pDroppable="products" (onDrop)="drop()">
+    <p-table [value]="operacion.detalles">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-detalles>
+            <tr>
+                    <td>{{detalles.id}}</td>
+                    <td>{{detalles.nombre}}</td>
+                    <td>{{detalles.detalles}}</td>
+                    <td>{{detalles.total}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<div class="grid flex-column">
+    <div class="col mb-2">
+        <button pButton pRipple type="button" icon="pi pi-plus" (click)="showStock()" label="Left"
+            styleClass="p-button-warning"></button>
+    </div>
+</div> 

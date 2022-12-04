@@ -5,19 +5,19 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
+    redirectTo: 'operaciones',
   },
   {
     path: 'security',
     loadChildren: () => import('./security/security.module').then(m => m.SecurityModule)
   },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    path: 'operaciones',
+    loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
   {
     path: '**',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
 ];
 

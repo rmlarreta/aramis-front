@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SortEvent } from 'primeng/api';
+import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
 import { UserAuth } from 'src/app/model/userAuth.interface';
+import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
 import { AuthenticationService } from 'src/app/service/security/authentication.service';
-import { BusOperacionesDto } from '../../../../model/busOperacionesDto.interface';
-import { OperacionesService } from '../../../../service/operaciones/operaciones.service';
+
 
 @Component({
   selector: 'app-gridoperaciones',
@@ -12,21 +13,21 @@ import { OperacionesService } from '../../../../service/operaciones/operaciones.
 })
 export class GridoperacionesComponent implements OnInit {
 
-  user?: UserAuth | null; 
-  operaciones!: BusOperacionesDto[] | []; 
+  user?: UserAuth | null;
+  operaciones!: BusOperacionesDto[] | [];
   loading = false;
   first = 0;
   rows = 10;
 
   constructor(
     private authenticationService: AuthenticationService,
-    private operacionesService: OperacionesService 
+    private operacionesService: OperacionesService
   ) {
-    this.authenticationService.user.subscribe(x => this.user = x); 
+    this.authenticationService.user.subscribe(x => this.user = x);
   }
 
   ngOnInit(): void {
-   this.getoperaciones();
+    this.getoperaciones();
   }
 
   async getoperaciones() {
