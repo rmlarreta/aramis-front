@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { User } from 'src/app/security/model/user.interface'; 
+import { UserAuth } from 'src/app/model/userAuth.interface'; 
 import { AuthenticationService } from 'src/app/service/security/authentication.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthenticationService } from 'src/app/service/security/authentication.s
 
 export class HomeComponent{
 
-  user?: User | null;
+  user?: UserAuth | null;
 
   constructor(
     private authenticationService: AuthenticationService

@@ -1,6 +1,6 @@
 import { BusDetallesOperacionesDto } from "./busDetallesOperacionesDto.interface";
 import { BusObservacionesDto } from "./busObservacionesDto.interface";
- 
+
 export interface BusOperacionesDto {
     id: string;
     numero: number | null;
@@ -26,8 +26,8 @@ export interface BusOperacionesDto {
     totalIva10: number | null;
     totalIva21: number | null;
     totalExento: number | null;
-    detalles: BusDetallesOperacionesDto[] | null;
-    observaciones: BusObservacionesDto[];
+    detalles: BusDetallesOperacionesDto[] | [];
+    observaciones: BusObservacionesDto[] | [];
     cuitEmpresa: string;
     razonEmpresa: string;
     domicilioEmpresa: string;
@@ -36,4 +36,3 @@ export interface BusOperacionesDto {
     inicio: Date;
     respoEmpresa: string;
 }
- 

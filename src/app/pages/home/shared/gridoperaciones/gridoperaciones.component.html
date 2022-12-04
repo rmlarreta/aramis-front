@@ -1,33 +1,39 @@
 <p-toolbar styleClass="mb-4 gap-2">
-    <ng-template pTemplate="left"> 
-        <button pButton pRipple type="button" icon="pi pi-plus"
-            class="p-button-rounded p-button-success p-button-text"
-            (click)="nuevaoperacion()" 
-            >
+    <ng-template pTemplate="left">
+        <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success p-button-text"
+            routerLink="nuevaoperacion">
         </button>
-    </ng-template>
-
-    <ng-template pTemplate="right">
-
-        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
     </ng-template>
     <app-tipodropdown></app-tipodropdown>
 </p-toolbar>
-<p-table #dt1 [value]="operaciones" dataKey="id">
+<p-table [value]="operaciones" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10,25,50]">
     <ng-template pTemplate="header">
         <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Quantity</th>
+            <th pSortableColumn="numero" style="width:10%">Numero <p-sortIcon field="numero"></p-sortIcon>
+            </th>
+            <th pSortableColumn="razon" style="width:60%">Cliente <p-sortIcon field="razon"></p-sortIcon>
+            </th>
+            <th pSortableColumn="total" style="width:15%">Total <p-sortIcon field="total"></p-sortIcon>
+            </th>
+            <th pSortableColumn="fecha" style="width:15%">Fecha <p-sortIcon field="fecha"></p-sortIcon>
+            </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-product>
+    <ng-template pTemplate="body" let-operaciones>
         <tr>
-            <td>{{operaciones}}</td>
-            <td>{{operaciones}}</td>
-            <td>{{operaciones}}</td>
-            <td>{{operaciones}}</td>
+            <td>{{operaciones.numero}}</td>
+            <td>{{operaciones.razon}}</td>
+            <td>{{operaciones.total}}</td>
+            <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
         </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"      routerLink="nuevaoperacion"></p-button>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
     </ng-template>
 </p-table>

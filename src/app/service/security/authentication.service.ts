@@ -2,15 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { User } from 'src/app/security/model/user.interface';
+import { UserAuth } from 'src/app/model/userAuth.interface';
 import { environment } from 'src/environments/environment'; 
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthenticationService {
-    private userSubject: BehaviorSubject<User | null>;
-    public user: Observable<User | null>;
+    private userSubject: BehaviorSubject<UserAuth | null>;
+    public user: Observable<UserAuth | null>;
 
     constructor(
         private router: Router,
@@ -25,7 +25,7 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.get<User>(`${environment.baseUrl}/users/authenticate/${username}/${password}`)
+        return this.http.get<UserAuth>(`${environment.baseUrl}/users/authenticate/${username}/${password}`)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
@@ -35,7 +35,7 @@ export class AuthenticationService {
     }
 
     changepassword(username: string, password: string, npassword: string) {
-        return this.http.get<User>(`${environment.baseUrl}/users/changePassword/${username}/${password}/${npassword}`)
+        return this.http.get<UserAuth>(`${environment.baseUrl}/users/changePassword/${username}/${password}/${npassword}`)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));

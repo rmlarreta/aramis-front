@@ -4,7 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { delay, filter } from 'rxjs/operators';
-import { User } from './security/model/user.interface'; 
+import { UserAuth } from './model/userAuth.interface'; 
 import { AuthenticationService } from './service/security/authentication.service';
 
 @UntilDestroy()
@@ -17,7 +17,7 @@ import { AuthenticationService } from './service/security/authentication.service
 export class AppComponent {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
-  user?: User | null;
+  user?: UserAuth | null;
 
   constructor(
     private observer: BreakpointObserver,

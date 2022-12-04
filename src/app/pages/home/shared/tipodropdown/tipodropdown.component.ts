@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BusOperacionTipo } from '../../model/busOperacionTipo.interface';
+import { BusOperacionTipo } from '../../../../model/busOperacionTipo.interface';
 import { OperacionesService } from '../../../../service/operaciones/operaciones.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class TipodropdownComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.operacionesService.tipos  
-      .subscribe(resp => {
+      .subscribe(resp => { 
         this.tipos = resp;
         this.loading = false;
       });
