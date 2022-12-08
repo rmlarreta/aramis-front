@@ -10,6 +10,9 @@ import { PanelModule } from 'primeng/panel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
 import {ToolbarModule} from 'primeng/toolbar';
+import {CardModule} from 'primeng/card';
+import {ToastModule} from 'primeng/toast';
+import {MenuModule} from 'primeng/menu';
 
 @NgModule({
   declarations: [],
@@ -24,7 +27,10 @@ import {ToolbarModule} from 'primeng/toolbar';
     TableModule,
     MultiSelectModule,
     DropdownModule,
-    ToolbarModule
+    ToolbarModule,
+    CardModule,
+    ToastModule,
+    MenuModule
   ]
 })
 export class PrimeModule { }

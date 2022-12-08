@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'; 
 import { BusOperacionTipo } from 'src/app/model/busOperacionTipo.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
+
 @Component({
   selector: 'app-tipodropdown',
   templateUrl: './tipodropdown.component.html',

@@ -30,11 +30,11 @@ export class GridoperacionesComponent implements OnInit {
     this.getoperaciones();
   }
 
-  async getoperaciones() {
+   getoperaciones() {
     this.loading = true;
     this.operacionesService.presupuestos
       .subscribe(ops => {
-        this.operaciones = ops;
+        this.operaciones = ops; 
         this.loading = false;
       });
   }

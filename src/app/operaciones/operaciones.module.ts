@@ -1,14 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';  
-import { OperacionesComponent } from './pages/operaciones/operaciones.component';   
+import { MaterialModule } from '../shared/material/material.module';
 import { PrimeModule } from '../shared/prime/prime.module';
 import { OperacionesRoutingModule } from './operaciones-routing.module';
 import { GridoperacionesComponent } from './pages/components/gridoperaciones/gridoperaciones.component';
 import { TipodropdownComponent } from './pages/components/tipodropdown/tipodropdown.component';
 import { OperacionComponent } from './pages/operacion/operacion.component';
+import { OperacionesComponent } from './pages/operaciones/operaciones.component';
+
 @NgModule({
   declarations: [ 
-   OperacionesComponent ,
+   OperacionesComponent , 
    OperacionComponent,
    GridoperacionesComponent,
    TipodropdownComponent
@@ -16,7 +18,9 @@ import { OperacionComponent } from './pages/operacion/operacion.component';
   imports: [
     CommonModule,
     PrimeModule,
-    OperacionesRoutingModule
+    MaterialModule,
+    OperacionesRoutingModule 
   ]
 })
+
 export class OperacionesModule { }
