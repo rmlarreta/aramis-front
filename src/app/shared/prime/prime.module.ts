@@ -13,6 +13,12 @@ import {ToolbarModule} from 'primeng/toolbar';
 import {CardModule} from 'primeng/card';
 import {ToastModule} from 'primeng/toast';
 import {MenuModule} from 'primeng/menu';
+import {RatingModule} from 'primeng/rating';
+import {RadioButtonModule} from 'primeng/radiobutton';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {SidebarModule} from 'primeng/sidebar';
+import {InputTextModule} from 'primeng/inputtext';
 
 @NgModule({
   declarations: [],
@@ -30,7 +36,13 @@ import {MenuModule} from 'primeng/menu';
     ToolbarModule,
     CardModule,
     ToastModule,
-    MenuModule
+    MenuModule,
+    RatingModule,
+    RadioButtonModule,
+    InputNumberModule,
+    ConfirmDialogModule,
+    SidebarModule,
+    InputTextModule
   ]
 })
 export class PrimeModule { }

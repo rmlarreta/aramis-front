@@ -16,9 +16,7 @@ export class TipodropdownComponent implements OnInit {
   loading = false; 
   constructor(
     private operacionesService: OperacionesService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loading = true;

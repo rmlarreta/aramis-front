@@ -1,30 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { SortEvent } from 'primeng/api';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
-import { UserAuth } from 'src/app/model/userAuth.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
-import { AuthenticationService } from 'src/app/service/security/authentication.service';
 
 
 @Component({
   selector: 'app-gridoperaciones',
-  templateUrl: './gridoperaciones.component.html',
-  styleUrls: ['./gridoperaciones.component.scss']
+  templateUrl: './gridoperaciones.component.html' 
 })
 export class GridoperacionesComponent implements OnInit {
-
-  user?: UserAuth | null;
+ 
   operaciones!: BusOperacionesDto[] | [];
   loading = false;
   first = 0;
   rows = 10;
 
   constructor(
-    private authenticationService: AuthenticationService,
+   
     private operacionesService: OperacionesService
-  ) {
-    this.authenticationService.user.subscribe(x => this.user = x);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getoperaciones();

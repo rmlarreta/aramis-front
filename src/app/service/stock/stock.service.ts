@@ -15,4 +15,5 @@ export class StockService {
   get products() {
     return this.http.get<StockProductDto[]>(`${environment.baseUrl}/stock/productsList`);
   }
+
 }

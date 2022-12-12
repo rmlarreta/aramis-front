@@ -30,4 +30,6 @@ export class OperacionesService {
   get nuevaoperacion() {
     return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOperacion`);
   }
+
+  
 }

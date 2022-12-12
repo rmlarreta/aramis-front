@@ -1,30 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
+import { ListadoComponent } from '../components/listadostock/listado.component';
 
 @Component({
   selector: 'app-operacion',
-  templateUrl: './operacion.component.html',
-  styleUrls: ['./operacion.component.scss']
+  templateUrl: './operacion.component.html'
 })
 
-export class OperacionComponent implements OnInit {  
- 
+export class OperacionComponent implements OnInit {
+
+  @ViewChild(ListadoComponent)
+  child!: ListadoComponent
   operacion!: BusOperacionesDto;
-  loading = false;
-   
+  loading: boolean = false;
   constructor(
-    private opservice: OperacionesService
+    private opservice: OperacionesService,
   ) { }
 
-  ngOnInit() { 
+
+  ngOnInit() {
     this.nuevaOperacion();
   }
 
-  nuevaOperacion(){
-    this.loading=true;
-    this.opservice.nuevaoperacion.subscribe(x=>this.operacion=x);
-    this.loading=false;
+  nuevaOperacion() {
+    this.loading = true;
+    this.opservice.nuevaoperacion.subscribe(x => {
+      this.operacion = x,
+      this.child.operacion = x.id,
+      this.child.operador =x.operador
+    })
+    this.loading = false;
   }
 }
 

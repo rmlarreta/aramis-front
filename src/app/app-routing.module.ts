@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
   {
+    path: 'stock',
+    loadChildren: () => import('./stock/stock.module').then(m => m.StockModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
   },

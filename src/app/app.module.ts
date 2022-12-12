@@ -11,6 +11,7 @@ import { ErrorInterceptor } from './service/security/error-interceptor.service';
 import { JwtInterceptor } from './service/security/jwt-interceptor.service';
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
+import { StockModule } from './stock/stock.module';
  
 
 @NgModule({
@@ -23,7 +24,8 @@ import { PrimeModule } from './shared/prime/prime.module';
     PrimeModule,
     SecurityModule,
     OperacionesModule,
-    HttpClientModule 
+    HttpClientModule ,
+    StockModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
