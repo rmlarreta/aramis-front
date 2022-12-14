@@ -36,8 +36,11 @@ export class OperacionesService {
     return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/GetOperationById/` + id);
   }
 
+  deleteoperacion(id: string) {
+    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteOperacion/` + id); 
+  }
+
   insertardetalle(detalles: BusDetalleOperacionesInsert[]) {
     return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/InsertDetalle`, detalles);
   }
-
 }

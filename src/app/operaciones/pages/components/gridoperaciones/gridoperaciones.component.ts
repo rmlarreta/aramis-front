@@ -1,51 +1,66 @@
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { SortEvent } from 'primeng/api';
+import { MessageService, SortEvent } from 'primeng/api';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
 
 
 @Component({
   selector: 'app-gridoperaciones',
-  templateUrl: './gridoperaciones.component.html' ,
+  templateUrl: './gridoperaciones.component.html',
   animations: [
     trigger('rowExpansionTrigger', [
-        state('void', style({
-            transform: 'translateX(-10%)',
-            opacity: 0
-        })),
-        state('active', style({
-            transform: 'translateX(0)',
-            opacity: 1
-        })),
-        transition('* <=> *', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
+      state('void', style({
+        transform: 'translateX(-10%)',
+        opacity: 0
+      })),
+      state('active', style({
+        transform: 'translateX(0)',
+        opacity: 1
+      })),
+      transition('* <=> *', animate('400ms cubic-bezier(0.86, 0, 0.07, 1)'))
     ])
-]
-}) 
+  ],
+  providers: [MessageService]
+})
 
 export class GridoperacionesComponent implements OnInit {
- 
+
   operaciones!: BusOperacionesDto[] | [];
   loading = false;
   first = 0;
   rows = 10;
 
   constructor(
-   
-    private operacionesService: OperacionesService
-  ) {}
+    private operacionesService: OperacionesService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
     this.getoperaciones();
   }
 
-   getoperaciones() {
+  getoperaciones() {
     this.loading = true;
     this.operacionesService.presupuestos
       .subscribe(ops => {
-        this.operaciones = ops; 
-        this.loading = false;
+        this.operaciones = ops;
+
       });
+    this.loading = false;
+  }
+
+  deleteoperacion(id: string) {
+    this.loading = true;
+    this.operacionesService.deleteoperacion(id)
+      .subscribe(() => {
+        this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Documento Eliminado' });
+        this.getoperaciones();
+      },
+        error => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
+      )
+
+    this.loading = false;
   }
 
   next() {

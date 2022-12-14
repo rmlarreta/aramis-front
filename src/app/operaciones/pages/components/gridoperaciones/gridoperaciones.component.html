@@ -1,3 +1,4 @@
+<p-toast position="top-center" key="tc"></p-toast>
 <p-toolbar>
     <ng-template pTemplate="left">
         <app-tipodropdown></app-tipodropdown>
@@ -21,12 +22,13 @@
     [rowHover]="true" [globalFilterFields]="['razon','numero','total']" dataKey="id">
     <ng-template pTemplate="header">
         <tr>
-            <th style="width: 5rem"></th>
-            <th pSortableColumn="numero" style="width:10%">Numero <p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="razon" style="width:60%">Cliente <p-sortIcon field="razon"></p-sortIcon></th>
+            <th style="width: 1rem"></th>
+            <th pSortableColumn="numero" style="width:20%">Numero <p-sortIcon field="numero"></p-sortIcon></th>
+            <th pSortableColumn="razon" style="width:45%">Cliente <p-sortIcon field="razon"></p-sortIcon></th>
             <th pSortableColumn="total" style="width:15%">Total <p-sortIcon field="total"></p-sortIcon></th>
             <th pSortableColumn="fecha" style="width:15%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
-            <th style="width:15%"><i class="pi pi-file-edit"></i></th>
+            <th style="width:10%"><i class="pi pi-file-edit"></i></th>
+            <th style="width:10%"><i class="pi pi-trash"></i></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-operaciones let-expanded="expanded">
@@ -40,7 +42,12 @@
             <td>{{operaciones.razon}}</td>
             <td>{{operaciones.total | currency:'USD'}}</td>
             <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
-            <td>Editar</td>
+            <td> <button pButton pRipple type="button" icon="pi pi-check"
+                    class="p-button-rounded p-button-success p-button-text" onclick="console.log('Abro el documento')">
+                </button></td>
+            <td> <button pButton pRipple type="button" icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger p-button-text" (click)="deleteoperacion(operaciones.id)">
+                </button></td>
         </tr>
     </ng-template>
     <ng-template pTemplate="rowexpansion" let-operacion let-detalles>
@@ -63,13 +70,12 @@
             <td>{{detalles.cantidad}}</td>
             <td>{{detalles.detalle}}</td>
             <td>{{detalles.total | currency:'USD'}}</td>
-            <td><span [class]="'order-badge order-'" > </span></td>
-            <td><p-button type="button" icon="pi pi-search"></p-button></td>
+            <td>Editar</td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="6">There are no order for this product yet.</td>
+            <td colspan="6">Este documento no contiene detalles aún</td>
         </tr>
     </ng-template>
 </p-table>
