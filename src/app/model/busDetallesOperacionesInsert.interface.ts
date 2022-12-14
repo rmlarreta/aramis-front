@@ -1,5 +1,4 @@
-export interface BusDetalleOperacionesInsert {
-    id: string;
+export interface BusDetalleOperacionesInsert { 
     operacionId: string;
     cantidad: number;
     productoId: string;

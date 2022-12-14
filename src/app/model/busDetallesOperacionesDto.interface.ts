@@ -19,6 +19,5 @@ export interface BusDetallesOperacionesDto {
     totalIva10: number | null;
     totalIva21: number | null;
     totalExento: number | null;
-    totalNeto: number | null;
-    operador: string | null;
+    totalNeto: number | null; 
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { BusEstadoDto } from 'src/app/model/busEstadosDto.interface';
 import { environment } from 'src/environments/environment';
 import { BusOperacionesDto } from '../../model/busOperacionesDto.interface';
@@ -31,5 +32,12 @@ export class OperacionesService {
     return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOperacion`);
   }
 
-  
+  operacion(id: string) {
+    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/GetOperationById/` + id);
+  }
+
+  insertardetalle(detalles: BusDetalleOperacionesInsert[]) {
+    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/InsertDetalle`, detalles);
+  }
+
 }

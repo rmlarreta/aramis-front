@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Table } from 'primeng/table';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { StockProductDto } from 'src/app/model/stockProductDto.interface';
+import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
 import { StockService } from 'src/app/service/stock/stock.service';
 
 @Component({
@@ -16,11 +16,14 @@ export class ListadoComponent implements OnInit {
   detalles: BusDetalleOperacionesInsert[] = [];
 
   loading = false;
+  @Output() booleanEvent = new EventEmitter<boolean>()
   visible = false;
   operacion = '';
-  operador ='';
+  operador = '';
+
   constructor(
-    private stockService: StockService
+    private stockService: StockService,
+    private opService: OperacionesService
   ) { }
 
   ngOnInit(): void {
@@ -29,11 +32,7 @@ export class ListadoComponent implements OnInit {
     this.loading = false;
   }
 
-  clear(table: Table) {
-    table.clear();
-  }
-
-  confirmar() { 
+  confirmar() {
     this.selectedProducts.forEach(
       (sp) => {
         let det: BusDetalleOperacionesInsert = {
@@ -47,11 +46,17 @@ export class ListadoComponent implements OnInit {
           ivaValue: sp.ivaValue!,
           internos: sp.internos!,
           facturado: 0,
-          operador: this.operador,
-          id: ''
+          operador: this.operador 
         }
         this.detalles.push(det);
       })
-      console.log(this.detalles)
+    if (this.detalles.length > 0) { 
+      this.opService.insertardetalle(this.detalles).subscribe(
+        _x => this.booleanEvent.emit(true)
+      )
+    }
+    this.selectedProducts=[];
+    this.detalles=[];
+    this.visible = false;
   }
 } 

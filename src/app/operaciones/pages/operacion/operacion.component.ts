@@ -14,10 +14,10 @@ export class OperacionComponent implements OnInit {
   child!: ListadoComponent
   operacion!: BusOperacionesDto;
   loading: boolean = false;
+  actualizar: boolean = false;
   constructor(
     private opservice: OperacionesService,
   ) { }
-
 
   ngOnInit() {
     this.nuevaOperacion();
@@ -27,8 +27,18 @@ export class OperacionComponent implements OnInit {
     this.loading = true;
     this.opservice.nuevaoperacion.subscribe(x => {
       this.operacion = x,
-      this.child.operacion = x.id,
-      this.child.operador =x.operador
+        this.child.operacion = x.id,
+        this.child.operador = x.operador
+    })
+    this.loading = false;
+  }
+
+  actualizaroperacion() {
+    this.loading = true;
+    this.opservice.operacion(this.operacion.id).subscribe(x => {
+      this.operacion = x,
+        this.child.operacion = x.id,
+        this.child.operador = x.operador 
     })
     this.loading = false;
   }
