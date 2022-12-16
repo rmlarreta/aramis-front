@@ -36,6 +36,7 @@ export class ListadoComponent implements OnInit {
     this.selectedProducts.forEach(
       (sp) => {
         let det: BusDetalleOperacionesInsert = {
+          id:null,
           cantidad: 1,
           detalle: sp.descripcion,
           operacionId: this.operacion,

@@ -20,4 +20,5 @@ export interface BusDetallesOperacionesDto {
     totalIva21: number | null;
     totalExento: number | null;
     totalNeto: number | null; 
+    unitarioCimp: number | null; 
 }

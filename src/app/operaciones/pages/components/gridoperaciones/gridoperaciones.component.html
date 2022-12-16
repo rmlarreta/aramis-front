@@ -5,7 +5,7 @@
     </ng-template>
     <ng-template pTemplate="right">
         <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success p-button-text"
-            routerLink="/operaciones/operacion">
+            [routerLink]="['/operaciones/operacion',0]">
         </button>
     </ng-template>
     <div class="flex">
@@ -43,7 +43,7 @@
             <td>{{operaciones.total | currency:'USD'}}</td>
             <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
             <td> <button pButton pRipple type="button" icon="pi pi-check"
-                    class="p-button-rounded p-button-success p-button-text" onclick="console.log('Abro el documento')">
+                    class="p-button-rounded p-button-success p-button-text"   [routerLink]="['/operaciones/operacion',operaciones.id]"  >
                 </button></td>
             <td> <button pButton pRipple type="button" icon="pi pi-trash"
                     class="p-button-rounded p-button-danger p-button-text" (click)="deleteoperacion(operaciones.id)">
@@ -70,7 +70,9 @@
             <td>{{detalles.cantidad}}</td>
             <td>{{detalles.detalle}}</td>
             <td>{{detalles.total | currency:'USD'}}</td>
-            <td>Editar</td>
+            <td><button pButton pRipple type="button" icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-text" (click)="deletedetalle(detalles.id)">
+            </button></td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
@@ -84,7 +86,7 @@
 </tr>
 </ng-template>
 <ng-template pTemplate="paginatorleft">
-    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" routerLink="/operaciones/operacion">
+    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" [routerLink]="['/operaciones/operacion',0]">
     </p-button>
 </ng-template>
 <ng-template pTemplate="paginatorright">

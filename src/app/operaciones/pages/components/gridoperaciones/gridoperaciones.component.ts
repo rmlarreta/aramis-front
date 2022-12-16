@@ -59,7 +59,18 @@ export class GridoperacionesComponent implements OnInit {
       },
         error => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
       )
+    this.loading = false;
+  }
 
+  deletedetalle(id: string) {
+    this.loading = true;
+    this.operacionesService.deletedetalle(id)
+      .subscribe(() => {
+        this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
+        this.getoperaciones();
+      },
+        error => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
+      )
     this.loading = false;
   }
 

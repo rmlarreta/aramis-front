@@ -37,10 +37,18 @@ export class OperacionesService {
   }
 
   deleteoperacion(id: string) {
-    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteOperacion/` + id); 
+    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteOperacion/` + id);
   }
 
   insertardetalle(detalles: BusDetalleOperacionesInsert[]) {
     return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/InsertDetalle`, detalles);
+  }
+
+  deletedetalle(id: string) {
+    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteDetalle/` + id);
+  }
+
+  updatedetalle(detalles: BusDetalleOperacionesInsert) {
+    return this.http.patch<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateDetalle`, detalles);
   }
 }

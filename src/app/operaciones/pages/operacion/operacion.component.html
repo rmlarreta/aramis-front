@@ -1,18 +1,23 @@
+<p-toast></p-toast>
 <app-listado (booleanEvent)="actualizaroperacion()"></app-listado>
 <p-toolbar>
     <ng-template pTemplate="left">
         <button *ngIf="operacion" pButton pRipple type="button" icon="pi pi-user" id="clientebtn"
-            class="p-button-rounded p-button-info p-button-text p-button-sm" onclick="console.log('Cambio el cliente')">
-            {{operacion.razon}}</button>
+            class="p-button-rounded p-button-info p-button-text p-button-sm" onclick="console.log('Cambio el cliente')"
+            label="{{operacion.razon}}"
+            >
+          </button>
         <button *ngIf="operacion" pButton pRipple type="button" icon="pi pi-bookmark" id="clientebtn"
             class="p-button-rounded p-button-info p-button-text p-button-sm"
-            onclick="console.log('Modifico el cliente')">
-            {{operacion.resp}}</button>
+            onclick="console.log('Modifico el cliente')"
+            label="{{operacion.resp}}"
+            >
+           </button>
     </ng-template>
 
     <ng-template pTemplate="right">
-        <button *ngIf="operacion" pButton pRipple type="button" 
-            class="p-button-rounded p-button-success p-button-text" onclick="console.log('Cobro')">
+        <button *ngIf="operacion" pButton pRipple type="button" class="p-button-rounded p-button-success p-button-text"
+            onclick="console.log('Cobro')">
             {{operacion.total | currency:'USD'}}
         </button>
         <button pButton pRipple type="button" icon="pi pi-cog" id="clientebtn"
@@ -20,23 +25,69 @@
     </ng-template>
 </p-toolbar>
 <p-divider></p-divider>
-<p-table *ngIf="operacion" [value]="operacion.detalles" dataKey="id">
+
+<p-table *ngIf="operacion" [value]="operacion.detalles" dataKey="id" editMode="row">
     <ng-template pTemplate="header">
         <tr class="header-table">
             <th>Cantidad</th>
             <th>Detalle</th>
-            <th>Total</th>
-            <th><button pButton pRipple type="button" icon="pi pi-plus"
+            <th>Unitario</th>
+            <th>STotal</th>
+            <th style="text-align:center"><button pButton pRipple type="button" icon="pi pi-plus"
                     class="p-button-rounded p-button-info p-button-text p-button-sm"
                     (click)="child.visible=true"></button></th>
+            <th style="text-align:center"></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-detalles>
-        <tr>
-            <td>{{detalles.cantidad}}</td>
-            <td>{{detalles.detalle}}</td>
-            <td>{{detalles.total | currency:'USD'}}</td>
-            <td>"Edicion"</td>
+    <ng-template pTemplate="body" let-detalles let-editing="editing" let-ri="rowIndex">
+        <tr [pEditableRow]="detalles">
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="number" [(ngModel)]="detalles.cantidad">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{detalles.cantidad}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="detalles.detalle">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{detalles.detalle}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="number" [(ngModel)]="detalles.unitario">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{detalles.unitarioCimp | currency:'USD'}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                {{detalles.total | currency:'USD'}}
+            </td>
+            <td style="text-align:center">
+                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                    (click)="onRowEditInit(detalles)" class="p-button-rounded p-button-text"></button>
+                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                    (click)="onRowEditSave(detalles)"
+                    class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="onRowEditCancel(detalles, ri)"
+                    class="p-button-rounded p-button-text p-button-danger"></button>
+            </td>
+            <td style="text-align:center">
+                <button pButton pRipple type="button" class="p-button-rounded p-button-text p-button-danger p-mr-2"
+                    icon="pi pi-trash" (click)="deletedetalle(detalles.id)"></button>
+            </td>
         </tr>
     </ng-template>
 </p-table>

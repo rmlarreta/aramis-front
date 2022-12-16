@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     children: [
       { path: 'operaciones', component: OperacionesComponent },
-      { path: 'operacion', component: OperacionComponent },
+      { path: 'operacion/:id', component: OperacionComponent },
       { path: '**', redirectTo: 'operaciones' }
     ]
   }
