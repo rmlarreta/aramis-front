@@ -4,7 +4,9 @@ import { MessageService } from 'primeng/api';
 import { BusDetallesOperacionesDto } from 'src/app/model/busDetallesOperacionesDto.interface';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
+import { CobroComponent } from 'src/app/pagos/components/cobro/cobro.component';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
+import { ListadocustomersComponent } from '../components/listadocustomers/listadocustomers.component';
 import { ListadoComponent } from '../components/listadostock/listado.component';
 
 @Component({
@@ -14,6 +16,11 @@ import { ListadoComponent } from '../components/listadostock/listado.component';
 })
 
 export class OperacionComponent implements OnInit {
+  @ViewChild(ListadocustomersComponent)
+  childCus!: ListadocustomersComponent
+
+  @ViewChild(CobroComponent)
+  childCob!: CobroComponent
 
   @ViewChild(ListadoComponent)
   child!: ListadoComponent
@@ -21,7 +28,7 @@ export class OperacionComponent implements OnInit {
   loading: boolean = false;
   actualizar: boolean = false;
   id: string = '0';
-  editedRow: { [s: string]: BusDetallesOperacionesDto; } = {};
+  editedRow: { [s: string]: BusDetallesOperacionesDto; } = {}; 
 
   constructor(
     private opservice: OperacionesService,
@@ -45,7 +52,8 @@ export class OperacionComponent implements OnInit {
     this.opservice.nuevaoperacion.subscribe(x => {
       this.operacion = x,
         this.child.operacion = x.id,
-        this.child.operador = x.operador
+        this.child.operador = x.operador,
+        this.childCus.operacion = x
     })
     this.loading = false;
   }
@@ -55,7 +63,8 @@ export class OperacionComponent implements OnInit {
     this.opservice.operacion(id).subscribe(x => {
       this.operacion = x,
         this.child.operacion = x.id,
-        this.child.operador = x.operador
+        this.child.operador = x.operador,
+        this.childCus.operacion = x 
     })
     this.loading = false;
   }
@@ -65,7 +74,8 @@ export class OperacionComponent implements OnInit {
     this.opservice.operacion(this.operacion.id).subscribe(x => {
       this.operacion = x,
         this.child.operacion = x.id,
-        this.child.operador = x.operador
+        this.child.operador = x.operador,
+        this.childCus.operacion = x 
     })
     this.loading = false;
   }
@@ -118,6 +128,12 @@ export class OperacionComponent implements OnInit {
         error => { this.messageService.add({severity: 'warn', summary: 'Error', detail: error }); }
       )
     this.loading = false;
+  }
+
+  displaycobro(){ 
+    this.childCob.operacion=this.operacion;
+    this.childCob.pago.monto=this.operacion.total;
+    this.childCob.visible=true;
   }
 }
 

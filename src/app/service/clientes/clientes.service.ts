@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { OpClienteDto } from 'src/app/model/opClientesDto.interface';
 import { environment } from 'src/environments/environment';
 
@@ -16,4 +15,9 @@ export class ClientesService {
   getbycui(cui: string) {
     return this.http.get<OpClienteDto>(`${environment.baseUrl}/customers/GetByCui/${cui}`);
   }
+
+  get clientes() {
+    return this.http.get<OpClienteDto[]>(`${environment.baseUrl}/customers/GetAll`);
+  }
+  
 }

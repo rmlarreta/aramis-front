@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { BusEstadoDto } from 'src/app/model/busEstadosDto.interface';
+import { BusOperacionesInsert } from 'src/app/model/busOperacionesInsert.interfaces';
 import { environment } from 'src/environments/environment';
 import { BusOperacionesDto } from '../../model/busOperacionesDto.interface';
 import { BusOperacionTipo } from '../../model/busOperacionTipo.interface';
@@ -50,5 +51,9 @@ export class OperacionesService {
 
   updatedetalle(detalles: BusDetalleOperacionesInsert) {
     return this.http.patch<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateDetalle`, detalles);
+  }
+
+  updateoperacion(operacion: BusOperacionesInsert) {
+    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateOperacion`, operacion);
   }
 }

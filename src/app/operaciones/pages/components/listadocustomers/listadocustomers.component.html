@@ -1,0 +1,38 @@
+<p-dialog header="Clientes" [(visible)]="visible" [style]="{width: '80vw'}" position="right"> 
+    <p-toolbar>      
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div> 
+    </p-toolbar>
+
+    <p-table #dt [value]="customers" [rows]="10" [paginator]="true" [globalFilterFields]="['razon','cui']"
+        [tableStyle]="{'min-width': '35rem'}"  dataKey="id"
+        currentPageReportTemplate="Mostrado {first} a {last} de {totalRecords} registros" [showCurrentPageReport]="true">
+       
+        <ng-template pTemplate="header">
+            <tr> 
+                <th pSortableColumn="razon" style="min-width:15rem">Razón <p-sortIcon
+                        field="razon"></p-sortIcon></th> 
+                <th pSortableColumn="cui">Cui <p-sortIcon field="cui"></p-sortIcon></th>
+                <th ></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-customers>
+            <tr>  
+                <td>{{customers.razon}}</td>
+                <td>{{customers.cui}}</td>
+                <td>  <p-button icon="pi pi-check" (click)="confirmar(customers.id)" styleClass="p-button-text"></p-button></td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+               Existen {{customers ? customers.length : 0 }} clientes.
+            </div>
+        </ng-template>
+    </p-table>
+</p-dialog>

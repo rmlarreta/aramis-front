@@ -9,6 +9,8 @@ import { ListadoComponent } from './pages/components/listadostock/listado.compon
 import { TipodropdownComponent } from './pages/components/tipodropdown/tipodropdown.component';
 import { OperacionComponent } from './pages/operacion/operacion.component';
 import { OperacionesComponent } from './pages/operaciones/operaciones.component';
+import { ListadocustomersComponent } from './pages/components/listadocustomers/listadocustomers.component';
+import { PagosModule } from '../pagos/pagos.module';
 
 @NgModule({
   declarations: [ 
@@ -16,14 +18,16 @@ import { OperacionesComponent } from './pages/operaciones/operaciones.component'
    OperacionComponent,
    GridoperacionesComponent,
    TipodropdownComponent ,
-   ListadoComponent 
+   ListadoComponent,
+   ListadocustomersComponent 
   ],
   imports: [
     CommonModule,
     PrimeModule,
     MaterialModule,
     OperacionesRoutingModule ,
-    FormsModule
+    FormsModule,
+    PagosModule
   ]
 })
 
