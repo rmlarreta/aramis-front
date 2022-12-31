@@ -1,6 +1,6 @@
 export interface PaymentIntentDto {
     additional_info: AddionalInfo | null;
-    amount: number;
+    amount: number; 
 } 
 
 export interface AddionalInfo {
@@ -10,6 +10,7 @@ export interface AddionalInfo {
 }
  
 export interface PaymentIntentResponseDto {
+    status: string | null;
     additional_info: AddionalInfo | null;
     amount: number;
     id: string | null;

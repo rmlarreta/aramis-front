@@ -8,8 +8,8 @@ export interface BusOperacionesDto {
     cui: string | null;
     resp: string | null;
     domicilio: string | null;
-    fecha: Date;
-    vence: Date;
+    fecha: Date | null;
+    vence: Date | null;
     razon: string;
     codAut: string | null;
     tipoDocId: string;
@@ -33,6 +33,6 @@ export interface BusOperacionesDto {
     domicilioEmpresa: string;
     fantasia: string;
     iibb: string;
-    inicio: Date;
+    inicio: Date | null;
     respoEmpresa: string;
 }

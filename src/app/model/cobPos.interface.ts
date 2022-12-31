@@ -1,6 +1,6 @@
 export interface CobPo {
-    id: string;
-    name: string;
+    id: string | null;
+    name: string | null;
     deviceId: string | null;
     token: string | null;
 }

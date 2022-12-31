@@ -56,4 +56,8 @@ export class OperacionesService {
   updateoperacion(operacion: BusOperacionesInsert) {
     return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateOperacion`, operacion);
   }
+
+  nuevoremito(presupuestoid: string) {
+    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevoRemito/` + presupuestoid);
+  }
 }

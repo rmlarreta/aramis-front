@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BusDetallesOperacionesDto } from 'src/app/model/busDetallesOperacionesDto.interface';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
 import { CobroComponent } from 'src/app/pagos/components/cobro/cobro.component';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
+import { PagosService } from 'src/app/service/pagos/pagos.service';
+import { ReportsService } from 'src/app/service/reports/reports.service';
 import { ListadocustomersComponent } from '../components/listadocustomers/listadocustomers.component';
 import { ListadoComponent } from '../components/listadostock/listado.component';
 
@@ -17,54 +19,97 @@ import { ListadoComponent } from '../components/listadostock/listado.component';
 
 export class OperacionComponent implements OnInit {
   @ViewChild(ListadocustomersComponent)
-  childCus!: ListadocustomersComponent
+  childCus!: ListadocustomersComponent;
 
   @ViewChild(CobroComponent)
-  childCob!: CobroComponent
+  childCob!: CobroComponent;
 
   @ViewChild(ListadoComponent)
-  child!: ListadoComponent
-  operacion!: BusOperacionesDto;
+  childProd!: ListadoComponent;
+
+
+  operacion: BusOperacionesDto = {
+    id: '',
+    numero: null,
+    clienteId: '',
+    cui: null,
+    resp: null,
+    domicilio: null,
+    fecha: null,
+    vence: null,
+    razon: '',
+    codAut: null,
+    tipoDocId: '',
+    tipoDocName: null,
+    estadoId: '',
+    estadoName: null,
+    pos: 0,
+    operador: '',
+    total: 0,
+    totalLetras: null,
+    totalInternos: null,
+    totalNeto: null,
+    totalIva: null,
+    totalIva10: null,
+    totalIva21: null,
+    totalExento: null,
+    detalles: [],
+    observaciones: [],
+    cuitEmpresa: '',
+    razonEmpresa: '',
+    domicilioEmpresa: '',
+    fantasia: '',
+    iibb: '',
+    inicio: null,
+    respoEmpresa: ''
+  };
+
   loading: boolean = false;
+
   actualizar: boolean = false;
-  id: string = '0';
-  editedRow: { [s: string]: BusDetallesOperacionesDto; } = {}; 
+
+  editedRow: { [s: string]: BusDetallesOperacionesDto; } = {};
 
   constructor(
     private opservice: OperacionesService,
+    private pagoservice: PagosService,
+    private reportservice: ReportsService,
     private route: ActivatedRoute,
+    private router: Router,
     private messageService: MessageService
   ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.id = params.get('id')!;
-    })
-    if (this.id === '0') {
+      this.operacion.id = params.get('id')!;
+    });
+
+    if (this.operacion.id === '0') {
       this.nuevaOperacion()
-    } else {
-      this.getoperacion(this.id);
     }
+    else {
+      this.getoperacion(this.operacion.id);
+    };
   }
 
-  nuevaOperacion() {
+  private nuevaOperacion() {
     this.loading = true;
     this.opservice.nuevaoperacion.subscribe(x => {
       this.operacion = x,
-        this.child.operacion = x.id,
-        this.child.operador = x.operador,
+        this.childProd.operacion = x.id,
+        this.childProd.operador = x.operador,
         this.childCus.operacion = x
-    })
+    });
     this.loading = false;
   }
 
-  getoperacion(id: string) {
+  private getoperacion(id: string) {
     this.loading = true;
     this.opservice.operacion(id).subscribe(x => {
       this.operacion = x,
-        this.child.operacion = x.id,
-        this.child.operador = x.operador,
-        this.childCus.operacion = x 
+        this.childProd.operacion = x.id,
+        this.childProd.operador = x.operador,
+        this.childCus.operacion = x
     })
     this.loading = false;
   }
@@ -73,10 +118,22 @@ export class OperacionComponent implements OnInit {
     this.loading = true;
     this.opservice.operacion(this.operacion.id).subscribe(x => {
       this.operacion = x,
-        this.child.operacion = x.id,
-        this.child.operador = x.operador,
-        this.childCus.operacion = x 
+        this.childProd.operacion = x.id,
+        this.childProd.operador = x.operador,
+        this.childCus.operacion = x
     })
+    this.loading = false;
+  }
+
+  deletedetalle(id: string) {
+    this.loading = true;
+    this.opservice.deletedetalle(id)
+      .subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
+        this.actualizaroperacion();
+      },
+        error => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
+      )
     this.loading = false;
   }
 
@@ -98,7 +155,7 @@ export class OperacionComponent implements OnInit {
         ivaValue: detalle.ivaValue,
         internos: detalle.internos,
         facturado: detalle.facturado,
-        operador: this.child.operador
+        operador: this.childProd.operador
       }
       this.opservice.updatedetalle(det).subscribe(x => {
         this.operacion = x
@@ -118,22 +175,32 @@ export class OperacionComponent implements OnInit {
     delete this.editedRow[detalle.id];
   }
 
-  deletedetalle(id: string) {
-    this.loading = true;
-    this.opservice.deletedetalle(id)
-      .subscribe(() => {
-        this.messageService.add({severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
-        this.actualizaroperacion();
-      },
-        error => { this.messageService.add({severity: 'warn', summary: 'Error', detail: error }); }
-      )
-    this.loading = false;
+  displaycobro() { 
+    this.childCob.operacion = this.operacion;
+    this.childCob.reciboDetalle.monto = this.operacion.total;
+    this.childCob.recibo.clienteId = this.operacion.clienteId;
+    this.childCob.visible = true;
+    this.pagoservice.resetpagado = false;
+    this.pagoservice.pagado
+      .subscribe(x => {
+        if (x) {
+          this.nuevoremito(this.operacion.id);
+        };
+      });
   }
 
-  displaycobro(){ 
-    this.childCob.operacion=this.operacion;
-    this.childCob.pago.monto=this.operacion.total;
-    this.childCob.visible=true;
+  private nuevoremito(op: string) {
+    this.opservice.nuevoremito(op)
+      .subscribe(r => {
+        this.reportservice.remito(op).subscribe(
+          x => {
+            const fileURL = URL.createObjectURL(x);
+            window.open(fileURL, '_blank');
+            this.router.navigate(['operaciones']);
+          }
+        );
+      });
   }
+
 }
 
