@@ -1,35 +1,36 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { BusOperacionTipo } from 'src/app/model/busOperacionTipo.interface';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { BusEstadoDto } from 'src/app/model/busEstadosDto.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
 
 @Component({
-  selector: 'app-tipodropdown',
-  templateUrl: './tipodropdown.component.html',
-  styleUrls: ['./tipodropdown.component.scss']
+  selector: 'app-estadosdropdown',
+  templateUrl: './estadosdropdown.component.html',
+  styleUrls: ['./estadosdropdown.component.scss']
 })
+export class EstadosdropdownComponent implements OnInit {
 
 
-export class TipodropdownComponent implements OnInit {
-
-
-  tipos!: BusOperacionTipo[] | [];
+  estados!: BusEstadoDto[] | [];
   @Output() stringEvent = new EventEmitter<string | null>()
   selected!: string | null;
   loading = false;
+  visible = false;
   constructor(
     private operacionesService: OperacionesService
-  ) { }
+  ) {}
+   
 
   ngOnInit(): void {
     this.loading = true;
-    this.operacionesService.tipos
+    this.operacionesService.estados
       .subscribe(resp => {
-        this.tipos = resp.filter(f => f.tipoAfip === 0);
+        this.estados=resp;
         this.loading = false;
       });
   }
-  
-  onChange(): void { 
+
+  onChange(): void {
     this.stringEvent.emit(this.selected)
   }
 }

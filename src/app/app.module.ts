@@ -12,7 +12,6 @@ import { JwtInterceptor } from './service/security/jwt-interceptor.service';
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
 import { StockModule } from './stock/stock.module';
- 
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +23,7 @@ import { StockModule } from './stock/stock.module';
     PrimeModule,
     SecurityModule,
     OperacionesModule,
-    HttpClientModule ,
+    HttpClientModule,
     StockModule
   ],
   providers: [

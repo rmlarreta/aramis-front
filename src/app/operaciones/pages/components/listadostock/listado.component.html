@@ -3,7 +3,7 @@
         <p-button icon="pi pi-check" (click)="confirmar()" label="Ok" styleClass="p-button-text"></p-button>
     </ng-template>
 
-    <p-toolbar>      
+    <p-toolbar>
         <div class="flex">
             <span class="p-input-icon-left ml-auto">
                 <i class="pi pi-search"></i>
@@ -16,8 +16,9 @@
 
     <p-table #dt [value]="products" [rows]="10" [paginator]="true" [globalFilterFields]="['descripcion','unitario']"
         [tableStyle]="{'min-width': '35rem'}" [(selection)]="selectedProducts" dataKey="id"
-        currentPageReportTemplate="Mostrado {first} a {last} de {totalRecords} registros" [showCurrentPageReport]="true">
-       
+        currentPageReportTemplate="Mostrado {first} a {last} de {totalRecords} registros"
+        [showCurrentPageReport]="true">
+
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 4rem">
@@ -41,7 +42,7 @@
         </ng-template>
         <ng-template pTemplate="summary">
             <div class="flex align-items-center justify-content-between">
-               Existen {{products ? products.length : 0 }} productos.
+                Existen {{products ? products.length : 0 }} productos.
             </div>
         </ng-template>
     </p-table>

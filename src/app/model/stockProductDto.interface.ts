@@ -11,5 +11,5 @@ export interface StockProductDto {
     internos: number;
     tasa: number;
     servicio: boolean;
-    unitario: number | null;
+    unitario: number | null; 
 }

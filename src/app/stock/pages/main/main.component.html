@@ -1,8 +1,5 @@
 <p-toast position="top-center" key="tc"></p-toast>
-<p-toolbar>
-    <ng-template pTemplate="left">
-        <app-tipodropdown (stringEvent)="getbyTipo($event)"></app-tipodropdown> 
-    </ng-template>
+<p-toolbar> 
     <ng-template pTemplate="right">
         <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success p-button-text"
             [routerLink]="['/operaciones/operacion',0]">
@@ -16,10 +13,10 @@
         </span>
     </div>
 </p-toolbar>
-<p-table #dt [value]="operaciones" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+<p-table #dt [value]="listado" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
     (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]"
-    [rowHover]="true" [globalFilterFields]="['razon','numero','total']" dataKey="id">
+    [rowHover]="true" [globalFilterFields]="['rubro','detalle','monto']" dataKey="id">
     <ng-template pTemplate="header">
         <tr>
             <th style="width: 1rem"></th>
@@ -47,7 +44,7 @@
                     [routerLink]="['/operaciones/operacion',operaciones.id]">
                 </button></td>
             <td> <button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger p-button-text" (click)="deleteoperacion(operaciones.id)">
+                    class="p-button-rounded p-button-danger p-button-text">
                 </button></td>
         </tr>
     </ng-template>
@@ -72,7 +69,7 @@
             <td>{{detalles.detalle}}</td>
             <td>{{detalles.total | currency:'USD'}}</td>
             <td><button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger p-button-text" (click)="deletedetalle(detalles.id)">
+                    class="p-button-rounded p-button-danger p-button-text">
                 </button></td>
         </tr>
     </ng-template>
@@ -93,5 +90,4 @@
 <ng-template pTemplate="paginatorright">
     <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
 </ng-template>
-</p-table> 
-<app-estadosdropdown (stringEvent)="getbyEstado($event)"></app-estadosdropdown>
+</p-table>  

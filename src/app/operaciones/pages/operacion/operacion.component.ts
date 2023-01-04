@@ -27,7 +27,6 @@ export class OperacionComponent implements OnInit {
   @ViewChild(ListadoComponent)
   childProd!: ListadoComponent;
 
-
   operacion: BusOperacionesDto = {
     id: '',
     numero: null,
@@ -175,7 +174,7 @@ export class OperacionComponent implements OnInit {
     delete this.editedRow[detalle.id];
   }
 
-  displaycobro() { 
+  displaycobro() {
     this.childCob.operacion = this.operacion;
     this.childCob.reciboDetalle.monto = this.operacion.total;
     this.childCob.recibo.clienteId = this.operacion.clienteId;
@@ -200,6 +199,14 @@ export class OperacionComponent implements OnInit {
           }
         );
       });
+  }
+
+  nuevaorden(id: string) {
+    this.opservice.nuevaorden(id)
+    .subscribe(r => { 
+          this.router.navigate(['operacion',r.id]);
+        }
+      ); 
   }
 
 }

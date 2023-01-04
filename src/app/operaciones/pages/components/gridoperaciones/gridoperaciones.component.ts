@@ -1,8 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService, SortEvent } from 'primeng/api';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
+import { EstadosdropdownComponent } from '../estadodropdown/estadosdropdown.component';
 
 
 @Component({
@@ -26,10 +27,14 @@ import { OperacionesService } from 'src/app/service/operaciones/operaciones.serv
 
 export class GridoperacionesComponent implements OnInit {
 
-  operaciones!: BusOperacionesDto[] | [];
+  @ViewChild(EstadosdropdownComponent)
+  childEstados!: EstadosdropdownComponent;
+
+  operaciones: BusOperacionesDto[] = [];
   loading = false;
   first = 0;
   rows = 10;
+  estadoselected!: string;
 
   constructor(
     private operacionesService: OperacionesService,
@@ -45,8 +50,22 @@ export class GridoperacionesComponent implements OnInit {
     this.operacionesService.presupuestos
       .subscribe(ops => {
         this.operaciones = ops;
-
       });
+    this.loading = false;
+  }
+
+  getremitos() {
+    this.loading = true;
+    this.operacionesService.remitos
+      .subscribe(ops => {
+        this.operaciones = ops;
+      });
+    this.loading = false;
+  }
+
+  getordenes() {
+    this.loading = true;
+    this.childEstados.visible = true;
     this.loading = false;
   }
 
@@ -113,5 +132,24 @@ export class GridoperacionesComponent implements OnInit {
 
       return (event.order! * result);
     });
+  }
+
+  getbyTipo(stringEvent: any) {
+    switch (stringEvent) {
+      case "PRESUPUESTO": this.getoperaciones();
+        break;
+      case "REMITO": this.getremitos();
+        break;
+      case "ORDEN": this.getordenes();
+    }
+  }
+
+  getbyEstado(stringEvent: any) {
+    this.childEstados.visible = false;
+    this.operacionesService.ordenesbyestado(stringEvent)
+      .subscribe(ops => {
+        this.operaciones = ops;
+      });
+
   }
 }

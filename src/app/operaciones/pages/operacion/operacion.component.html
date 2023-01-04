@@ -23,7 +23,7 @@
             {{operacion.total | currency:'USD'}}
         </button>
         <button pButton pRipple type="button" icon="pi pi-cog" id="clientebtn"
-            class="p-button-rounded p-button-info p-button-text" onclick="console.log('Hago una orden')"></button>
+            class="p-button-rounded p-button-info p-button-text" (click)="nuevaorden(operacion.id)"></button>
     </ng-template>
 </p-toolbar>
 <p-divider></p-divider>

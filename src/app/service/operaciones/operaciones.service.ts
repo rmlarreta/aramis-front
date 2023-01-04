@@ -21,6 +21,15 @@ export class OperacionesService {
     return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/presupuestos`);
   }
 
+  get remitos() {
+    return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/RemitosPendientes`);
+  }
+
+  ordenesbyestado(estado: string) {
+    return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/OrdenesByEstado/` + estado);
+  }
+
+
   get tipos() {
     return this.http.get<BusOperacionTipo[]>(`${environment.baseUrl}/operaciones/Tipos`);
   }
@@ -59,5 +68,9 @@ export class OperacionesService {
 
   nuevoremito(presupuestoid: string) {
     return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevoRemito/` + presupuestoid);
+  }
+
+  nuevaorden(presupuestoid: string) {
+    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOrden/` + presupuestoid);
   }
 }
