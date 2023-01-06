@@ -12,7 +12,6 @@ import { ListadoComponent } from './pages/components/listadostock/listado.compon
 import { TipodropdownComponent } from './pages/components/tipodropdown/tipodropdown.component';
 import { OperacionComponent } from './pages/operacion/operacion.component';
 import { OperacionesComponent } from './pages/operaciones/operaciones.component';
-
 @NgModule({
   declarations: [ 
    OperacionesComponent , 
@@ -21,7 +20,7 @@ import { OperacionesComponent } from './pages/operaciones/operaciones.component'
    TipodropdownComponent ,
    ListadoComponent,
    ListadocustomersComponent,
-   EstadosdropdownComponent  
+   EstadosdropdownComponent     
   ],
   imports: [
     CommonModule,
@@ -30,7 +29,7 @@ import { OperacionesComponent } from './pages/operaciones/operaciones.component'
     OperacionesRoutingModule ,
     FormsModule,
     PagosModule
-  ]
+  ] 
 })
 
 export class OperacionesModule { }

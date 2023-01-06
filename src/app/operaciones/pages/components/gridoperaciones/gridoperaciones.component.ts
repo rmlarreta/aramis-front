@@ -72,24 +72,29 @@ export class GridoperacionesComponent implements OnInit {
   deleteoperacion(id: string) {
     this.loading = true;
     this.operacionesService.deleteoperacion(id)
-      .subscribe(() => {
-        this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Documento Eliminado' });
-        this.getoperaciones();
-      },
-        error => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
-      )
+      .subscribe({
+        complete: () => {
+          this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Documento Eliminado' });
+          this.getoperaciones();
+        },
+        error: (error) => {
+          this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error });
+        }
+      }
+      );
     this.loading = false;
   }
 
   deletedetalle(id: string) {
     this.loading = true;
     this.operacionesService.deletedetalle(id)
-      .subscribe(() => {
-        this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
-        this.getoperaciones();
-      },
-        error => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
-      )
+      .subscribe({
+        complete: () => {
+          this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
+          this.getoperaciones();
+        },
+        error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
+      });
     this.loading = false;
   }
 

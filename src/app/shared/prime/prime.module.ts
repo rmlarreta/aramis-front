@@ -20,6 +20,8 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import {CheckboxModule} from 'primeng/checkbox';
+
 @NgModule({
   declarations: [],
   exports: [
@@ -43,7 +45,8 @@ import { ToolbarModule } from 'primeng/toolbar';
     ConfirmDialogModule,
     SidebarModule,
     InputTextModule,
-    ProgressBarModule
+    ProgressBarModule,
+    CheckboxModule
   ]
 })
 export class PrimeModule { }

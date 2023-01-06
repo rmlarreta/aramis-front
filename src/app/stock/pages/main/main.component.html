@@ -1,93 +1,142 @@
-<p-toast position="top-center" key="tc"></p-toast>
-<p-toolbar> 
-    <ng-template pTemplate="right">
-        <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-success p-button-text"
-            [routerLink]="['/operaciones/operacion',0]">
-        </button>
-    </ng-template>
-    <div class="flex">
-        <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Búsqueda..." />
-        </span>
-    </div>
-</p-toolbar>
-<p-table #dt [value]="listado" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
-    (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
-    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [rowsPerPageOptions]="[10,25,50]"
-    [rowHover]="true" [globalFilterFields]="['rubro','detalle','monto']" dataKey="id">
-    <ng-template pTemplate="header">
-        <tr>
-            <th style="width: 1rem"></th>
-            <th pSortableColumn="numero" style="width:20%">Numero <p-sortIcon field="numero"></p-sortIcon></th>
-            <th pSortableColumn="razon" style="width:40%">Cliente <p-sortIcon field="razon"></p-sortIcon></th>
-            <th pSortableColumn="total" style="width:15%">Total <p-sortIcon field="total"></p-sortIcon></th>
-            <th pSortableColumn="fecha" style="width:15%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
-            <th style="width:5%"><i class="pi pi-file-edit"></i></th>
-            <th style="width:5%"><i class="pi pi-trash"></i></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-operaciones let-expanded="expanded">
-        <tr>
-            <td>
-                <button type="button" pButton pRipple [pRowToggler]="operaciones"
-                    class="p-button-text p-button-rounded p-button-plain"
-                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-            </td>
-            <td>{{operaciones.numero}}</td>
-            <td>{{operaciones.razon}}</td>
-            <td>{{operaciones.total | currency:'USD'}}</td>
-            <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
-            <td> <button pButton pRipple type="button" icon="pi pi-check"
-                    class="p-button-rounded p-button-success p-button-text"
-                    [routerLink]="['/operaciones/operacion',operaciones.id]">
-                </button></td>
-            <td> <button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger p-button-text">
-                </button></td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="rowexpansion" let-operacion let-detalles>
-        <tr>
-            <td colspan="7">
-                <div class="p-p-3">
-                    <p-table [value]="operacion.detalles" dataKey="id">
-                        <ng-template pTemplate="header">
-        <tr>
-            <th columm="id" hidden></th>
-            <th pSortableColumn="cantidad">Cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
-            <th pSortableColumn="detalle">Detalle <p-sortIcon field="detalle"></p-sortIcon></th>
-            <th pSortableColumn="total">Total <p-sortIcon field="total"></p-sortIcon></th>
-            <th style="width: 4rem"></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-detalles>
-        <tr>
-            <td hidden>{{detalles.id}}</td>
-            <td>{{detalles.cantidad}}</td>
-            <td>{{detalles.detalle}}</td>
-            <td>{{detalles.total | currency:'USD'}}</td>
-            <td><button pButton pRipple type="button" icon="pi pi-trash"
-                    class="p-button-rounded p-button-danger p-button-text">
-                </button></td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-        <tr>
-            <td colspan="6">Este documento no contiene detalles aún</td>
-        </tr>
-    </ng-template>
-</p-table>
-</div>
-</td>
-</tr>
-</ng-template>
-<ng-template pTemplate="paginatorleft">
-    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" [routerLink]="['/operaciones/operacion',0]">
-    </p-button>
-</ng-template>
-<ng-template pTemplate="paginatorright">
-    <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-</ng-template>
-</p-table>  
+<p-card>
+    <p-toast></p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-button-text" (click)="productDialog=true">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-table #dt [value]="listado" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true"
+        [globalFilterFields]="['rubro','descripcion','unitario','plu']" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="cantidad" style="width:15%">Stock <p-sortIcon field="cantidad"></p-sortIcon>
+                </th>
+                <th pSortableColumn="plu" style="width:15%">Plu <p-sortIcon field="plu"></p-sortIcon></th>
+                <th pSortableColumn="descripcion" style="width:40%">Descripción <p-sortIcon
+                        field="descripcion"></p-sortIcon></th>
+                <th pSortableColumn="unitario" style="width:20%">Precio <p-sortIcon field="unitario"></p-sortIcon></th>
+                <th style="width:5%"><i class="pi pi-file-edit"></i></th>
+                <th style="width:5%"><i class="pi pi-trash"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado let-expanded="expanded">
+            <tr>
+                <td>{{listado.cantidad}}</td>
+                <td>{{listado.plu}}</td>
+                <td>{{listado.descripcion}}</td>
+                <td>{{listado.unitario | currency:'USD'}}</td>
+                <td> <button pButton pRipple type="button" icon="pi pi-check"
+                        class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
+                    </button></td>
+                <td> <button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteProduct(listado)">
+                    </button></td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                [routerLink]="['/operaciones/operacion',0]">
+            </p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nuevo Producto" [modal]="true"
+        styleClass="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field" hidden>
+                <input type="text" pInputText id="cantidad" [(ngModel)]="insert.cantidad" [value]="0" />
+            </div>
+            <div class="field">
+                <label for="plu">Plu</label>
+                <input type="text" pInputText id="plu" [(ngModel)]="insert.plu" required autofocus />
+                <small class="p-error" *ngIf="submitted && !insert.plu">Plu es necesario.</small>
+
+                <label for="descripcion">Descripción</label>
+                <input type="text" pInputText id="descripcion" [(ngModel)]="insert.descripcion" required />
+                <small class="p-error" *ngIf="submitted && !insert.descripcion">Descripción es necesario.</small>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col-9">
+                    <label for="rubro">Rubro</label>
+                    <p-dropdown [options]="rubros" [(ngModel)]="insert.rubro" optionLabel="name" optionValue="id"
+                        [virtualScroll]="true" [virtualScrollItemSize]="38" [lazy]="true" placeholder="Rubros"
+                        [virtualScrollOptions]="{ showLoader: true, loading: loading, delay: 250 }">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="field col">
+                    <label for="servicio">Tipo</label>
+                    <p-checkbox name="servicio" [binary]="true" label="Servicio"
+                        [(ngModel)]="insert.servicio"></p-checkbox>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="neto">Neto</label>
+                    <p-inputNumber [(ngModel)]="insert.neto" mode="currency" currency="USD" locale="en-US"
+                        (onBlur)="onCalculate()">{{insert.neto}}</p-inputNumber>
+                </div>
+                <div class="field col">
+                    <label for="iva">Iva</label>
+                    <p-dropdown [options]="ivas" [(ngModel)]="insert.iva" optionLabel="value" optionValue="id"
+                        [virtualScroll]="true" [virtualScrollItemSize]="38" [lazy]="true" placeholder="Iva"
+                        [virtualScrollOptions]="{ showLoader: true, loading: loading, delay: 250 }"
+                        (onChange)="onCalculate()">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="internos">Internos</label>
+                    <p-inputNumber id="internos" [(ngModel)]="insert.internos" mode="currency" currency="USD"
+                        locale="en-US" (onBlur)="onCalculate()"></p-inputNumber>
+                </div>
+                <div class="field col">
+                    <label for="tasa">Tasa</label>
+                    <p-inputNumber id="tasa" [(ngModel)]="insert.tasa" prefix="%" locale="en-US"
+                        (onBlur)="onCalculate()"></p-inputNumber>
+                </div>
+                <div class="field col">
+                    <label for="precio">Precio</label>
+                    <p-inputNumber id="precio" [(ngModel)]="insert.precio" mode="currency" currency="USD"
+                        [readonly]="true" locale="en-US"></p-inputNumber>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button *ngIf="!updating" pButton pRipple label="Agregar" icon="pi pi-check" class="p-button-text"
+                (click)="addProduct()"></button>
+            <button *ngIf="updating" pButton pRipple label="Actualizar" icon="pi pi-check" class="p-button-text"
+                (click)="saveProduct()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-card>

@@ -1,21 +1,62 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
+import { BusDetallesOperacionesDto } from 'src/app/model/busDetallesOperacionesDto.interface';
 import { BusEstadoDto } from 'src/app/model/busEstadosDto.interface';
 import { BusOperacionesInsert } from 'src/app/model/busOperacionesInsert.interfaces';
 import { environment } from 'src/environments/environment';
 import { BusOperacionesDto } from '../../model/busOperacionesDto.interface';
 import { BusOperacionTipo } from '../../model/busOperacionTipo.interface';
+import { BehaviorSubject, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class OperacionesService {
-
+  private afipObservable: BehaviorSubject<BusOperacionesDto>
+    = new BehaviorSubject<BusOperacionesDto>({
+      id: '',
+      numero: null,
+      clienteId: '',
+      cui: null,
+      resp: null,
+      domicilio: null,
+      fecha: null,
+      vence: null,
+      razon: '',
+      codAut: null,
+      tipoDocId: '',
+      tipoDocName: null,
+      estadoId: '',
+      estadoName: null,
+      pos: 0,
+      operador: '',
+      total: 0,
+      totalLetras: null,
+      totalInternos: null,
+      totalNeto: null,
+      totalIva: null,
+      totalIva10: null,
+      totalIva21: null,
+      totalExento: null,
+      detalles: [],
+      observaciones: [],
+      cuitEmpresa: '',
+      razonEmpresa: '',
+      domicilioEmpresa: '',
+      fantasia: '',
+      iibb: '',
+      inicio: null,
+      respoEmpresa: ''
+    })
   constructor(
     private http: HttpClient
   ) { }
+
+  get afip() {
+    return this.afipObservable.asObservable();
+  }
 
   get presupuestos() {
     return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/presupuestos`);
@@ -72,5 +113,15 @@ export class OperacionesService {
 
   nuevaorden(presupuestoid: string) {
     return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOrden/` + presupuestoid);
+  }
+
+  facturar(remitos: BusDetallesOperacionesDto[]) {
+    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/fiscal/generarFactura`, remitos)
+    .pipe(map(r => {
+      console.log(r)
+      this.afipObservable.next(r);
+      return r;
+    })) 
+    ;
   }
 }

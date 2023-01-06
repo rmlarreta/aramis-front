@@ -1,3 +1,4 @@
+
 <mat-toolbar class="mat-elevation-z8">
 
   <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
@@ -27,19 +28,18 @@
     <mat-divider></mat-divider>
     <button pButton pRipple type="button" icon="pi pi-home" label="Operaciones"
       class="p-button-raised p-button-text menu-button" routerLink="operaciones"></button>
-    <button pButton pRipple type="button" icon="pi pi-home" label="Clientes"
+    <button pButton pRipple type="button" icon="pi pi-users" label="Clientes"
       class="p-button-raised p-button-text menu-button"></button>
-    <button pButton pRipple type="button" icon="pi pi-home" label="Reportes"
+    <button pButton pRipple type="button" icon="pi pi-print" label="Reportes"
       class="p-button-raised p-button-text menu-button"></button>
-    <button pButton pRipple type="button" icon="pi pi-home" label="Stock"
+    <button pButton pRipple type="button" icon="pi pi-box" label="Stock"
       class="p-button-raised p-button-text menu-button" routerLink="stock"></button>
     <mat-divider></mat-divider>
-    <button pButton pRipple type="button" icon="pi pi-home" label="Admin"
+    <button pButton pRipple type="button" icon="pi pi-wrench" label="Admin"
       class="p-button-raised p-button-text menu-button"></button>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-
+  <mat-sidenav-content> 
     <div class="content mat-elevation-z8">
       <router-outlet> </router-outlet>
     </div>

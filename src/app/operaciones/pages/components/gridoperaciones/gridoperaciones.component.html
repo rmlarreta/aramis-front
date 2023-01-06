@@ -28,7 +28,7 @@
             <th pSortableColumn="total" style="width:15%">Total <p-sortIcon field="total"></p-sortIcon></th>
             <th pSortableColumn="fecha" style="width:15%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
             <th style="width:5%"><i class="pi pi-file-edit"></i></th>
-            <th style="width:5%"><i class="pi pi-trash"></i></th>
+            <th style="width:5%"></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-operaciones let-expanded="expanded">
@@ -42,11 +42,16 @@
             <td>{{operaciones.razon}}</td>
             <td>{{operaciones.total | currency:'USD'}}</td>
             <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
-            <td> <button pButton pRipple type="button" icon="pi pi-check"
+            <td><button *ngIf="operaciones.tipoDocName==='PRESUPUESTO'" pButton pRipple type="button" icon="pi pi-check" 
                     class="p-button-rounded p-button-success p-button-text"
                     [routerLink]="['/operaciones/operacion',operaciones.id]">
-                </button></td>
-            <td> <button pButton pRipple type="button" icon="pi pi-trash"
+                </button>
+                <button *ngIf="operaciones.tipoDocName==='REMITO'" pButton pRipple type="button" icon="pi pi-hashtag" 
+                class="p-button-rounded p-button-success p-button-text"
+                [routerLink]="['/operaciones/operacion',operaciones.id]">
+            </button>
+            </td>
+            <td> <button *ngIf="operaciones.tipoDocName==='PRESUPUESTO' || operaciones.tipoDocName=== 'ORDEN'" pButton pRipple type="button" icon="pi pi-trash"
                     class="p-button-rounded p-button-danger p-button-text" (click)="deleteoperacion(operaciones.id)">
                 </button></td>
         </tr>

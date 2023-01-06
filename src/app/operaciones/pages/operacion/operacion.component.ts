@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Observable } from 'rxjs';
 import { BusDetallesOperacionesDto } from 'src/app/model/busDetallesOperacionesDto.interface';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
@@ -18,6 +19,7 @@ import { ListadoComponent } from '../components/listadostock/listado.component';
 })
 
 export class OperacionComponent implements OnInit {
+  totalRemito = 0;
   @ViewChild(ListadocustomersComponent)
   childCus!: ListadocustomersComponent;
 
@@ -65,10 +67,13 @@ export class OperacionComponent implements OnInit {
 
   loading: boolean = false;
 
+  facturando: boolean = false;
+
   actualizar: boolean = false;
 
   editedRow: { [s: string]: BusDetallesOperacionesDto; } = {};
 
+  afipresponse$: Observable<BusOperacionesDto>;
   constructor(
     private opservice: OperacionesService,
     private pagoservice: PagosService,
@@ -76,7 +81,9 @@ export class OperacionComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
-  ) { }
+  ) {
+    this.afipresponse$ = this.opservice.afip;
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -108,7 +115,8 @@ export class OperacionComponent implements OnInit {
       this.operacion = x,
         this.childProd.operacion = x.id,
         this.childProd.operador = x.operador,
-        this.childCus.operacion = x
+        this.childCus.operacion = x,
+        this.totalRemito = this.operacion.total;
     })
     this.loading = false;
   }
@@ -119,7 +127,8 @@ export class OperacionComponent implements OnInit {
       this.operacion = x,
         this.childProd.operacion = x.id,
         this.childProd.operador = x.operador,
-        this.childCus.operacion = x
+        this.childCus.operacion = x,
+        this.totalRemito = this.operacion.total;
     })
     this.loading = false;
   }
@@ -127,13 +136,21 @@ export class OperacionComponent implements OnInit {
   deletedetalle(id: string) {
     this.loading = true;
     this.opservice.deletedetalle(id)
-      .subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
-        this.actualizaroperacion();
-      },
-        error => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
-      )
+      .subscribe({
+        complete: () => {
+          this.messageService.add({ key: 'tc', severity: 'success', summary: 'ELiminando', detail: 'Item Eliminado' });
+          this.actualizaroperacion();
+        },
+        error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
+      });
     this.loading = false;
+  }
+
+  deletedetalleremito(detalle: BusDetallesOperacionesDto) {
+    this.operacion.detalles = this.operacion.detalles.filter(val => val.id !== detalle.id);
+    let total = 0;
+    this.operacion.detalles.forEach(x => total += x.cantidad * x.unitario)
+    this.operacion.total = total;
   }
 
   onRowEditInit(detalle: BusDetallesOperacionesDto) {
@@ -156,17 +173,39 @@ export class OperacionComponent implements OnInit {
         facturado: detalle.facturado,
         operador: this.childProd.operador
       }
-      this.opservice.updatedetalle(det).subscribe(x => {
-        this.operacion = x
-        this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Documento Actualizado' });
-        delete this.editedRow[detalle.id!];
+      this.opservice.updatedetalle(det).subscribe({
+        next: (x) => {
+          this.operacion = x
+          this.messageService.add({ key: 'tc', severity: 'success', summary: 'Correcto', detail: 'Documento Actualizado' });
+          delete this.editedRow[detalle.id!];
+        },
+        error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }) }
       })
     }
     else {
       delete this.editedRow[detalle.id!];
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cantidad y Precio, deben ser mayores a 0' });
+      this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Cantidad y Precio, deben ser mayores a 0' });
       this.actualizaroperacion();
     }
+  }
+
+  onRowEditSaveRemito(detalle: BusDetallesOperacionesDto, index: number) {
+
+    let total = 0;
+    this.operacion.detalles.forEach(x => total += x.cantidad * x.unitario)
+    total = total - this.operacion.detalles[index].cantidad * this.operacion.detalles[index].unitario;
+    total = total + (detalle.cantidad * detalle.unitario);
+    if (total > this.totalRemito) {
+      this.onRowEditCancel(detalle, index);
+      return;
+    }
+    if (detalle.cantidad <= 0) {
+      this.onRowEditCancel(detalle, index);
+      return;
+    }
+    delete this.editedRow[detalle.id];
+    this.operacion.total = total;
+    this.operacion.detalles.forEach(x => x.total = x.cantidad * x.unitario);
   }
 
   onRowEditCancel(detalle: BusDetallesOperacionesDto, index: number) {
@@ -181,32 +220,47 @@ export class OperacionComponent implements OnInit {
     this.childCob.visible = true;
     this.pagoservice.resetpagado = false;
     this.pagoservice.pagado
-      .subscribe(x => {
-        if (x) {
-          this.nuevoremito(this.operacion.id);
-        };
+      .subscribe({
+        next: (x) => { if (x) { this.nuevoremito(this.operacion.id) } }
+        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
       });
   }
 
   private nuevoremito(op: string) {
     this.opservice.nuevoremito(op)
-      .subscribe(r => {
-        this.reportservice.remito(op).subscribe(
-          x => {
+      .subscribe({
+        complete: () => {
+          this.reportservice.remito(op).subscribe(x => {
             const fileURL = URL.createObjectURL(x);
             window.open(fileURL, '_blank');
             this.router.navigate(['operaciones']);
           }
-        );
+          );
+        }
+        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
       });
   }
 
   nuevaorden(id: string) {
     this.opservice.nuevaorden(id)
-    .subscribe(r => { 
-          this.router.navigate(['operacion',r.id]);
-        }
-      ); 
+      .subscribe({
+        next: (r) => { this.router.navigate(['operacion', r.id]) }
+        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
+      });
+  }
+
+  facturar() {
+    this.facturando = true;
+    this.opservice.facturar(this.operacion.detalles)
+      .subscribe({
+        next: (x) => console.log(x)
+        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
+      })
+    this.afipresponse$
+      .subscribe({
+        next: (x) => { if (x.codAut !== null) { this.facturando = false; console.log(x) } }
+        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
+      });
   }
 
 }
