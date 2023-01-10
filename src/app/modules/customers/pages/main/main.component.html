@@ -1,0 +1,130 @@
+<p-card>
+    <p-toast></p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-button-text" (click)="customerDialog=true">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-table #dt [value]="listado" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="['razon','cui']" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="cui" style="width:15%">Cui <p-sortIcon field="cui"></p-sortIcon></th>
+                <th pSortableColumn="razon" style="width:15%">Razón <p-sortIcon field="razon"></p-sortIcon></th>
+                <th pSortableColumn="respName" style="width:40%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
+                <th pSortableColumn="contacto" style="width:20%">Contacto <p-sortIcon field="contacto"></p-sortIcon>
+                </th>
+                <th style="width:5%"><i class="pi pi-file-edit"></i></th>
+                <th style="width:5%"><i class="pi pi-trash"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado>
+            <tr>
+                <td>{{listado.cui}}</td>
+                <td>{{listado.razon}}</td>
+                <td>{{listado.respName}}</td>
+                <td>{{listado.contacto}}</td>
+                <td> <button pButton pRipple type="button" icon="pi pi-check"
+                        class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
+                    </button></td>
+                <td> <button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteCustomer(listado)">
+                    </button></td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                [routerLink]="['/operaciones/operacion',0]">
+            </p-button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-table>
+
+    <p-dialog [(visible)]="customerDialog" [style]="{width: '450px'}" header="Nuevo Producto" [modal]="true"
+        styleClass="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="field col">
+                <label for="cui">Cui</label>
+                <input type="text" pInputText id="cui" [(ngModel)]="insert.cui" required autofocus />
+            </div>
+            <div class="field col">
+                <label for="razon">Razon</label>
+                <input type="text" pInputText id="razon" [(ngModel)]="insert.razon" required />
+                <small class="p-error" *ngIf="submitted && !insert.razon">Razón es necesario.</small>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="resp">Responsabilidad</label>
+                    <app-respodrop [(ngModel)]="insert.resp">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </app-respodrop>
+                </div>
+                <div class="field col">
+                    <label for="gender">Género</label>
+                    <app-genderdrop [(ngModel)]="insert.gender">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </app-genderdrop>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="pais">País</label>
+                    <app-paisdrop [(ngModel)]="insert.pais">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </app-paisdrop>
+                </div>
+                <div class="field col">
+                    <label for="mail">mail</label>
+                    <input type="mail" pInputText id="mail" [(ngModel)]="insert.mail" />
+                </div>
+                <div class="field col">
+                    <label for="domicilio">Domicilio</label>
+                    <input type="text" pInputText id="domicilio" [(ngModel)]="insert.domicilio" required />
+                    <small class="p-error" *ngIf="submitted && !insert.razon">Domicilio es necesario.</small>
+                </div>
+                <div class="field col">
+                    <label for="contacto">Contacto</label>
+                    <input type="text" pInputText id="contacto" [(ngModel)]="insert.contacto" required />
+                    <small class="p-error" *ngIf="submitted && !insert.razon">Contacto es necesario.</small>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button *ngIf="!updating" pButton pRipple label="Agregar" icon="pi pi-check" class="p-button-text"
+                (click)="addCustomer()"></button>
+            <button *ngIf="updating" pButton pRipple label="Actualizar" icon="pi pi-check" class="p-button-text"
+                (click)="saveCustomer()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-card>

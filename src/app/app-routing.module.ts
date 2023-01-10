@@ -9,19 +9,23 @@ const routes: Routes = [
   },
   {
     path: 'security',
-    loadChildren: () => import('./security/security.module').then(m => m.SecurityModule)
+    loadChildren: () => import('./modules/security/security.module').then(m => m.SecurityModule)
   },
   {
     path: 'operaciones',
-    loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
+    loadChildren: () => import('./modules/operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
   {
     path: 'stock',
-    loadChildren: () => import('./stock/stock.module').then(m => m.StockModule)
+    loadChildren: () => import('./modules/stock/stock.module').then(m => m.StockModule)
+  }, 
+  {
+    path: 'clientes',
+    loadChildren: () => import('./modules/customers/customers.module').then(m => m.CustomersModule)
   },
   {
     path: '**',
-    loadChildren: () => import('./operaciones/operaciones.module').then(m => m.OperacionesModule)
+    loadChildren: () => import('./modules/operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
 ];
 

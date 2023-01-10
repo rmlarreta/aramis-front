@@ -20,4 +20,26 @@ export class ReportsService {
           return new Blob([res.body], { type: 'application/pdf' });
         }));
   }
+
+  factura(id: string) {
+    return this.http.get(`${environment.baseUrl}/reports/ReporteFactura/` + id, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }));
+  }
+
+  orden(id: string) {
+    return this.http.get(`${environment.baseUrl}/reports/ReporteTicketOrden/` + id, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }));
+  }
 }

@@ -1,0 +1,8 @@
+<p-dropdown [options]="genders" [(ngModel)]="selected" optionLabel="name" optionValue="id" [lazy]="true"
+    (onChange)="onChange()" placeholder="Seleccione Genero">
+    <ng-template pTemplate="loader" let-options="options">
+        <div class="flex align-items-center py-2 px-3" style="height: 38px">
+            <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+        </div>
+    </ng-template>
+</p-dropdown>
