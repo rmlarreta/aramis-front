@@ -33,9 +33,8 @@ export class GridoperacionesComponent implements OnInit {
   operaciones: BusOperacionesDto[] = [];
   loading = false;
   first = 0;
-  rows = 10;
-  estadoselected!: string;
-
+  rows = 10; 
+  
   constructor(
     private operacionesService: OperacionesService,
     private messageService: MessageService

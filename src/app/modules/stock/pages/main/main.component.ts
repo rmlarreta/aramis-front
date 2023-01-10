@@ -57,16 +57,7 @@ export class MainComponent implements OnInit {
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
-    this.insert.plu = '',
-      this.insert.cantidad = 0,
-      this.insert.descripcion = '',
-      this.insert.rubro = '',
-      this.insert.iva = '',
-      this.insert.neto = 0,
-      this.insert.internos = 0,
-      this.insert.tasa = 0,
-      this.insert.servicio = false,
-      this.insert.precio = 0
+    this.updating = false;
   }
 
   addProduct() {
@@ -77,7 +68,8 @@ export class MainComponent implements OnInit {
           this.hideDialog()
           this.stockservice.products
             .subscribe(x => this.listado = x);
-        }
+        },
+        error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
   }
 
@@ -90,7 +82,8 @@ export class MainComponent implements OnInit {
           this.hideDialog()
           this.stockservice.products
             .subscribe(x => this.listado = x);
-        }
+        },
+        error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
   }
 

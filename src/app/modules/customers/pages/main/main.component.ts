@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
+import { OpGenderDto, OpPaiDto, OpRespDto } from 'src/app/model/opClientesAttributes.interface';
 import { OpClienteDto } from 'src/app/model/opClientesDto.interface';
 import { OpClienteInsert } from 'src/app/model/opClientesInsert.interface';
 import { ClientesService } from 'src/app/service/clientes/clientes.service';
@@ -12,6 +13,9 @@ import { ClientesService } from 'src/app/service/clientes/clientes.service';
 
 export class MainComponent implements OnInit {
 
+  respos: OpRespDto[] = [];
+  genders: OpGenderDto[] = [];
+  paises: OpPaiDto[] = [];
   listado: OpClienteDto[] = [];
   loading = false;
   updating = false;
@@ -42,18 +46,21 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.clienteservice.clientes
       .subscribe(s => this.listado = s);
+
+    this.clienteservice.respos
+      .subscribe(x => this.respos = x);
+
+    this.clienteservice.genders
+      .subscribe(x => this.genders = x);
+
+    this.clienteservice.paises
+      .subscribe(x => this.paises = x);
   }
 
   hideDialog() {
-    this.insert.id = null,
-      this.insert.cui = '',
-      this.insert.resp = '',
-      this.insert.razon = '',
-      this.insert.gender = '',
-      this.insert.domicilio = '',
-      this.insert.pais = null,
-      this.insert.contacto = null,
-      this.insert.mail = null
+    this.customerDialog = false;
+    this.submitted = false;
+    this.updating = false;
   }
 
   addCustomer() {
@@ -64,7 +71,8 @@ export class MainComponent implements OnInit {
           this.hideDialog()
           this.clienteservice.clientes
             .subscribe(x => this.listado = x);
-        }
+        },
+        error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
   }
 
@@ -77,7 +85,8 @@ export class MainComponent implements OnInit {
           this.hideDialog()
           this.clienteservice.clientes
             .subscribe(x => this.listado = x);
-        }
+        },
+        error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
   }
 

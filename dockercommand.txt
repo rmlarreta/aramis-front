@@ -1,4 +1,4 @@
-docker build -t aramisistemas/aramisfront:version_1.1 .
-docker run --name aramis-front-container -d -p 8888:80 aramisistemas/aramisfront:version_1.1
-docker push aramisistemas/aramisfront:version_1.1
+docker build -t aramisistemas/aramisfront:version1.2 .
+docker run --name aramis-front-container -d -p 8888:80 aramisistemas/aramisfront:version1.2
+docker push aramisistemas/aramisfront:version1.2
 docker image ls

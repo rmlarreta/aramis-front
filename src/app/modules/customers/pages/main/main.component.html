@@ -20,11 +20,9 @@
         [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="['razon','cui']" dataKey="id">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="cui" style="width:15%">Cui <p-sortIcon field="cui"></p-sortIcon></th>
-                <th pSortableColumn="razon" style="width:15%">Razón <p-sortIcon field="razon"></p-sortIcon></th>
-                <th pSortableColumn="respName" style="width:40%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
-                <th pSortableColumn="contacto" style="width:20%">Contacto <p-sortIcon field="contacto"></p-sortIcon>
-                </th>
+                <th pSortableColumn="cui" style="width:20%">Cui <p-sortIcon field="cui"></p-sortIcon></th>
+                <th pSortableColumn="razon" style="width:40%">Razón <p-sortIcon field="razon"></p-sortIcon></th>
+                <th pSortableColumn="respName" style="width:30%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
                 <th style="width:5%"><i class="pi pi-file-edit"></i></th>
                 <th style="width:5%"><i class="pi pi-trash"></i></th>
             </tr>
@@ -33,8 +31,7 @@
             <tr>
                 <td>{{listado.cui}}</td>
                 <td>{{listado.razon}}</td>
-                <td>{{listado.respName}}</td>
-                <td>{{listado.contacto}}</td>
+                <td>{{listado.respName}}</td> 
                 <td> <button pButton pRipple type="button" icon="pi pi-check"
                         class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
                     </button></td>
@@ -46,7 +43,7 @@
 
         <ng-template pTemplate="paginatorleft">
             <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
-                [routerLink]="['/operaciones/operacion',0]">
+            (click)="customerDialog=true">
             </p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">
@@ -54,60 +51,68 @@
         </ng-template>
     </p-table>
 
-    <p-dialog [(visible)]="customerDialog" [style]="{width: '450px'}" header="Nuevo Producto" [modal]="true"
-        styleClass="p-fluid">
+    <p-dialog [(visible)]="customerDialog" [style]="{width: '500px'}" header="Clientes" [modal]="true"
+        styleClass="p-fluid" (onHide)="hideDialog()">
         <ng-template pTemplate="content">
-            <div class="field col">
-                <label for="cui">Cui</label>
-                <input type="text" pInputText id="cui" [(ngModel)]="insert.cui" required autofocus />
-            </div>
-            <div class="field col">
-                <label for="razon">Razon</label>
-                <input type="text" pInputText id="razon" [(ngModel)]="insert.razon" required />
-                <small class="p-error" *ngIf="submitted && !insert.razon">Razón es necesario.</small>
-            </div>
-
             <div class="formgrid grid">
+                <div class="field col">
+                    <label for="cui">Cui</label>
+                    <input type="text" pInputText id="cui" [(ngModel)]="insert.cui" required autofocus />
+                </div>
                 <div class="field col">
                     <label for="resp">Responsabilidad</label>
-                    <app-respodrop [(ngModel)]="insert.resp">
+                    <p-dropdown [options]="respos" [(ngModel)]="insert.resp" optionLabel="name" optionValue="id"
+                        [lazy]="true" placeholder="Seleccione Resp.">
                         <ng-template pTemplate="loader" let-options="options">
                             <div class="flex align-items-center py-2 px-3" style="height: 38px">
                                 <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
                             </div>
                         </ng-template>
-                    </app-respodrop>
-                </div>
-                <div class="field col">
-                    <label for="gender">Género</label>
-                    <app-genderdrop [(ngModel)]="insert.gender">
-                        <ng-template pTemplate="loader" let-options="options">
-                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
-                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
-                            </div>
-                        </ng-template>
-                    </app-genderdrop>
+                    </p-dropdown>
                 </div>
             </div>
             <div class="formgrid grid">
                 <div class="field col">
-                    <label for="pais">País</label>
-                    <app-paisdrop [(ngModel)]="insert.pais">
+                    <label for="razon">Razon</label>
+                    <input type="text" pInputText id="razon" [(ngModel)]="insert.razon" required />
+                    <small class="p-error" *ngIf="submitted && !insert.razon">Razón es necesario.</small>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col">
+                    <label for="gender">Género</label>
+                    <p-dropdown [options]="genders" [(ngModel)]="insert.gender" optionLabel="name" optionValue="id"
+                        [lazy]="true" placeholder="Seleccione Genero">
                         <ng-template pTemplate="loader" let-options="options">
                             <div class="flex align-items-center py-2 px-3" style="height: 38px">
                                 <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
                             </div>
                         </ng-template>
-                    </app-paisdrop>
+                    </p-dropdown>
                 </div>
                 <div class="field col">
-                    <label for="mail">mail</label>
-                    <input type="mail" pInputText id="mail" [(ngModel)]="insert.mail" />
+                    <label for="pais">País</label>
+                    <p-dropdown [options]="paises" [(ngModel)]="insert.pais" optionLabel="name" optionValue="id"
+                        [lazy]="true" placeholder="Seleccione Pais">
+                        <ng-template pTemplate="loader" let-options="options">
+                            <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                                <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
                 </div>
+            </div>
+            <div class="formgrid grid">
                 <div class="field col">
                     <label for="domicilio">Domicilio</label>
                     <input type="text" pInputText id="domicilio" [(ngModel)]="insert.domicilio" required />
                     <small class="p-error" *ngIf="submitted && !insert.razon">Domicilio es necesario.</small>
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col-7">
+                    <label for="mail">Mail</label>
+                    <input type="mail" pInputText id="mail" [(ngModel)]="insert.mail" />
                 </div>
                 <div class="field col">
                     <label for="contacto">Contacto</label>
