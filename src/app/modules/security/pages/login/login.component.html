@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="col-12 " *ngIf="submitted && f['username'].errors" class="p-error block">
-            <span *ngIf="f['username'].errors['required' || 'minLength']">Username is required</span>
+            <span *ngIf="f['username'].errors['required']">Username is required</span>
             </div>
         <div class="col-12 ">
             <div class="p-inputgroup">
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="col-12 " *ngIf="submitted && f['password'].errors" class="p-error block">
-            <span *ngIf="f['password'].errors['required']">Password is required</span>
+            <span *ngIf="f['password'].errors['required'  || 'minLength']">Password is required</span>
         </div>
         <button pButton pRipple [disabled]="loading" icon="pi pi-check" class="p-button-rounded p-button-text">
             <span *ngIf="loading">

@@ -2,3 +2,8 @@ docker build -t aramisistemas/aramisfront:version1.2 .
 docker run --name aramis-front-container -d -p 8888:80 aramisistemas/aramisfront:version1.2
 docker push aramisistemas/aramisfront:version1.2
 docker image ls
+
+kubectl config get-contexts
+kubectl get pods
+kubectl create -f appback.yml
+kubectl create -f appback-service.yml
