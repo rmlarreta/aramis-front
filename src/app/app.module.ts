@@ -25,7 +25,7 @@ import { StockModule } from './modules/stock/stock.module';
     SecurityModule,
     OperacionesModule,
     HttpClientModule,
-    StockModule,
+    StockModule ,
     CustomersModule
   ],
   providers: [

@@ -22,7 +22,8 @@
             <tr>
                 <th pSortableColumn="cui" style="width:20%">Cui <p-sortIcon field="cui"></p-sortIcon></th>
                 <th pSortableColumn="razon" style="width:40%">Razón <p-sortIcon field="razon"></p-sortIcon></th>
-                <th pSortableColumn="respName" style="width:30%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
+                <th pSortableColumn="respName" style="width:25%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
+                <th style="width:5%"><i class="pi pi-dollar"></i></th>
                 <th style="width:5%"><i class="pi pi-file-edit"></i></th>
                 <th style="width:5%"><i class="pi pi-trash"></i></th>
             </tr>
@@ -32,6 +33,9 @@
                 <td>{{listado.cui}}</td>
                 <td>{{listado.razon}}</td>
                 <td>{{listado.respName}}</td> 
+                <td> <button pButton pRipple type="button" icon="pi pi-dollar"
+                    class="p-button-rounded p-button-info p-button-text" (click)="onConciliar(listado.id)">
+                </button></td>
                 <td> <button pButton pRipple type="button" icon="pi pi-check"
                         class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
                     </button></td>
@@ -132,4 +136,5 @@
     </p-dialog>
 
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<app-conciliacion></app-conciliacion>
 </p-card>

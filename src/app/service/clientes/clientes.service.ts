@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConciliacionCliente } from 'src/app/model/cobConciliacionCliente.interface';
 import { OpGenderDto, OpPaiDto, OpRespDto } from 'src/app/model/opClientesAttributes.interface';
 import { OpClienteDto } from 'src/app/model/opClientesDto.interface';
 import { OpClienteInsert } from 'src/app/model/opClientesInsert.interface';
@@ -38,11 +39,15 @@ export class ClientesService {
     return this.http.post<OpClienteDto>(`${environment.baseUrl}/customers/Insert`, customer);
   }
 
-  customerdelete(id: string) {
-    return this.http.delete(`${environment.baseUrl}/customers/Delete/` + id, { responseType: "arraybuffer" });
+  customerdelete(customerId: string) {
+    return this.http.delete(`${environment.baseUrl}/customers/Delete/` + customerId, { responseType: "arraybuffer" });
   }
 
   customersave(customer: OpClienteInsert) {
     return this.http.patch<OpClienteDto>(`${environment.baseUrl}/customers/Update`, customer);
+  }
+
+  conciliacion(customerId : string){
+    return this.http.get<ConciliacionCliente>(`${environment.baseUrl}/pagos/ConciliacionCliente/`+customerId);
   }
 }

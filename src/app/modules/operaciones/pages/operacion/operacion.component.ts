@@ -224,8 +224,10 @@ export class OperacionComponent implements OnInit {
     this.pagoservice.resetpagado = false;
     this.pagoservice.pagado
       .subscribe({
-        next: (x) => { if (x) { this.nuevoremito(this.operacion.id) } }
-        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
+        next: (x) => {
+          if (x) { this.nuevoremito(this.operacion.id) }
+        },
+        error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
       });
   }
 
@@ -262,20 +264,16 @@ export class OperacionComponent implements OnInit {
     this.facturando = true;
     this.opservice.facturar(this.operacion.detalles)
       .subscribe({
-        complete: () => {
-          this.reportservice.factura(this.operacion.id).subscribe(x => {
+        next: (x) => {
+          this.operacion.id = '';
+          this.reportservice.factura(x.id).subscribe(x => {
             const fileURL = URL.createObjectURL(x);
             window.open(fileURL, '_blank');
-            this.router.navigate(['operaciones'])
-          });
+            this.router.navigate(['operaciones']);
+          })
         }
         , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
-      })
-    /* this.afipresponse$
-      .subscribe({
-        next: (x) => { if (x.codAut !== null) { this.facturando = false;  this.router.navigate(['operaciones']); } }
-        , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
-      }); */
+      });
   }
 
 }

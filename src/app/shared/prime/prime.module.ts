@@ -20,7 +20,8 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import {CheckboxModule} from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox';
+import { SplitterModule } from 'primeng/splitter';
 
 @NgModule({
   declarations: [],
@@ -46,7 +47,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     SidebarModule,
     InputTextModule,
     ProgressBarModule,
-    CheckboxModule
+    CheckboxModule,
+    SplitterModule
   ]
 })
 export class PrimeModule { }

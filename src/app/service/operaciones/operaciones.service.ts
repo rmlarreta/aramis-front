@@ -117,8 +117,7 @@ export class OperacionesService {
 
   facturar(remitos: BusDetallesOperacionesDto[]) {
     return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/fiscal/generarFactura`, remitos)
-    .pipe(map(r => {
-      console.log(r)
+    .pipe(map(r => { 
       this.afipObservable.next(r);
       return r;
     })) 

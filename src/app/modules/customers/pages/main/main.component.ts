@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
 import { OpGenderDto, OpPaiDto, OpRespDto } from 'src/app/model/opClientesAttributes.interface';
 import { OpClienteDto } from 'src/app/model/opClientesDto.interface';
 import { OpClienteInsert } from 'src/app/model/opClientesInsert.interface';
 import { ClientesService } from 'src/app/service/clientes/clientes.service';
+import { ConciliacionComponent } from '../components/conciliacion/conciliacion.component';
 
 @Component({
   selector: 'app-main',
@@ -12,6 +13,9 @@ import { ClientesService } from 'src/app/service/clientes/clientes.service';
 })
 
 export class MainComponent implements OnInit {
+
+  @ViewChild(ConciliacionComponent)
+  childCon!: ConciliacionComponent;
 
   respos: OpRespDto[] = [];
   genders: OpGenderDto[] = [];
@@ -44,6 +48,7 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.clienteservice.clientes
       .subscribe(s => this.listado = s);
 
@@ -113,6 +118,10 @@ export class MainComponent implements OnInit {
     this.insert = customer;
     this.customerDialog = true;
     this.updating = true;
+  }
+
+  onConciliar(customerId: string) { 
+    this.childCon.onCall(customerId); 
   }
 
   next() {

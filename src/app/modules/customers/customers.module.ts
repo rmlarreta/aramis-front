@@ -5,10 +5,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { PrimeModule } from '../../shared/prime/prime.module';
 import { CustomersRoutingModule } from './customers-routing.module';
 import { MainComponent } from './pages/main/main.component';
+import { ConciliacionComponent } from './pages/components/conciliacion/conciliacion.component';
  
 @NgModule({
   declarations: [
-    MainComponent 
+    MainComponent,
+    ConciliacionComponent 
   ],
   imports: [
     CommonModule,

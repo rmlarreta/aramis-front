@@ -10,6 +10,17 @@ export class ReportsService {
 
   constructor(private http: HttpClient) { }
 
+  recibo(id: string) {
+    return this.http.get(`${environment.baseUrl}/reports/ReporteRecibo/` + id, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }));
+  }
+
   remito(id: string) {
     return this.http.get(`${environment.baseUrl}/reports/ReporteRemito/` + id, {
       responseType: 'blob',

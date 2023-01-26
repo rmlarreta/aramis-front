@@ -88,11 +88,11 @@ export class CobroComponent implements OnInit {
               p.codAut = x.id
             };
           });
-          this.insertrecibo();
+          if (x.id !== '0') { this.insertrecibo(); }
           this.recibo$.subscribe({
-            next: (r) => {if(r){if(r.id !== '0') {this.imputarpago(r.id?.toString()!)}}}
-          , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error })}
-         });
+            next: (r) => { if (r) { if (r.id !== '0') { this.imputarpago(r.id?.toString()!) } } }
+            , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }) }
+          });
         };
       };
     });
@@ -100,7 +100,7 @@ export class CobroComponent implements OnInit {
 
   agregaritempago(): void {
     if (this.reciboDetalle.monto === 0) {
-      this.messageService.add({key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique Monto' });
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique Monto' });
       return;
     }
 
@@ -109,12 +109,12 @@ export class CobroComponent implements OnInit {
     }
 
     if (this.tiposelected === null || this.tiposelected.id === '') {
-      this.messageService.add({key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique Tipo de Pago' });
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique Tipo de Pago' });
       return;
     }
 
     if (this.tiposelected.name === "MERCADO PAGO" && (this.posselected === null || this.posselected.id === '')) {
-      this.messageService.add({key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique POS' });
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'Especifique POS' });
       return;
     }
 
@@ -181,7 +181,7 @@ export class CobroComponent implements OnInit {
 
   confirmar() {
     if (this.calculartotalcobro() !== this.operacion.total) {
-      this.messageService.add({key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'El monto de los Pagos no es igual a la operación' });
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'El monto de los Pagos no es igual a la operación' });
       return;
     }
 
