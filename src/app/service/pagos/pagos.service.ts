@@ -73,4 +73,8 @@ export class PagosService {
       }));
   }
 
+  imputarRecibo(recibo: string) { 
+    return this.http.get<boolean>(`${environment.baseUrl}/pagos/ImputarRecibo/` + recibo);
+  }
+
 }

@@ -56,7 +56,8 @@ export class CobroComponent implements OnInit {
     observacion: null,
     posId: null,
     posNombre: null,
-    codAut: null
+    codAut: null,
+    cancelado: null
   };
 
   intent!: PaymentIntentDto;
@@ -141,7 +142,8 @@ export class CobroComponent implements OnInit {
       observacion: null,
       posId: null,
       posNombre: null,
-      codAut: null
+      codAut: null,
+      cancelado: null
     }
 
     this.tiposelected = {

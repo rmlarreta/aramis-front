@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
 import { ConciliacionCliente } from 'src/app/model/cobConciliacionCliente.interface';
 import { ClientesService } from 'src/app/service/clientes/clientes.service';
+import { PagosService } from 'src/app/service/pagos/pagos.service';
 import { ReportsService } from 'src/app/service/reports/reports.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class ConciliacionComponent {
   }
   constructor(
     private customerService: ClientesService,
+    private pagoService: PagosService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private reportService: ReportsService
@@ -33,7 +35,6 @@ export class ConciliacionComponent {
         next: (c) => {
           this.conciliacion = c;
           this.visible = true;
-          console.log(this.conciliacion)
         }
         , error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
       });
@@ -84,17 +85,17 @@ export class ConciliacionComponent {
       })
   }
 
-  imputarrecibo(id: string){
+  imputarrecibo(id: string) {
     this.confirmationService.confirm({
       message: 'Seguro de imputar este recibo ?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.reportService.remito(id!)
+        this.pagoService.imputarRecibo(id)
           .subscribe({
             complete: () => {
               this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Cliente Eliminado', life: 3000 });
-               
+
             }
             , error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
           })

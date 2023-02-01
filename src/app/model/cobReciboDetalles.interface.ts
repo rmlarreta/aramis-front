@@ -8,4 +8,5 @@ export interface CobReciboDetalle {
     posId: string | null;
     posNombre: string | null;
     codAut: string | null;
+    cancelado: boolean | null;
 }
