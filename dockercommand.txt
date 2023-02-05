@@ -1,5 +1,5 @@
-docker build -t aramisistemas/aramisfront:version1.0 -f Dockerfile .
-docker run --name aramis-front-container -d -p 8888:80 aramisistemas/aramisfront:version1.2
+docker build -t aramisistemas/aramisfront:version1.0 -f Dockerfile .  
+docker run -it --rm -p 8080:80 aramisistemas/aramisfront:version1.0 
 docker push aramisistemas/aramisfront:version1.2
 docker image ls
 
@@ -7,3 +7,8 @@ kubectl config get-contexts
 kubectl get pods
 kubectl create -f appback.yml
 kubectl create -f appback-service.yml
+
+docker run --name cors -p 80:80 -d nginx
+
+ConnectionStrings__DefaultConnection
+Server=Ricardo\Server;Initial Catalog=AramisBD; User Id=kndRicardo;password=Aramis1234;Encrypt=False
