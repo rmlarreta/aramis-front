@@ -94,8 +94,8 @@ export class ConciliacionComponent {
         this.pagoService.imputarRecibo(id)
           .subscribe({
             complete: () => {
-              this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Cliente Eliminado', life: 3000 });
-
+              this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Recibo Imputado', life: 3000 });
+              this.onHide();
             }
             , error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
           })
