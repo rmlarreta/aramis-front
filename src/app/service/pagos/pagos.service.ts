@@ -61,6 +61,7 @@ export class PagosService {
     return this.http.post<ReciboInsert>(`${environment.baseUrl}/pagos/InsertRecibo/`, recibo)
       .pipe(map(r => {
         this.reciboObservable.next(r);
+        this.pagadoObservable.next(true);
         return r;
       }));
   }
@@ -73,7 +74,7 @@ export class PagosService {
       }));
   }
 
-  imputarRecibo(recibo: string) { 
+  imputarRecibo(recibo: string) {
     return this.http.get<boolean>(`${environment.baseUrl}/pagos/ImputarRecibo/` + recibo);
   }
 

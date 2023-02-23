@@ -19,7 +19,7 @@
                         </th>
                         <th pSortableColumn="total" style="width:30%">Total <p-sortIcon field="total"></p-sortIcon></th>
                         <th pSortableColumn="fecha" style="width:30%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
-                        <th style="width:10%"><i class="pi pi-print"></i></th> 
+                        <th style="width:10%"><i class="pi pi-print"></i></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-operaciones let-expanded="expanded">
@@ -33,8 +33,9 @@
                         <td>{{operaciones.total | currency:'USD'}}</td>
                         <td>{{operaciones.fecha | date:'dd/M/yyyy'}}</td>
                         <td> <button pButton pRipple type="button" icon="pi pi-print"
-                                class="p-button-rounded p-button-info p-button-text" (click)="printremito(operaciones.id)">
-                            </button></td> 
+                                class="p-button-rounded p-button-info p-button-text"
+                                (click)="printremito(operaciones.id)">
+                            </button></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-operacion let-detalles>
@@ -78,6 +79,10 @@
                 <ng-template pTemplate="caption">
                     <div class="flex align-items-center justify-content-between">
                         Recibos sin Imputar {{conciliacion.creditos | currency:'USD'}}
+                        <button pButton pRipple type="button" icon="pi pi-dollar" id="recibobtn"
+                            class="p-button-rounded p-button-info p-button-text p-button-sm" (click)="displaycobro()">
+                            Nuevo Recibo
+                        </button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -103,7 +108,8 @@
                                 class="p-button-rounded p-button-info p-button-text">
                             </button></td>
                         <td> <button pButton pRipple type="button" icon="pi pi-chevron-circle-right"
-                                class="p-button-rounded p-button-info p-button-text" (click)="imputarrecibo(recibos.id)">
+                                class="p-button-rounded p-button-info p-button-text"
+                                (click)="imputarrecibo(recibos.id)">
                             </button></td>
                     </tr>
                 </ng-template>
@@ -137,5 +143,5 @@
         </p-table>
         </ng-template>
     </p-splitter>
-
+    <app-cobro></app-cobro>
 </p-dialog>

@@ -1,8 +1,5 @@
 <p-dialog [modal]="true" header="Cobranzas" [(visible)]="visible" [style]="{width: '70vw', heigth:'auto'}"
-    position="center"  
-    closeIcon="pi pi-trash"
-    (onHide)="resetpagos()"
-    >
+    position="center" closeIcon="pi pi-trash" (onHide)="resetpagos()">
 
     <div class="grid p-fluid">
         <div class="col-12 md:col-4">
@@ -19,6 +16,7 @@
                 <button type="button" pButton pRipple icon="pi pi-times"
                     class="p-button-rounded p-button-danger p-button-text" (click)="reciboDetalle.monto=0"></button>
                 <input *ngIf="operacion" [(ngModel)]="reciboDetalle.monto" type="number" pInputText>
+                <input *ngIf="alone" [(ngModel)]="reciboDetalle.monto" type="number" pInputText>
                 <button type="button" pButton pRipple icon="pi pi-check"
                     class="p-button-rounded p-button-success p-button-text" (click)="agregaritempago()"></button>
             </div>
@@ -51,13 +49,9 @@
     <ng-template #nopagos>
         <div>No hay pagos para procesar aún
         </div>
-    </ng-template> 
+    </ng-template>
 </p-dialog>
-<p-dialog 
-[visible]="cobrandomp" 
-[modal]="true"  
-closeIcon="pi pi-trash"
-[style]="{width: '50vw'}"
-><p>Cobrando...{{(intentresponse$ | async)?.id}}</p>
-<p-progressBar mode="indeterminate"></p-progressBar>
+<p-dialog [visible]="cobrandomp" [modal]="true" closeIcon="pi pi-trash" [style]="{width: '50vw'}">
+    <p>Cobrando...{{(intentresponse$ | async)?.id}}</p>
+    <p-progressBar mode="indeterminate"></p-progressBar>
 </p-dialog>

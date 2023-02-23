@@ -53,4 +53,15 @@ export class ReportsService {
           return new Blob([res.body], { type: 'application/pdf' });
         }));
   }
+
+  presupuesto(id: string) {
+    return this.http.get(`${environment.baseUrl}/reports/ReportePresupuesto/` + id, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }));
+  }
 }

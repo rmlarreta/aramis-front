@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { BusOperacionesDto } from 'src/app/model/busOperacionesDto.interface';
@@ -9,6 +9,7 @@ import { ReciboInsert } from 'src/app/model/cobReciboInsert.interface';
 import { CobTipoPago } from 'src/app/model/cobTipoPago.interface';
 import { PaymentIntentDto, PaymentIntentResponseDto } from 'src/app/model/paymentIntentDto.interface';
 import { PagosService } from 'src/app/service/pagos/pagos.service';
+import { ReportsService } from 'src/app/service/reports/reports.service';
 
 @Component({
   selector: 'app-cobro',
@@ -20,6 +21,7 @@ export class CobroComponent implements OnInit {
 
   visible = false;
   cobrandomp = false;
+  alone = false; 
 
   operacion!: BusOperacionesDto;
 
@@ -47,6 +49,7 @@ export class CobroComponent implements OnInit {
     operador: null,
     detalles: []
   };
+
   reciboDetalles: CobReciboDetalle[] = [];
   reciboDetalle: CobReciboDetalle = {
     id: null,
@@ -70,11 +73,13 @@ export class CobroComponent implements OnInit {
 
   constructor(
     private pagoservice: PagosService,
+    private reporteService: ReportsService,
     private messageService: MessageService
   ) {
-    this.pagoservice.tipopagos.subscribe(x => this.tipospago = x);
+    this.pagoservice.tipopagos.subscribe(x => {
+      this.tipospago = x;
+    });
     this.pagoservice.pos.subscribe(x => this.pos = x);
-
     this.intentresponse$ = pagoservice.pago;
     this.recibo$ = pagoservice.recibo;
   }
@@ -91,7 +96,23 @@ export class CobroComponent implements OnInit {
           });
           if (x.id !== '0') { this.insertrecibo(); }
           this.recibo$.subscribe({
-            next: (r) => { if (r) { if (r.id !== '0') { this.imputarpago(r.id?.toString()!) } } }
+            next: (r) => {
+              if (r) {
+                if (r.id !== '0') {
+                  if (this.alone) {
+                    this.reporteService.recibo(r.id!).subscribe({
+                      next: (x) => {
+                        const fileURL = URL.createObjectURL(x);
+                        window.open(fileURL, '_blank');
+                        this.resetpagos();
+                        this.visible = false; 
+                        return;
+                      }, error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
+                    })
+                  } else { this.imputarpago(r.id?.toString()!) }
+                }
+              }
+            }
             , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }) }
           });
         };
@@ -137,7 +158,7 @@ export class CobroComponent implements OnInit {
     this.reciboDetalle = {
       id: null,
       reciboId: null,
-      monto: this.operacion.total - this.calculartotalcobro(),
+      monto: this.alone ? 0 : this.operacion.total - this.calculartotalcobro(),
       tipo: '',
       observacion: null,
       posId: null,
@@ -170,6 +191,7 @@ export class CobroComponent implements OnInit {
   }
 
   private validarmonto(monto: number): boolean {
+    if (this.alone) return true;
     let total = 0;
     this.reciboDetalles.forEach(x =>
       total += x.monto
@@ -182,11 +204,12 @@ export class CobroComponent implements OnInit {
   }
 
   confirmar() {
-    if (this.calculartotalcobro() !== this.operacion.total) {
-      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'El monto de los Pagos no es igual a la operación' });
-      return;
+    if (!this.alone) {
+      if (this.calculartotalcobro() !== this.operacion.total) {
+        this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Revisar', detail: 'El monto de los Pagos no es igual a la operación' });
+        return;
+      }
     }
-
     let totalMP = 0;
     let posId: string | null = '';
 
@@ -206,7 +229,18 @@ export class CobroComponent implements OnInit {
       this.recibo$.subscribe(r => {
         if (r) {
           if (r.id !== '0') {
-            this.imputarpago(r.id?.toString()!)
+            if (this.alone) {
+              this.reporteService.recibo(r.id!)
+                .subscribe({
+                  next: (x) => {
+                    const fileURL = URL.createObjectURL(x);
+                    window.open(fileURL, '_blank');
+                    this.resetpagos();
+                    this.visible = false;
+                    return;
+                  }, error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
+                })
+            } else { this.imputarpago(r.id?.toString()!) }
           }
         }
       })
@@ -217,9 +251,9 @@ export class CobroComponent implements OnInit {
     this.intent = {
       amount: totalMP,
       additional_info: {
-        external_reference: this.operacion.fantasia,
+        external_reference: this.alone ? 'ALONE' : this.operacion.fantasia,
         print_on_terminal: true,
-        ticket_number: this.operacion.numero?.toString()!
+        ticket_number: this.alone ? 'COBRO A CUENTA' : this.operacion.numero?.toString()!
       }
     };
 

@@ -276,5 +276,25 @@ export class OperacionComponent implements OnInit {
       });
   }
 
+  onPrint() {
+    if (this.operacion.tipoDocName == 'PRESUPUESTO') {
+      this.reportservice.presupuesto(this.operacion.id).subscribe(x => {
+        const fileURL = URL.createObjectURL(x);
+        window.open(fileURL, '_blank');
+      })
+    }
+    if (this.operacion.tipoDocName == 'ORDEN') {
+      this.reportservice.orden(this.operacion.id).subscribe(x => {
+        const fileURL = URL.createObjectURL(x);
+        window.open(fileURL, '_blank');
+      })
+    }
+    if (this.operacion.tipoDocName == 'REMITO') {
+      this.reportservice.remito(this.operacion.id).subscribe(x => {
+        const fileURL = URL.createObjectURL(x);
+        window.open(fileURL, '_blank');
+      })
+    }
+  }
 }
 

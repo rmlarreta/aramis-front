@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
 import { ConciliacionCliente } from 'src/app/model/cobConciliacionCliente.interface';
+import { CobroComponent } from 'src/app/modules/pagos/components/cobro/cobro.component';
 import { ClientesService } from 'src/app/service/clientes/clientes.service';
 import { PagosService } from 'src/app/service/pagos/pagos.service';
 import { ReportsService } from 'src/app/service/reports/reports.service';
@@ -13,6 +14,7 @@ import { ReportsService } from 'src/app/service/reports/reports.service';
 export class ConciliacionComponent {
 
   visible = false;
+  clienteId!: string;
   conciliacion: ConciliacionCliente = {
     operacionesImpagas: [],
     detallesCuentaCorriente: null,
@@ -21,6 +23,10 @@ export class ConciliacionComponent {
     creditos: null,
     saldoConciliado: null
   }
+
+  @ViewChild(CobroComponent)
+  childCob!: CobroComponent;
+
   constructor(
     private customerService: ClientesService,
     private pagoService: PagosService,
@@ -30,6 +36,7 @@ export class ConciliacionComponent {
   ) { }
 
   public onCall(clienteId: string): void {
+    this.clienteId = clienteId;
     this.customerService.conciliacion(clienteId)
       .subscribe({
         next: (c) => {
@@ -83,6 +90,24 @@ export class ConciliacionComponent {
           window.open(fileURL, '_blank')
         }, error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
       })
+  }
+
+  displaycobro() {
+    this.childCob.recibo.clienteId = this.clienteId;
+    this.childCob.alone = true;
+    this.childCob.reciboDetalle.monto = 0;
+    this.childCob.visible = true;
+    this.childCob.tipospago = this.childCob.tipospago.filter(x => x.name != 'CUENTA CORRIENTE');
+    this.pagoService.resetpagado = false;
+    this.pagoService.pagado
+      .subscribe({
+        next: (x => {
+          if (x) {
+            this.onCall(this.clienteId);
+          }
+        }),
+        error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); }
+      });
   }
 
   imputarrecibo(id: string) {

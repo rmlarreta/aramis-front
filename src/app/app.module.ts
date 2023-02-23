@@ -12,7 +12,8 @@ import { ErrorInterceptor } from './service/security/error-interceptor.service';
 import { JwtInterceptor } from './service/security/jwt-interceptor.service';
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
-import { StockModule } from './modules/stock/stock.module';
+import { StockModule } from './modules/stock/stock.module'; 
+import { ReportsModule } from './modules/reports/reports.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,8 @@ import { StockModule } from './modules/stock/stock.module';
     OperacionesModule,
     HttpClientModule,
     StockModule ,
-    CustomersModule
+    CustomersModule,
+    ReportsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
