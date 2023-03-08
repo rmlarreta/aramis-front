@@ -13,14 +13,55 @@
                     placeholder="Búsqueda..." />
             </span>
         </div>
+        <p-dropdown [options]="rubros" optionLabel="name" optionValue="id" [lazy]="true" placeholder="Seleccione Rubro"
+            [(ngModel)]="rubroselected" (onChange)="onChangeRubro()">
+            <ng-template pTemplate="loader" let-options="options">
+                <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                    <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <button pButton pRipple type="button" icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-button-text" (click)="abmRubro=true">
+        </button>
+        <button pButton pRipple type="button" icon="pi pi-truck" class="p-button-rounded p-button-success p-button-text"
+            (click)="ingresaStockDialog=true">
+        </button>
+        <button pButton pRipple type="button" icon="pi pi-percentage"
+            class="p-button-rounded p-button-success p-button-text" (click)="aumentaStockDialog=true">
+        </button>
+
+        <p-dialog [(visible)]="ingresaStockDialog" [style]="{width: '450px'}" header="Ingrese Cantidad" [modal]="true"
+            styleClass="p-fluid" (onHide)="ingresaStockDialog=false">
+            <div class="p-inputgroup">
+                <p-inputNumber [(ngModel)]="remitoIn" inputId="remitoIn" mode="decimal" locale="de-DE"
+                    [minFractionDigits]="2">
+                </p-inputNumber>
+                <button type="button" pButton pRipple icon="pi pi-check"
+                    class="p-button-rounded p-button-success p-button-text" (click)="ingresaStock()"></button>
+            </div>
+        </p-dialog>
+        <p-dialog [(visible)]="aumentaStockDialog" [style]="{width: '450px'}" header="Ingrese Porcentaje" [modal]="true"
+            styleClass="p-fluid" (onHide)="aumentaStockDialog=false">
+            <div class="p-inputgroup">
+                <p-inputNumber [(ngModel)]="percent" inputId="percent" mode="decimal" prefix="%">
+                </p-inputNumber>
+                <button type="button" pButton pRipple icon="pi pi-check"
+                    class="p-button-rounded p-button-success p-button-text" (click)="aumentaPrecioStock()"></button>
+            </div>
+        </p-dialog>
     </p-toolbar>
-    <p-table #dt [value]="listado" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+    <p-table #dt [value]="listadoFt" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
         (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+        [(selection)]="selectedProducts" dataKey="id"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true"
-        [globalFilterFields]="['rubro','descripcion','unitario','plu']" dataKey="id">
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'descripcion','unitario','plu']"
+        dataKey="id">
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 4rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
                 <th pSortableColumn="cantidad" style="width:15%">Stock <p-sortIcon field="cantidad"></p-sortIcon>
                 </th>
                 <th pSortableColumn="plu" style="width:15%">Plu <p-sortIcon field="plu"></p-sortIcon></th>
@@ -33,6 +74,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-listado>
             <tr>
+                <td>
+                    <p-tableCheckbox [value]="listado"></p-tableCheckbox>
+                </td>
                 <td>{{listado.cantidad}}</td>
                 <td>{{listado.plu}}</td>
                 <td>{{listado.descripcion}}</td>
@@ -55,6 +99,10 @@
         </ng-template>
     </p-table>
 
+    <p-dialog [(visible)]="abmRubro" [style]="{width: '600px'}" header="Edición Rubros" [modal]="true"
+        styleClass="p-fluid" (onHide)="abmRubro=false">
+        <app-rubrosabm></app-rubrosabm>
+    </p-dialog>
     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nuevo Producto" [modal]="true"
         styleClass="p-fluid" (onHide)="hideDialog()">
         <ng-template pTemplate="content">

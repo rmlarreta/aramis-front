@@ -1,4 +1,4 @@
-export interface StockProductInsert { 
+export interface StockProductInsert {
     cantidad: number;
     plu: string;
     descripcion: string;
@@ -9,4 +9,5 @@ export interface StockProductInsert {
     tasa: number;
     servicio: boolean;
     precio: number | null;
+    id: string | null;
 }

@@ -15,14 +15,20 @@ import { StockService } from 'src/app/service/stock/stock.service';
 export class MainComponent implements OnInit {
 
   listado: StockProductDto[] = [];
+  listadoFt: StockProductDto[] = [];
+  selectedProducts: StockProductDto[] = [];
   loading = false;
   updating = false;
+  abmRubro = false;
   first = 0;
   rows = 10;
 
   rubros: StockRubroDto[] = [];
+  rubroselected: string = '';
   ivas: StockIvaDto[] = [];
+  inserts: StockProductInsert[] = [];
   insert: StockProductInsert = {
+    id: null,
     plu: '',
     cantidad: 0,
     descripcion: '',
@@ -36,6 +42,10 @@ export class MainComponent implements OnInit {
   };
   productDialog = false;
   submitted = false;
+  remitoIn: number = 0;
+  percent: number = 0;
+  ingresaStockDialog = false;
+  aumentaStockDialog = false;
 
   constructor(
     private stockservice: StockService,
@@ -44,14 +54,21 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.stockservice.rubrosObservable
+    .subscribe(r => this.rubros = r);
+
     this.stockservice.products
-      .subscribe(s => this.listado = s);
+      .subscribe(s => { this.listado = s; this.listadoFt = s });
 
     this.stockservice.rubros
       .subscribe(r => this.rubros = r);
 
     this.stockservice.ivas
       .subscribe(i => this.ivas = i);
+  }
+
+  onChangeRubro() {
+    this.listadoFt = this.listado.filter(x => x.rubro === this.rubroselected);
   }
 
   hideDialog() {
@@ -67,7 +84,7 @@ export class MainComponent implements OnInit {
         complete: () => {
           this.hideDialog()
           this.stockservice.products
-            .subscribe(x => this.listado = x);
+            .subscribe(s => { this.listado = s; this.listadoFt = s });
         },
         error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
@@ -81,7 +98,7 @@ export class MainComponent implements OnInit {
         complete: () => {
           this.hideDialog()
           this.stockservice.products
-            .subscribe(x => this.listado = x);
+            .subscribe(s => { this.listado = s; this.listadoFt = s });
         },
         error: (error) => { this.messageService.add({ severity: 'warn', summary: 'Error', detail: error }); }
       })
@@ -126,11 +143,11 @@ export class MainComponent implements OnInit {
   }
 
   isLastPage(): boolean {
-    return this.listado ? this.first === (this.listado.length - this.rows) : true;
+    return this.listadoFt ? this.first === (this.listadoFt.length - this.rows) : true;
   }
 
   isFirstPage(): boolean {
-    return this.listado ? this.first === 0 : true;
+    return this.listadoFt ? this.first === 0 : true;
   }
 
   customSort(event: SortEvent) {
@@ -160,4 +177,87 @@ export class MainComponent implements OnInit {
     this.insert.precio = final;
   }
 
+  dialogRemito() {
+    this.ingresaStockDialog = true;
+  }
+
+  ingresaStock() {
+    this.selectedProducts.length > 0 ? this.updateRangeProducts() : this.ingresaStockDialog = false;
+  }
+
+  updateRangeProducts() {
+    this.selectedProducts.forEach(x => {
+      this.inserts.push({
+        id: x.id,
+        plu: x.plu,
+        cantidad: x.cantidad + this.remitoIn,
+        descripcion: x.descripcion,
+        rubro: x.rubro,
+        iva: x.iva,
+        neto: x.neto,
+        internos: x.internos,
+        tasa: x.tasa,
+        servicio: x.servicio,
+        precio: x.unitario!
+      })
+    })
+    this.stockservice.productssave(this.inserts)
+      .subscribe(
+        {
+          complete: () => {
+            this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Productos Actualizados', life: 3000 });
+            this.stockservice.products
+              .subscribe(s => { this.listado = s; this.listadoFt = s });
+            this.ingresaStockDialog = false;
+            this.selectedProducts = [];
+            this.inserts = [];
+            this.remitoIn = 0;
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'warn', summary: 'Error', detail: error });
+            this.ingresaStockDialog = false;
+            this.selectedProducts = [];
+            this.inserts = [];
+            this.remitoIn = 0;
+          }
+        })
+  }
+
+  aumentaPrecioStock() {
+    this.selectedProducts.forEach(x => {
+      this.inserts.push({
+        id: x.id,
+        plu: x.plu,
+        cantidad: x.cantidad,
+        descripcion: x.descripcion,
+        rubro: x.rubro,
+        iva: x.iva,
+        neto: x.neto * (1 + (this.percent / 100)),
+        internos: x.internos,
+        tasa: x.tasa,
+        servicio: x.servicio,
+        precio: x.unitario!
+      })
+    })
+    this.stockservice.productssave(this.inserts)
+      .subscribe(
+        {
+          complete: () => {
+            this.messageService.add({ severity: 'success', summary: 'Correcto', detail: 'Productos Actualizados', life: 3000 });
+            this.stockservice.products
+              .subscribe(s => { this.listado = s; this.listadoFt = s });
+            this.aumentaStockDialog = false;
+            this.selectedProducts = [];
+            this.inserts = [];
+            this.percent = 0;
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'warn', summary: 'Error', detail: error });
+            this.aumentaStockDialog = false;
+            this.selectedProducts = [];
+            this.inserts = [];
+            this.percent = 0;
+          }
+        })
+  }
 }

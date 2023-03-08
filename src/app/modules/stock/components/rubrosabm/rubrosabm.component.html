@@ -1,0 +1,54 @@
+<p-card> 
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-button-text" (click)="rubroDialog=true">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-table #dt [value]="listado"   [showCurrentPageReport]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '20rem'}" [rowHover]="true"
+        [globalFilterFields]="[ 'name']" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name" style="width:95%">Rubro <p-sortIcon field="name"></p-sortIcon></th>
+                <th style="width:5%"><i class="pi pi-file-edit"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado>
+            <tr>
+                <td>{{listado.name}}</td>
+                <td> <button pButton pRipple type="button" icon="pi pi-check"
+                        class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
+                    </button></td>
+            </tr>
+        </ng-template>  
+    </p-table>
+
+    <p-dialog [(visible)]="rubroDialog" [style]="{width: '350px'}" header="Nuevo Rubro" [modal]="true"
+        styleClass="p-fluid" (onHide)="hideDialog()">
+        <ng-template pTemplate="content">
+            <div class="field">
+                <label for="name">Rubro Nuevo</label>
+                <input type="text" pInputText id="name" [(ngModel)]="insert.name" required autofocus />
+                <small class="p-error" *ngIf="submitted && !insert.name">Rubro es necesario.</small>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button *ngIf="!updating" pButton pRipple label="Agregar" icon="pi pi-check" class="p-button-text"
+                (click)="addRubro()"></button>
+            <button *ngIf="updating" pButton pRipple label="Actualizar" icon="pi pi-check" class="p-button-text"
+                (click)="saveRubro()"></button>
+        </ng-template>
+    </p-dialog>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-card>

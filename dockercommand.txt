@@ -1,6 +1,6 @@
-docker build -t aramisistemas/aramisfront:version1.0 -f Dockerfile .  
+docker build -t aramisistemas/aramisfront:v1.5 -f Dockerfile .  
 docker run -it --rm -p 8080:80 aramisistemas/aramisfront:version1.0 
-docker push aramisistemas/aramisfront:version1.2
+docker push aramisistemas/aramisfront:v1.5
 docker image ls
 
 kubectl config get-contexts
