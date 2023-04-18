@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -16,13 +18,12 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RatingModule } from 'primeng/rating';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
+import { SplitterModule } from 'primeng/splitter';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { CheckboxModule } from 'primeng/checkbox';
-import { SplitterModule } from 'primeng/splitter';
-
 @NgModule({
   declarations: [],
   exports: [
@@ -48,7 +49,9 @@ import { SplitterModule } from 'primeng/splitter';
     InputTextModule,
     ProgressBarModule,
     CheckboxModule,
-    SplitterModule
+    SplitterModule,
+    SelectButtonModule,
+    CalendarModule
   ]
 })
 export class PrimeModule { }

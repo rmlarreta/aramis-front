@@ -28,6 +28,10 @@ const routes: Routes = [
     loadChildren: () => import('./modules/reports/reports.module').then(m => m.ReportsModule)
   },
   {
+    path: 'suppliers',
+    loadChildren: () => import('./modules/suppliers/suppliers.module').then(m => m.SuppliersModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./modules/operaciones/operaciones.module').then(m => m.OperacionesModule)
   },

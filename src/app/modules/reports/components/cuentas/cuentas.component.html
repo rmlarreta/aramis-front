@@ -1,4 +1,5 @@
 <p-card>
+    <p-toast></p-toast>
     <p-toolbar>
         <div class="flex">
             <span class="p-input-icon-left ml-auto">
@@ -19,6 +20,8 @@
                 <th pSortableColumn="name" style="min-width:15rem">Cuenta <p-sortIcon field="name"></p-sortIcon></th>
                 <th pSortableColumn="saldo">Saldo <p-sortIcon field="saldo"></p-sortIcon></th>
                 <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </ng-template>
 
@@ -26,7 +29,10 @@
             <tr>
                 <td>{{cuentas.name}}</td>
                 <td>{{cuentas.saldo | currency:'USD'}}</td>
-                <td> <p-button icon="pi pi-check" styleClass="p-button-text"></p-button></td>
+                <td> <p-button icon="pi pi-arrow-right-arrow-left" styleClass="p-button-text"
+                        (onClick)="onShow(cuentas.id)"></p-button></td>
+                <td> <p-button icon="pi pi-dollar" styleClass="p-button-text"></p-button></td>
+                <td> <p-button icon="pi pi-file-excel" styleClass="p-button-text"></p-button></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary">
@@ -35,4 +41,44 @@
             </div>
         </ng-template>
     </p-table>
+    <p-dialog [(visible)]="movimientoCuentaDialog" [style]="{width: '650px'}" header="Movimiento de Cuentas"
+        [modal]="true" styleClass="p-fluid" (onHide)="movimientoCuentaDialog=false">
+        <div class="grid p-fluid">
+            <div class="col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-dollar"></i></span>
+                    <p-inputNumber [(ngModel)]="movimiento.monto" inputId="currency-us" mode="decimal"
+                        [minFractionDigits]="2" [maxFractionDigits]="2"> </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-sort-alt-slash"></i></span>
+                    <p-selectButton [options]="debitoOptions" [(ngModel)]="movimiento.debito" optionLabel="label"
+                        optionValue="value"></p-selectButton>
+                </div>
+            </div>
+        </div>
+        <div class="grid p-fluid">
+            <div class="col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-list"></i></span>
+                    <input type="text" pInputText [(ngModel)]="movimiento.detalle" />
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-verified"></i></span>
+                    <p-selectButton [options]="computaOptions" [(ngModel)]="movimiento.computa" optionLabel="label"
+                        optionValue="value"></p-selectButton>
+                </div>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                (click)="hideDialog()"></button>
+            <button pButton pRipple label="Actualizar" icon="pi pi-check" class="p-button-text"
+                (click)="onSubmit()"></button>
+        </ng-template>
+    </p-dialog>
 </p-card>

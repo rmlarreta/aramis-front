@@ -3,7 +3,8 @@ export interface OpClienteDto {
     cui: string;
     resp: string;
     respName: string;
-    razon: string;
+    razon: string; 
+    razoncui: string | null;
     gender: string;
     genderName: string;
     domicilio: string;

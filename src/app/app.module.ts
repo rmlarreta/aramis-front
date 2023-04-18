@@ -14,6 +14,7 @@ import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
 import { StockModule } from './modules/stock/stock.module'; 
 import { ReportsModule } from './modules/reports/reports.module';
+import { SuppliersModule } from './modules/suppliers/suppliers.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,8 @@ import { ReportsModule } from './modules/reports/reports.module';
     HttpClientModule,
     StockModule ,
     CustomersModule,
-    ReportsModule
+    ReportsModule,
+    SuppliersModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

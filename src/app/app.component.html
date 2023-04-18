@@ -1,19 +1,18 @@
-
 <mat-toolbar class="mat-elevation-z8">
 
   <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
     <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
     <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
-  </button> 
+  </button>
   <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-info p-button-text"
     routerLink="security/login"></button>
   <button pButton pRipple type="button" icon="pi pi-power-off" class="p-button-rounded p-button-danger p-button-text"
     (click)="logout()"></button>
   <button pButton pRipple type="button" icon="pi pi-user-edit" class="p-button-rounded p-button-warning p-button-text"
     routerLink="security/change"></button>
-  
+
   <div *ngIf="user" class="user">Usuario Logueado: {{user.realName}}</div>
- 
+
 </mat-toolbar>
 
 
@@ -30,6 +29,8 @@
       class="p-button-raised p-button-text menu-button" routerLink="operaciones"></button>
     <button pButton pRipple type="button" icon="pi pi-users" label="Clientes"
       class="p-button-raised p-button-text menu-button" routerLink="clientes"></button>
+    <button pButton pRipple type="button" icon="pi pi-truck" label="Proveedores"
+      class="p-button-raised p-button-text menu-button" routerLink="suppliers"></button>
     <button pButton pRipple type="button" icon="pi pi-print" label="Reportes"
       class="p-button-raised p-button-text menu-button" routerLink="reportes"></button>
     <button pButton pRipple type="button" icon="pi pi-box" label="Stock"
@@ -39,7 +40,7 @@
       class="p-button-raised p-button-text menu-button"></button>
   </mat-sidenav>
 
-  <mat-sidenav-content> 
+  <mat-sidenav-content>
     <div class="content mat-elevation-z8">
       <router-outlet> </router-outlet>
     </div>

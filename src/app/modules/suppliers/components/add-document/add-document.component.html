@@ -1,0 +1,63 @@
+<p-dialog header="Nuevo Documento Proveedores" [modal]="true" [(visible)]="visible" [dismissableMask]="true"
+    [style]="{width: '50vw', height: 'auto'}">
+
+    <p-toast></p-toast>
+    <p-card class="grid p-fluid">
+        <form [formGroup]="addDocument" (ngSubmit)="onSubmit()" class="grid">
+            <div class="field col-7">
+                <label for="razoncui">Proveedor</label>
+                <p-dropdown [options]="customers" optionLabel="razoncui"  [lazy]="true"
+                    placeholder="Seleccione Proveedor" [(ngModel)]="selectedCustomer" [filter]="true"
+                    filterBy="razoncui" formControlName="proveedorId" appendTo="body"
+                    (onChange)="razon()"
+                    >
+                    <ng-template pTemplate="loader" let-options="options">
+                        <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                            <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="field col-2">
+                <label for="pos">Pos</label>
+                <input type="text" pInputText id="pos" [(ngModel)]="document.pos" required autofocus
+                    formControlName="pos" />
+                <small class="p-error" *ngIf="submitted && !document.pos">Pos es necesario.</small>
+            </div>
+            <div class="field col-3">
+                <label for="numero">Número</label>
+                <input type="text" pInputText id="numero" [(ngModel)]="document.numero" required
+                    formControlName="numero" />
+                <small class="p-error" *ngIf="submitted && !document.numero">Número es necesario.</small>
+            </div>
+            <div class="field col-4">
+                <label for="tipoDoc">Tipo</label>
+                <p-dropdown [options]="tipoOperaciones" optionLabel="name" optionValue="id" [lazy]="true"
+                    placeholder="Seleccione Tipo" [(ngModel)]="document.tipoDocId" [filter]="true" filterBy="name"
+                    formControlName="tipoDocId" appendTo="body">
+                    <ng-template pTemplate="loader" let-options="options">
+                        <div class="flex align-items-center py-2 px-3" style="height: 38px">
+                            <ngx-skeleton-loader height="1rem"></ngx-skeleton-loader>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+            <div class="field col-4">
+                <label for="fecha">Fecha</label>
+                <p-calendar [showIcon]="true"  formControlName="fecha" inputId="fecha"
+                    dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
+            </div>
+            <div class="field col-4">
+                <label for="monto">Monto</label>
+                <p-inputNumber [(ngModel)]="document.monto" formControlName="monto" inputId="monto" mode="currency"
+                    currency="USD" locale="en-US"> </p-inputNumber>
+            </div>
+            <div class="col-12">
+                <button pButton class="button-submit" [disabled]="loading">
+                    Guardar
+                    <p-progressSpinner strokeWidth="6" styleClass="spinner-button" *ngIf="loading"></p-progressSpinner>
+                </button>
+            </div>
+        </form>
+    </p-card>
+</p-dialog>

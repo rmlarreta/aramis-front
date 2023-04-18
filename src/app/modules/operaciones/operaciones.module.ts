@@ -14,23 +14,26 @@ import { OperacionComponent } from './pages/operacion/operacion.component';
 import { OperacionesComponent } from './pages/operaciones/operaciones.component';
 
 @NgModule({
-  declarations: [ 
-   OperacionesComponent , 
-   OperacionComponent,
-   GridoperacionesComponent,
-   TipodropdownComponent ,
-   ListadoComponent,
-   ListadocustomersComponent,
-   EstadosdropdownComponent     
+  declarations: [
+    OperacionesComponent,
+    OperacionComponent,
+    GridoperacionesComponent,
+    TipodropdownComponent,
+    ListadoComponent,
+    ListadocustomersComponent,
+    EstadosdropdownComponent
   ],
   imports: [
     CommonModule,
     PrimeModule,
     MaterialModule,
-    OperacionesRoutingModule ,
+    OperacionesRoutingModule,
     FormsModule,
     PagosModule
-  ] 
+  ],
+  exports: [
+    ListadocustomersComponent
+  ]
 })
 
 export class OperacionesModule { }
