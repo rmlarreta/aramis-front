@@ -1,4 +1,4 @@
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -7,13 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CustomersModule } from './modules/customers/customers.module';
 import { OperacionesModule } from './modules/operaciones/operaciones.module';
+import { ReportsModule } from './modules/reports/reports.module';
 import { SecurityModule } from './modules/security/security.module';
+import { StockModule } from './modules/stock/stock.module';
 import { ErrorInterceptor } from './service/security/error-interceptor.service';
 import { JwtInterceptor } from './service/security/jwt-interceptor.service';
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
-import { StockModule } from './modules/stock/stock.module'; 
-import { ReportsModule } from './modules/reports/reports.module';
 import { SuppliersModule } from './modules/suppliers/suppliers.module';
 
 @NgModule({
@@ -27,7 +27,7 @@ import { SuppliersModule } from './modules/suppliers/suppliers.module';
     SecurityModule,
     OperacionesModule,
     HttpClientModule,
-    StockModule ,
+    StockModule,
     CustomersModule,
     ReportsModule,
     SuppliersModule

@@ -6,13 +6,15 @@ import { AddDocumentComponent } from './components/add-document/add-document.com
 import { MainComponent } from './pages/main/main.component';
 import { SuppliersRoutingModule } from './suppliers-routing.module';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { PayDocumentComponent } from './components/pay-document/pay-document.component';
 
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    AddDocumentComponent
+    AddDocumentComponent,
+    PayDocumentComponent
   ],
   providers: [MessageService, ConfirmationService],
   imports: [

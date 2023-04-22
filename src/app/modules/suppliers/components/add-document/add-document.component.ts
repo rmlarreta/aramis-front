@@ -75,9 +75,11 @@ export class AddDocumentComponent implements OnInit {
   }
 
   public onSubmit() {
+    this.loading = true;
     this.submitted = true;
 
     if (this.addDocument.invalid) {
+      this.loading = false;
       return;
     }
 

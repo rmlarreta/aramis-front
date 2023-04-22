@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
+import { OpDocumentoProveedorDto } from 'src/app/model/OpDocumentoProveedorDto.interface';
 import { BusEstadoDto } from 'src/app/model/busEstadosDto.interface';
 import { OpClienteDto } from 'src/app/model/opClientesDto.interface';
-import { OpDocumentoProveedorDto } from 'src/app/model/OpDocumentoProveedorDto.interface';
 import { ClientesService } from 'src/app/service/clientes/clientes.service';
 import { OperacionesService } from 'src/app/service/operaciones/operaciones.service';
 import { SuppliersService } from 'src/app/service/suppliers/suppliers.service';
 import { AddDocumentComponent } from '../../components/add-document/add-document.component';
+import { PayDocumentComponent } from '../../components/pay-document/pay-document.component';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'app-main',
@@ -16,17 +18,21 @@ import { AddDocumentComponent } from '../../components/add-document/add-document
 export class MainComponent implements OnInit {
   @ViewChild(AddDocumentComponent)
   childAddDocument!: AddDocumentComponent;
+  @ViewChild(PayDocumentComponent)
+  childPayDocument!: PayDocumentComponent;
+  pagando: boolean = false;
   listado: OpDocumentoProveedorDto[] = [];
   customers: OpClienteDto[] = [];
   estados: BusEstadoDto[] = [];
-  estadoselected: string = '';
+  estadoselected: BusEstadoDto = {
+    id: '',
+    name: ''
+  };
   first = 0;
   rows = 10;
   addDocument = false;
   constructor(
     private estadoService: OperacionesService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
     private supplierService: SuppliersService,
     private customerService: ClientesService
   ) { }
@@ -37,7 +43,8 @@ export class MainComponent implements OnInit {
         next: x => {
           this.estados = x;
           this.estados = this.estados.filter(x => x.name === 'PAGADO' || x.name === 'ABIERTO');
-          this.estadoselected = this.estados.find(x => x.name === 'ABIERTO')?.id.toString() || '';
+          this.estadoselected.id = this.estados.find(x => x.name === 'ABIERTO')?.id || '';
+          this.estadoselected.name = this.estados.find(x => x.name === 'ABIERTO')?.name || '';
           this.onChangeEstado();
         }
       }
@@ -50,7 +57,16 @@ export class MainComponent implements OnInit {
           x.razoncui = x.razon + ' (' + x.cui + ')'
         })
       }
-    }) 
+    })
+
+    this.supplierService.newdocumentsuccess.subscribe({
+      next: x => {
+        if (x) {
+          this.onChangeEstado();
+        }
+      }
+    }
+    )
   }
 
   onAddDocument() {
@@ -60,13 +76,32 @@ export class MainComponent implements OnInit {
   }
 
   onChangeEstado() {
-    this.supplierService.documentByEstado(this.estadoselected).subscribe(
+    this.estadoselected.name = this.estados.find(x => x.id === this.estadoselected.id)?.name || '';
+    this.supplierService.documentByEstado(this.estadoselected.id).subscribe(
       {
         next: x => {
           this.listado = x;
         }
       }
     )
+  }
+
+  onPayDocument(documento: OpDocumentoProveedorDto) {
+    this.pagando = true;
+    this.childPayDocument.pago.documento = documento;
+    this.supplierService.newdocumentsuccess.subscribe({
+      next: x => {
+        if (x) {
+          this.onChangeEstado();
+        }
+      }
+    }
+    )
+  }
+
+  pagado(pagado: boolean) {
+    this.pagando = !pagado;
+
   }
 
   next() {
