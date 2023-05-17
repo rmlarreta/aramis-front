@@ -152,7 +152,7 @@ export class OperacionComponent implements OnInit {
   deletedetalleremito(detalle: BusDetallesOperacionesDto) {
     this.operacion.detalles = this.operacion.detalles.filter(val => val.id !== detalle.id);
     let total = 0;
-    this.operacion.detalles.forEach(x => total += x.cantidad * x.unitario)
+    this.operacion.detalles.forEach(x => total += x.cantidadDisponible * x.unitario)
     this.operacion.total = total;
   }
 
@@ -161,10 +161,10 @@ export class OperacionComponent implements OnInit {
   }
 
   onRowEditSave(detalle: BusDetallesOperacionesDto) {
-    if (detalle.cantidad! > 0 && detalle.unitario! > 0) {
+    if (detalle.cantidadDisponible! > 0 && detalle.unitario! > 0) {
       let det: BusDetalleOperacionesInsert = {
         id: detalle.id,
-        cantidad: detalle.cantidad,
+        cantidad: detalle.cantidadDisponible,
         detalle: detalle.detalle,
         operacionId: detalle.operacionId,
         productoId: detalle.productoId,
@@ -197,8 +197,13 @@ export class OperacionComponent implements OnInit {
     let total = 0;
     this.operacion.detalles.forEach(x => total += x.cantidad * x.unitario)
     total = total - this.operacion.detalles[index].cantidad * this.operacion.detalles[index].unitario;
-    total = total + (detalle.cantidad * detalle.unitario);
-    if (total > this.totalRemito) {
+    total = total + (detalle.cantidadDisponible * detalle.unitario); 
+   if(detalle.cantidadDisponible > this.operacion.detalles[index].cantidad){ 
+    this.onRowEditCancel(detalle, index);
+    this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: 'No de puede facturar mas de lo que está pendiente' }); 
+    return;
+   }
+    if (total > this.totalRemito) { 
       this.onRowEditCancel(detalle, index);
       return;
     }
@@ -206,9 +211,13 @@ export class OperacionComponent implements OnInit {
       this.onRowEditCancel(detalle, index);
       return;
     }
+    if (detalle.cantidadDisponible <= 0) {
+      this.onRowEditCancel(detalle, index);
+      return;
+    }
     delete this.editedRow[detalle.id];
     this.operacion.total = total;
-    this.operacion.detalles.forEach(x => x.total = x.cantidad * x.unitario);
+    this.operacion.detalles.forEach(x => x.total = x.cantidadDisponible * x.unitario);
   }
 
   onRowEditCancel(detalle: BusDetallesOperacionesDto, index: number) {
@@ -261,7 +270,8 @@ export class OperacionComponent implements OnInit {
   }
 
   facturar() {
-    this.facturando = true;
+    this.facturando = true; 
+    this.operacion.detalles[0].cantidad =   this.operacion.detalles[0]. cantidadDisponible
     this.opservice.facturar(this.operacion.detalles)
       .subscribe({
         next: (x) => {

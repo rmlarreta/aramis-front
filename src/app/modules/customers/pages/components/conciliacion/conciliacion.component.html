@@ -78,7 +78,7 @@
                 [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex align-items-center justify-content-between">
-                        Recibos sin Imputar {{conciliacion.creditos | currency:'USD'}}
+                        Recibos y Facturas sin Imputar {{conciliacion.creditos | currency:'USD'}}
                         <button pButton pRipple type="button" icon="pi pi-dollar" id="recibobtn"
                             class="p-button-rounded p-button-info p-button-text p-button-sm" (click)="displaycobro()">
                             Nuevo Recibo
