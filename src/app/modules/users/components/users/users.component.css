@@ -1,0 +1,5 @@
+.custom-toast {
+    max-width: 100%; /* Establece un ancho máximo */
+    width: auto; /* Permite que el ancho se ajuste automáticamente */
+    white-space: normal; /* Permite que el contenido se envuelva en varias líneas */
+  }

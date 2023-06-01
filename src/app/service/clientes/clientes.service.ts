@@ -10,37 +10,37 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ClientesService {
-
+  private baseUrl = environment.baseUrl; // Establece la URL base del BFF
   constructor(
     private http: HttpClient
   ) { }
 
   getbycui(cui: string) {
-    return this.http.get<OpClienteDto>(`${environment.baseUrl}/customers/GetByCui/${cui}`);
+    return this.http.get<OpClienteDto>(`${this.baseUrl}/customers/GetByCui/${cui}`);
   }
 
   get clientes() {
-    return this.http.get<OpClienteDto[]>(`${environment.baseUrl}/customers/GetAll`);
+    return this.http.get<OpClienteDto[]>(`${this.baseUrl}/customers/GetAll`);
   }
 
   get genders() {
-    return this.http.get<OpGenderDto[]>(`${environment.baseUrl}/customers/GetGenderList`);
+    return this.http.get<OpGenderDto[]>(`${this.baseUrl}/customers/GetGenderList`);
   }
 
   get respos() {
-    return this.http.get<OpRespDto[]>(`${environment.baseUrl}/customers/GetRespList`);
+    return this.http.get<OpRespDto[]>(`${this.baseUrl}/customers/GetRespList`);
   }
 
   get paises() {
-    return this.http.get<OpPaiDto[]>(`${environment.baseUrl}/customers/GetPaisList`);
+    return this.http.get<OpPaiDto[]>(`${this.baseUrl}/customers/GetPaisList`);
   }
 
   customeradd(customer: OpClienteInsert) {
-    return this.http.post<OpClienteDto>(`${environment.baseUrl}/customers/Insert`, customer);
+    return this.http.post<OpClienteDto>(`${this.baseUrl}/customers/Insert`, customer);
   }
 
   customerdelete(customerId: string) {
-    return this.http.delete(`${environment.baseUrl}/customers/Delete/` + customerId, { responseType: "arraybuffer" });
+    return this.http.delete(`${this.baseUrl}/customers/Delete/` + customerId, { responseType: "arraybuffer" });
   }
 
   customersave(customer: OpClienteInsert) {

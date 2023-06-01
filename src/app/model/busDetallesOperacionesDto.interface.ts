@@ -1,4 +1,5 @@
 export interface BusDetallesOperacionesDto {
+    forEach(arg0: (element: any) => void): unknown;
     id: string;
     operacionId: string;
     productoId: string;

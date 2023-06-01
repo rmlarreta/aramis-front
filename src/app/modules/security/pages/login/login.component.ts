@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs'; 
-import { AuthenticationService } from 'src/app/service/security/authentication.service';
+import { first } from 'rxjs';
+import { AuthenticationService } from 'src/app/modules/security/service/authentication.service';
+import { UserRequest } from '../../dtos/userRequest.interface copy';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,11 @@ export class LoginComponent implements OnInit {
   submitted = false;
   error = '';
 
+  userRequest: UserRequest = {
+    user: null,
+    password: null,
+    nPassword: null
+  };
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -48,14 +54,17 @@ export class LoginComponent implements OnInit {
 
     this.error = '';
     this.loading = true;
-    this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+
+    this.userRequest.user = this.f['username'].value;
+    this.userRequest.password = this.f['password'].value;
+    this.authenticationService.login(this.userRequest)
       .pipe(first())
       .subscribe({
         next: (user) => {
           // get return url from route parameters or default to '/' 
           if (user == null) {
             this.loading = false;
-            this.error = 'Verifique los datos ingresados'; 
+            this.error = 'Verifique los datos ingresados';
             return;
           }
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';

@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CuentasService {
-
+  private baseUrl =  environment.baseUrl; // Establece la URL base del BFF
   private cuenta$: BehaviorSubject<CobCuentum> = new BehaviorSubject<CobCuentum>({
     id: '',
     name: '',
@@ -21,11 +21,11 @@ export class CuentasService {
     return this.cuenta$.asObservable();
   }
   get cuentas() {
-    return this.http.get<CobCuentum[]>(`${environment.baseUrl}/cuentas/getall`);
+    return this.http.get<CobCuentum[]>(`${this.baseUrl}/cuentas/getall`);
   }
 
   movimiento(movimiento: CobCuentaMovimientoDto) {
-    return this.http.post<CobCuentum>(`${environment.baseUrl}/cuentas/MovimientoCuentas`, movimiento)
+    return this.http.post<CobCuentum>(`${this.baseUrl}/cuentas/MovimientoCuentas`, movimiento)
       .pipe(
         map((_cuenta) => {
           this.cuenta$.next(_cuenta);

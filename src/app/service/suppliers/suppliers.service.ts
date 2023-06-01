@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class SuppliersService {
-
+  private baseUrl =  environment.baseUrl; // Establece la URL base del BFF
   constructor(private http: HttpClient) { }
   private newdocument: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
@@ -18,11 +18,11 @@ export class SuppliersService {
     return this.newdocument.asObservable();
   }
   documentByEstado(estado: string) {
-    return this.http.get<OpDocumentoProveedorDto[]>(`${environment.baseUrl}/proveedores/GetByEstado/` + estado);
+    return this.http.get<OpDocumentoProveedorDto[]>(`${this.baseUrl}/proveedores/GetByEstado/` + estado);
   }
 
   InsertDocument(document: OpDocumentoProveedorDto) {
-    return this.http.post<boolean>(`${environment.baseUrl}/proveedores/Add/`, document)
+    return this.http.post<boolean>(`${this.baseUrl}/proveedores/Add/`, document)
       .pipe(
         map((_response) => {
           this.newdocument.next(_response);
@@ -31,7 +31,7 @@ export class SuppliersService {
   }
 
   PagarDocumento(pago: OpDocumentoProveedorPago) {
-    return this.http.patch<boolean>(`${environment.baseUrl}/proveedores/PagarDocumento/`, pago)
+    return this.http.patch<boolean>(`${this.baseUrl}/proveedores/PagarDocumento/`, pago)
       .pipe(
         map((_response) => {
           this.newdocument.next(_response);

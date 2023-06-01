@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class StockService {
+  private baseUrl =  environment.baseUrl;// Establece la URL base del BFF
   private rubrosObservables: BehaviorSubject<StockRubroDto[]> =
     new BehaviorSubject<StockRubroDto[]>([]);
   constructor(
@@ -18,7 +19,7 @@ export class StockService {
   ) { }
 
   get products() {
-    return this.http.get<StockProductDto[]>(`${environment.baseUrl}/stock/productsList`);
+    return this.http.get<StockProductDto[]>(`${this.baseUrl}/stock/productsList`);
   }
 
   get rubrosObservable() {
@@ -26,7 +27,7 @@ export class StockService {
   }
 
   get rubros() {
-    return this.http.get<StockRubroDto[]>(`${environment.baseUrl}/stock/rubros`)
+    return this.http.get<StockRubroDto[]>(`${this.baseUrl}/stock/rubros`)
       .pipe(
         map((_r) => {
           this.rubrosObservables.next(_r);
@@ -36,31 +37,31 @@ export class StockService {
   }
 
   get ivas() {
-    return this.http.get<StockIvaDto[]>(`${environment.baseUrl}/stock/ivas`);
+    return this.http.get<StockIvaDto[]>(`${this.baseUrl}/stock/ivas`);
   }
 
   productadd(product: StockProductInsert) {
-    return this.http.post<StockProductDto>(`${environment.baseUrl}/stock/productadd`, product);
+    return this.http.post<StockProductDto>(`${this.baseUrl}/stock/productadd`, product);
   }
 
   productdelete(id: string) {
-    return this.http.delete(`${environment.baseUrl}/stock/ProductDelete/` + id, { responseType: "arraybuffer" });
+    return this.http.delete(`${this.baseUrl}/stock/ProductDelete/` + id, { responseType: "arraybuffer" });
   }
 
   productsave(product: StockProductInsert) {
-    return this.http.patch<StockProductDto>(`${environment.baseUrl}/stock/productupdate`, product);
+    return this.http.patch<StockProductDto>(`${this.baseUrl}/stock/productupdate`, product);
   }
 
   productssave(product: StockProductInsert[]) {
-    return this.http.patch(`${environment.baseUrl}/stock/productsUpdate`, product, { responseType: "arraybuffer" });
+    return this.http.patch(`${this.baseUrl}/stock/productsUpdate`, product, { responseType: "arraybuffer" });
   }
 
   rubroadd(rubro: StockRubroDto) {
-    return this.http.post(`${environment.baseUrl}/stock/RubroInsert`, rubro, { responseType: "arraybuffer" });
+    return this.http.post(`${this.baseUrl}/stock/RubroInsert`, rubro, { responseType: "arraybuffer" });
   }
 
   rubroupdate(rubro: StockRubroDto) {
-    return this.http.patch(`${environment.baseUrl}/stock/RubroUpdate`, rubro, { responseType: "arraybuffer" });
+    return this.http.patch(`${this.baseUrl}/stock/RubroUpdate`, rubro, { responseType: "arraybuffer" });
   }
 
 

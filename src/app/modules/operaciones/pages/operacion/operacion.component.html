@@ -43,23 +43,35 @@
 </p-toolbar>
 <p-divider></p-divider>
 
-<p-table *ngIf="operacion" [value]="operacion.detalles" dataKey="id" editMode="row">
+<p-table *ngIf="operacion" [value]="operacion.detalles" dataKey="id" editMode="row"
+[(selection)]="selectedDetalls" 
+>
     <ng-template pTemplate="header">
         <tr class="header-table">
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
             <th>Cantidad</th>
             <th>Detalle</th>
             <th>Unitario</th>
             <th>STotal</th>
             <th style="text-align:center"><button
-                    *ngIf="operacion.tipoDocName==='PRESUPUESTO' || operacion.tipoDocName=== 'ORDEN'" pButton pRipple
+                    *ngIf="(operacion.tipoDocName==='PRESUPUESTO' || operacion.tipoDocName=== 'ORDEN') " pButton pRipple
                     type="button" icon="pi pi-plus" class="p-button-rounded p-button-info p-button-text p-button-sm"
                     (click)="childProd.visible=true"></button></th>
             <th style="text-align:center"></th>
+            <th style="text-align:center"><button
+                *ngIf="(operacion.tipoDocName==='REMITO' || operacion.tipoDocName?.includes('FACTURA'))&& selectedDetalls.length > 0" pButton pRipple
+                type="button" icon="pi pi-delete-left" class="p-button-rounded p-button-danger p-button-text p-button-sm"
+                 (click)="devolver(selectedDetalls)"></button></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-detalles let-editing="editing" let-ri="rowIndex">
-        <tr [pEditableRow]="detalles">
+        <tr [pEditableRow]="detalles"> 
             <td>
+                <p-tableCheckbox [value]="detalles"></p-tableCheckbox>
+            </td>
+            <td  *ngIf="(operacion.tipoDocName==='REMITO' || operacion.tipoDocName==='PRESUPUESTO')">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="number" [(ngModel)]="detalles.cantidadDisponible">
@@ -68,6 +80,9 @@
                         {{detalles.cantidadDisponible}}
                     </ng-template>
                 </p-cellEditor>
+            </td>
+            <td *ngIf="operacion.tipoDocName==='DEVOLUCION'">
+                {{detalles.cantidad}}
             </td>
             <td>
                 <p-cellEditor>
@@ -116,6 +131,10 @@
                     class="p-button-rounded p-button-text p-button-info p-mr-2" icon="pi pi-trash"
                     (click)="deletedetalleremito(detalles)"></button>
             </td>
+            <td><button
+                *ngIf="(operacion.tipoDocName==='REMITO' || operacion.tipoDocName?.includes('FACTURA'))" pButton pRipple
+                type="button" icon="pi pi-delete-left" class="p-button-rounded p-button-danger p-button-text p-button-sm"
+                 (click)="devolver(detalles)"></button></td>
         </tr>
     </ng-template>
 </p-table>
@@ -123,3 +142,4 @@
     <p>Esperando respuesta de AFIP...{{(afipresponse$ | async)?.codAut}}</p>
     <p-progressBar mode="indeterminate"></p-progressBar>
 </p-dialog>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

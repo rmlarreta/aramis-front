@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { BusDetallesOperacionesDto } from 'src/app/model/busDetallesOperacionesDto.interface';
 import { BusDetalleOperacionesInsert } from 'src/app/model/busDetallesOperacionesInsert.interface';
@@ -11,6 +11,7 @@ import { PagosService } from 'src/app/service/pagos/pagos.service';
 import { ReportsService } from 'src/app/service/reports/reports.service';
 import { ListadocustomersComponent } from '../components/listadocustomers/listadocustomers.component';
 import { ListadoComponent } from '../components/listadostock/listado.component';
+import { BusDetalleDevolucion } from 'src/app/model/busDetallesDevolucionInsert.interface';
 
 @Component({
   selector: 'app-operacion',
@@ -65,6 +66,9 @@ export class OperacionComponent implements OnInit {
     respoEmpresa: ''
   };
 
+  factura: BusDetalleOperacionesInsert[] = [];
+  devolucion: BusDetalleDevolucion[] = [];
+  selectedDetalls: BusDetallesOperacionesDto[] = [];
   loading: boolean = false;
 
   facturando: boolean = false;
@@ -73,17 +77,20 @@ export class OperacionComponent implements OnInit {
 
   editedRow: { [s: string]: BusDetallesOperacionesDto; } = {};
 
-  afipresponse$: Observable<BusOperacionesDto>;
+  afipresponse$: Observable<BusOperacionesDto>; 
   constructor(
     private opservice: OperacionesService,
     private pagoservice: PagosService,
     private reportservice: ReportsService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
     this.afipresponse$ = this.opservice.afip;
   }
+
+
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -160,7 +167,7 @@ export class OperacionComponent implements OnInit {
     this.editedRow[detalle.id!] = { ...detalle };
   }
 
-  onRowEditSave(detalle: BusDetallesOperacionesDto) {
+  onRowEditSave(detalle: BusDetallesOperacionesDto) { 
     if (detalle.cantidadDisponible! > 0 && detalle.unitario! > 0) {
       let det: BusDetalleOperacionesInsert = {
         id: detalle.id,
@@ -193,17 +200,20 @@ export class OperacionComponent implements OnInit {
   }
 
   onRowEditSaveRemito(detalle: BusDetallesOperacionesDto, index: number) {
-
+ 
+    if (detalle.cantidadDisponible > this.operacion.detalles[index].cantidad) {
+      this.onRowEditCancel(detalle, index);
+      this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: 'No de puede facturar mas de lo que está pendiente' });
+      return;
+    }
     let total = 0;
     this.operacion.detalles.forEach(x => total += x.cantidad * x.unitario)
     total = total - this.operacion.detalles[index].cantidad * this.operacion.detalles[index].unitario;
-    total = total + (detalle.cantidadDisponible * detalle.unitario); 
-   if(detalle.cantidadDisponible > this.operacion.detalles[index].cantidad){ 
-    this.onRowEditCancel(detalle, index);
-    this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: 'No de puede facturar mas de lo que está pendiente' }); 
-    return;
-   }
-    if (total > this.totalRemito) { 
+    total = total + (detalle.cantidadDisponible * detalle.unitario);
+
+    if (total > this.totalRemito) {
+      console.log(this.totalRemito)
+      console.log(total)
       this.onRowEditCancel(detalle, index);
       return;
     }
@@ -233,14 +243,14 @@ export class OperacionComponent implements OnInit {
     this.pagoservice.resetpagado = false;
     this.pagoservice.pagado
       .subscribe({
-        next: (x) => {
-          if (x) { this.nuevoremito(this.operacion.id) }
+        next: async (x) => {
+          if (x) { await this.nuevoremito(this.operacion.id) }
         },
         error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
       });
   }
 
-  private nuevoremito(op: string) {
+  private async nuevoremito(op: string) {
     this.opservice.nuevoremito(op)
       .subscribe({
         complete: () => {
@@ -270,11 +280,27 @@ export class OperacionComponent implements OnInit {
   }
 
   facturar() {
-    this.facturando = true; 
-    this.operacion.detalles[0].cantidad =   this.operacion.detalles[0]. cantidadDisponible
-    this.opservice.facturar(this.operacion.detalles)
+    this.facturando = true;
+    this.operacion.detalles.forEach(x => {
+      this.factura.push({
+        id: x.id,
+        operacionId: x.operacionId,
+        cantidad: x.cantidadDisponible,
+        productoId: x.productoId,
+        codigo: x.codigo,
+        detalle: x.detalle,
+        rubro: x.rubro,
+        unitario: x.unitario,
+        ivaValue: x.ivaValue,
+        internos: x.internos,
+        facturado: x.facturado,
+        operador: ''
+      })
+    });
+    this.opservice.facturar(this.factura)
       .subscribe({
         next: (x) => {
+          this.limpiar();
           this.operacion.id = '';
           this.reportservice.factura(x.id).subscribe(x => {
             const fileURL = URL.createObjectURL(x);
@@ -305,6 +331,54 @@ export class OperacionComponent implements OnInit {
         window.open(fileURL, '_blank');
       })
     }
+  }
+
+  devolver(detalles: any) { 
+    if (!Array.isArray(detalles)) {
+      this.selectedDetalls.push(detalles);
+    }
+    this.selectedDetalls.forEach(x => { 
+      this.devolucion.push({
+        id: x.id,
+        operacionId: x.operacionId,
+        cantidad: x.cantidadDisponible,
+        productoId: x.productoId,
+        codigo: x.codigo,
+        detalle: x.detalle,
+        rubro: x.rubro,
+        unitario: x.unitario,
+        ivaValue: x.ivaValue,
+        internos: x.internos,
+        facturado: x.facturado,
+        operador: ''
+      }
+      )
+    })
+    this.confirmationService.confirm({
+      message: 'Seguro de devolver estos productos?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.opservice.devolucion(this.devolucion)
+          .subscribe({
+            next: (x) => { 
+              this.limpiar();
+              this.operacion.id = '';
+              this.reportservice.remito(x.id).subscribe(x => {
+                const fileURL = URL.createObjectURL(x);
+                window.open(fileURL, '_blank');
+                this.router.navigate(['operaciones']);
+              })
+            }
+            , error: (error) => { this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: error }); this.facturando = false; }
+          });
+      }
+    });
+  }
+  private limpiar(){
+    this.selectedDetalls=[];
+    this.factura =[];
+    this.devolucion=[];
   }
 }
 

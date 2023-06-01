@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs'; 
-import { AuthenticationService } from 'src/app/service/security/authentication.service';
+import { AuthenticationService } from 'src/app/modules/security/service/authentication.service';
+import { UserRequest } from '../../dtos/userRequest.interface copy';
 
 @Component({
   selector: 'app-changepassword',
@@ -14,7 +15,12 @@ export class ChangepasswordComponent implements OnInit {
   loading = false;
   submitted = false;
   error = '';
-
+  
+  userRequest: UserRequest = {
+    user: null,
+    password: null,
+    nPassword: null
+  };
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -53,7 +59,10 @@ export class ChangepasswordComponent implements OnInit {
 
     this.error = '';
     this.loading = true;
-    this.authenticationService.changepassword(this.f['username'].value, this.f['password'].value, this.f['npassword'].value)
+    this.userRequest.user = this.f['username'].value;
+    this.userRequest.password = this.f['password'].value;
+    this.userRequest.nPassword = this.f['npassword'].value;
+    this.authenticationService.changepassword(this.userRequest)
       .pipe(first())
       .subscribe({
         next: (user) => {

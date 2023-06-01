@@ -62,6 +62,15 @@ export class GridoperacionesComponent implements OnInit {
     this.loading = false;
   }
 
+  getdevoluciones() {
+    this.loading = true;
+    this.operacionesService.devoluciones
+      .subscribe(ops => {
+        this.operaciones = ops;
+      });
+    this.loading = false;
+  }
+
   getordenes() {
     this.loading = true;
     this.childEstados.visible = true;
@@ -145,6 +154,8 @@ export class GridoperacionesComponent implements OnInit {
       case "REMITO": this.getremitos();
         break;
       case "ORDEN": this.getordenes();
+      break;
+      case "DEVOLUCION": this.getdevoluciones();
     }
   }
 

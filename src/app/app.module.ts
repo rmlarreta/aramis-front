@@ -9,12 +9,14 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { OperacionesModule } from './modules/operaciones/operaciones.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { SecurityModule } from './modules/security/security.module';
+import { ErrorInterceptor } from './modules/security/service/error-interceptor.service';
+import { JwtInterceptor } from './modules/security/service/jwt-interceptor.service';
 import { StockModule } from './modules/stock/stock.module';
-import { ErrorInterceptor } from './service/security/error-interceptor.service';
-import { JwtInterceptor } from './service/security/jwt-interceptor.service';
+import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { UsersModule } from './modules/users/users.module'; 
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
-import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { ResponseInterceptor } from './shared/responseInterceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,11 +32,13 @@ import { SuppliersModule } from './modules/suppliers/suppliers.module';
     StockModule,
     CustomersModule,
     ReportsModule,
-    SuppliersModule
+    SuppliersModule,
+    UsersModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }],
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {

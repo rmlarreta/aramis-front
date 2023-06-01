@@ -85,7 +85,7 @@ export class CobroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.intentresponse$.subscribe(x => {
+    this.intentresponse$.subscribe(async x => {
       if (x) {
         this.cobrandomp = x.status === 'COBRANDO' ? true : false;
         if (x.status === 'FINISHED') {
@@ -94,9 +94,9 @@ export class CobroComponent implements OnInit {
               p.codAut = x.id
             };
           });
-          if (x.id !== '0') { this.insertrecibo(); }
+          if (x.id !== '0') { await this.insertrecibo(); }
           this.recibo$.subscribe({
-            next: (r) => {
+            next: async (r) => {
               if (r) {
                 if (r.id !== '0') {
                   if (this.alone) {
@@ -109,7 +109,7 @@ export class CobroComponent implements OnInit {
                         return;
                       }, error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
                     })
-                  } else { this.imputarpago(r.id?.toString()!) }
+                  } else { await this.imputarpago(r.id?.toString()!) }
                 }
               }
             }
@@ -226,7 +226,7 @@ export class CobroComponent implements OnInit {
       this.cobromp(totalMP, posId);
     } else {
       this.insertrecibo();
-      this.recibo$.subscribe(r => {
+      this.recibo$.subscribe(async r => {
         if (r) {
           if (r.id !== '0') {
             if (this.alone) {
@@ -240,7 +240,7 @@ export class CobroComponent implements OnInit {
                     return;
                   }, error: (error) => { this.messageService.add({ severity: 'error', summary: 'Error', detail: error }) }
                 })
-            } else { this.imputarpago(r.id?.toString()!) }
+            } else { await this.imputarpago(r.id?.toString()!) }
           }
         }
       })
@@ -262,16 +262,16 @@ export class CobroComponent implements OnInit {
       this.pagoservice.cobranzaMPAsync(this.intent, posId!);
   }
 
-  private insertrecibo() {
+  private async insertrecibo() {
     this.recibo.detalles = this.reciboDetalles;
     this.recibo$ =
-      this.pagoservice.insertRecibo(this.recibo);
+     await this.pagoservice.insertRecibo(this.recibo);
   }
 
-  private imputarpago(recibo: string) {
+  private async imputarpago(recibo: string) {
     this.pago.reciboId = recibo;
     this.pago.operaciones.push(this.operacion.id);
-    this.pagoservice.imputarPago(this.pago)
+    (await this.pagoservice.imputarPago(this.pago))
       .subscribe(x => {
         if (x) {
           this.resetpagos();

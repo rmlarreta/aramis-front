@@ -7,11 +7,11 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ReportsService {
-
+  private baseUrl =  environment.baseUrl; // Establece la URL base del BFF
   constructor(private http: HttpClient) { }
 
   recibo(id: string) {
-    return this.http.get(`${environment.baseUrl}/reports/ReporteRecibo/` + id, {
+    return this.http.get(`${this.baseUrl}/reports/ReporteRecibo/` + id, {
       responseType: 'blob',
       observe: 'response'
     })
@@ -22,7 +22,7 @@ export class ReportsService {
   }
 
   remito(id: string) {
-    return this.http.get(`${environment.baseUrl}/reports/ReporteRemito/` + id, {
+    return this.http.get(`${this.baseUrl}/reports/ReporteRemito/` + id, {
       responseType: 'blob',
       observe: 'response'
     })
@@ -33,7 +33,7 @@ export class ReportsService {
   }
 
   factura(id: string) {
-    return this.http.get(`${environment.baseUrl}/reports/ReporteFactura/` + id, {
+    return this.http.get(`${this.baseUrl}/reports/ReporteFactura/` + id, {
       responseType: 'blob',
       observe: 'response'
     })
@@ -44,7 +44,7 @@ export class ReportsService {
   }
 
   orden(id: string) {
-    return this.http.get(`${environment.baseUrl}/reports/ReporteTicketOrden/` + id, {
+    return this.http.get(`${this.baseUrl}/reports/ReporteTicketOrden/` + id, {
       responseType: 'blob',
       observe: 'response'
     })
@@ -55,7 +55,7 @@ export class ReportsService {
   }
 
   presupuesto(id: string) {
-    return this.http.get(`${environment.baseUrl}/reports/ReportePresupuesto/` + id, {
+    return this.http.get(`${this.baseUrl}/reports/ReportePresupuesto/` + id, {
       responseType: 'blob',
       observe: 'response'
     })
@@ -64,4 +64,5 @@ export class ReportsService {
           return new Blob([res.body], { type: 'application/pdf' });
         }));
   }
+ 
 }

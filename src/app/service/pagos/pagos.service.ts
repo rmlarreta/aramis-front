@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PagosService {
-
+  private baseUrl =  environment.baseUrl; // Establece la URL base del BFF
   private pagoObservable: BehaviorSubject<PaymentIntentResponseDto>
     = new BehaviorSubject<PaymentIntentResponseDto>({ id: '0', status: '0', amount: 0, device_id: '', additional_info: { external_reference: '', print_on_terminal: true, ticket_number: '0' } })
   private reciboObservable: BehaviorSubject<ReciboInsert>
@@ -34,11 +34,11 @@ export class PagosService {
   }
 
   get tipopagos() {
-    return this.http.get<CobTipoPago[]>(`${environment.baseUrl}/pagos/TiposPago`);
+    return this.http.get<CobTipoPago[]>(`${this.baseUrl}/pagos/TiposPago`);
   }
 
   get pos() {
-    return this.http.get<CobPo[]>(`${environment.baseUrl}/pagos/GetPos`);
+    return this.http.get<CobPo[]>(`${this.baseUrl}/pagos/GetPos`);
   }
 
   set nuevopago(intent: PaymentIntentResponseDto) {
@@ -50,15 +50,15 @@ export class PagosService {
   }
 
   cobranzaMPAsync(intent: PaymentIntentDto, posId: string) {
-    return this.http.post<PaymentIntentResponseDto>(`${environment.baseUrl}/pagos/CobranzaMP/` + posId, intent)
+    return this.http.post<PaymentIntentResponseDto>(`${this.baseUrl}/pagos/CobranzaMP/` + posId, intent)
       .pipe(map(r => {
         this.pagoObservable.next(r);
         return r;
       }));
   }
 
-  insertRecibo(recibo: ReciboInsert) {
-    return this.http.post<ReciboInsert>(`${environment.baseUrl}/pagos/InsertRecibo/`, recibo)
+  async insertRecibo(recibo: ReciboInsert) {
+    return this.http.post<ReciboInsert>(`${this.baseUrl}/pagos/InsertRecibo/`, recibo)
       .pipe(map(r => {
         this.reciboObservable.next(r);
         this.pagadoObservable.next(true);
@@ -66,8 +66,8 @@ export class PagosService {
       }));
   }
 
-  imputarPago(pago: PagoInsert) {
-    return this.http.post<boolean>(`${environment.baseUrl}/pagos/ImputarPago/`, pago)
+ async imputarPago(pago: PagoInsert) {
+    return this.http.post<boolean>(`${this.baseUrl}/pagos/ImputarPago/`, pago)
       .pipe(map(r => {
         this.pagadoObservable.next(r);
         return r;
@@ -75,7 +75,7 @@ export class PagosService {
   }
 
   imputarRecibo(recibo: string) {
-    return this.http.get<boolean>(`${environment.baseUrl}/pagos/ImputarRecibo/` + recibo);
+    return this.http.get<boolean>(`${this.baseUrl}/pagos/ImputarRecibo/` + recibo);
   }
 
 }

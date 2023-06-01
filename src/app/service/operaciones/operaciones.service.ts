@@ -8,12 +8,14 @@ import { environment } from 'src/environments/environment';
 import { BusOperacionesDto } from '../../model/busOperacionesDto.interface';
 import { BusOperacionTipo } from '../../model/busOperacionTipo.interface';
 import { BehaviorSubject, map } from 'rxjs';
+import { BusDetalleDevolucion } from 'src/app/model/busDetallesDevolucionInsert.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class OperacionesService {
+  private baseUrl = environment.baseUrl; // Establece la URL base del BFF
   private afipObservable: BehaviorSubject<BusOperacionesDto>
     = new BehaviorSubject<BusOperacionesDto>({
       id: '',
@@ -59,68 +61,76 @@ export class OperacionesService {
   }
 
   get presupuestos() {
-    return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/presupuestos`);
+    return this.http.get<BusOperacionesDto[]>(`${this.baseUrl}/operaciones/presupuestos`);
   }
 
   get remitos() {
-    return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/RemitosPendientes`);
+    return this.http.get<BusOperacionesDto[]>(`${this.baseUrl}/operaciones/RemitosPendientes`);
+  }
+
+  get devoluciones() {
+    return this.http.get<BusOperacionesDto[]>(`${this.baseUrl}/operaciones/Devoluciones`);
   }
 
   ordenesbyestado(estado: string) {
-    return this.http.get<BusOperacionesDto[]>(`${environment.baseUrl}/operaciones/OrdenesByEstado/` + estado);
+    return this.http.get<BusOperacionesDto[]>(`${this.baseUrl}/operaciones/OrdenesByEstado/` + estado);
   }
 
 
   get tipos() {
-    return this.http.get<BusOperacionTipo[]>(`${environment.baseUrl}/operaciones/Tipos`);
+    return this.http.get<BusOperacionTipo[]>(`${this.baseUrl}/operaciones/Tipos`);
   }
 
   get estados() {
-    return this.http.get<BusEstadoDto[]>(`${environment.baseUrl}/operaciones/Estados`);
+    return this.http.get<BusEstadoDto[]>(`${this.baseUrl}/operaciones/Estados`);
   }
 
   get nuevaoperacion() {
-    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOperacion`);
+    return this.http.get<BusOperacionesDto>(`${this.baseUrl}/operaciones/NuevaOperacion`);
   }
 
   operacion(id: string) {
-    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/GetOperationById/` + id);
+    return this.http.get<BusOperacionesDto>(`${this.baseUrl}/operaciones/GetOperationById/` + id);
   }
 
   deleteoperacion(id: string) {
-    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteOperacion/` + id);
+    return this.http.delete(`${this.baseUrl}/operaciones/DeleteOperacion/` + id);
   }
 
   insertardetalle(detalles: BusDetalleOperacionesInsert[]) {
-    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/InsertDetalle`, detalles);
+    return this.http.post<BusOperacionesDto>(`${this.baseUrl}/operaciones/InsertDetalle`, detalles);
   }
 
   deletedetalle(id: string) {
-    return this.http.delete(`${environment.baseUrl}/operaciones/DeleteDetalle/` + id);
+    return this.http.delete(`${this.baseUrl}/operaciones/DeleteDetalle/` + id);
   }
 
   updatedetalle(detalles: BusDetalleOperacionesInsert) {
-    return this.http.patch<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateDetalle`, detalles);
+    return this.http.patch<BusOperacionesDto>(`${this.baseUrl}/operaciones/UpdateDetalle`, detalles);
   }
 
   updateoperacion(operacion: BusOperacionesInsert) {
-    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/operaciones/UpdateOperacion`, operacion);
+    return this.http.post<BusOperacionesDto>(`${this.baseUrl}/operaciones/UpdateOperacion`, operacion);
   }
 
   nuevoremito(presupuestoid: string) {
-    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevoRemito/` + presupuestoid);
+    return this.http.get<BusOperacionesDto>(`${this.baseUrl}/operaciones/NuevoRemito/` + presupuestoid);
   }
 
   nuevaorden(presupuestoid: string) {
-    return this.http.get<BusOperacionesDto>(`${environment.baseUrl}/operaciones/NuevaOrden/` + presupuestoid);
+    return this.http.get<BusOperacionesDto>(`${this.baseUrl}/operaciones/NuevaOrden/` + presupuestoid);
   }
 
-  facturar(remitos: BusDetallesOperacionesDto[]) { 
-    return this.http.post<BusOperacionesDto>(`${environment.baseUrl}/fiscal/generarFactura`, remitos)
-    .pipe(map(r => { 
-      this.afipObservable.next(r);
-      return r;
-    })) 
-    ;
+  facturar(remitos: BusDetalleOperacionesInsert[]) {
+    return this.http.post<BusOperacionesDto>(`${this.baseUrl}/fiscal/generarFactura`, remitos)
+      .pipe(map(r => {
+        this.afipObservable.next(r);
+        return r;
+      }))
+      ;
+  }
+
+  devolucion(devolucion: BusDetalleDevolucion[]) {
+    return this.http.post<BusOperacionesDto>(`${this.baseUrl}/operaciones/NuevaDevolucion`, devolucion);
   }
 }
