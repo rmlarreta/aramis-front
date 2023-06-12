@@ -1,0 +1,105 @@
+<p-card>
+    <p-toast class="custom-toast" position="top-center" [showTransformOptions]="'translateY(100%)'"
+        [showTransitionOptions]="'1000ms'" [hideTransitionOptions]="'1000ms'"
+        [showTransformOptions]="'translateX(100%)'">
+    </p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-button-text" [routerLink]="['/operations/editPresupuesto']">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-table #dt [value]="listado" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+        [(selection)]="selectedOperations" dataKey="id"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'numero','razon','total']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 1rem"></th>
+                <th pSortableColumn="numero" style="width:20%">Numero <p-sortIcon field="numero"></p-sortIcon></th>
+                <th pSortableColumn="razon" style="width:40%">Cliente <p-sortIcon field="razon"></p-sortIcon></th>
+                <th pSortableColumn="total" style="width:15%">Total <p-sortIcon field="total"></p-sortIcon></th>
+                <th pSortableColumn="fecha" style="width:15%">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
+                <th style="width:5%"><i class="pi pi-file-edit"></i></th>
+                <th style="width:5%"><i class="pi pi-trash"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado let-expanded="expanded">
+            <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="listado"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
+                <td>{{listado.numero}}</td>
+                <td>{{listado.razon}}</td>
+                <td>{{listado.total | currency:'USD'}}</td>
+                <td>{{listado.fecha | date:'dd/M/yyyy'}}</td>
+                <td>
+                    <button pButton pRipple type="button" icon="pi pi-cog"
+                        class="p-button-rounded p-button-success p-button-text" [routerLink]="['/operations/editPresupuesto',listado.id]">
+                    </button>
+                </td>
+                <td>
+                    <button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-listado let-detalles>
+            <tr>
+                <td colspan="7">
+                    <div class="p-p-3">
+                        <p-table [value]="listado.detalles" dataKey="id">
+                            <ng-template pTemplate="header">
+            <tr>
+                <th columm="id" hidden></th>
+                <th pSortableColumn="cantidad">Cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
+                <th pSortableColumn="detalle">Detalle <p-sortIcon field="detalle"></p-sortIcon></th>
+                <th pSortableColumn="total">Total <p-sortIcon field="total"></p-sortIcon></th>
+                <th style="width: 4rem"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-detalle>
+            <tr>
+                <td hidden>{{detalle.id}}</td>
+                <td>{{detalle.cantidad}}</td>
+                <td>{{detalle.detalle}}</td>
+                <td>{{detalle.total | currency:'USD'}}</td>
+                <td>
+                    <button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4">Este presupuesto no contiene detalles aún</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+
+    <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+    </ng-template>
+    </p-table>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-card>

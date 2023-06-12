@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { UserInsertDto } from '../../dtos/userInsertDto.interface';
-import { SecRoleDto } from '../../dtos/commons/rolesDto.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { tap, map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
-import { UserUpdateDto } from '../../dtos/userUpdateDto.inteface';
+import { SecRoleDto } from '../../dtos/commons/rolesDto.interface';
+import { UserInsertDto } from '../../dtos/userInsertDto.interface';
 import { UsersService } from '../../users.service';
 
 @Component({

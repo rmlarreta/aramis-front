@@ -18,7 +18,7 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   createUser(userInsert: UserInsertDto): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/users/createUser`, userInsert).pipe(
+    return this.http.post<void>(`${this.baseUrl}/users/createUser`, userInsert).pipe(
       tap(() => {
         // Emitir el evento de actualización desde el servicio
         this.userUpdatedSubject.next();

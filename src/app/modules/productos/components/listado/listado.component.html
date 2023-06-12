@@ -1,4 +1,4 @@
-<p-card>
+<p-dialog header="Productos" [(visible)]="visible" [style]="{width: '80vw', height: 'auto'}" position="right">  
     <p-toast 
     class="custom-toast" 
     position="top-center" 
@@ -10,7 +10,7 @@
     <p-toolbar>
         <ng-template pTemplate="right">
             <button pButton pRipple type="button" icon="pi pi-plus"
-                class="p-button-rounded p-button-success p-button-text" (click)="openUserAdd()">
+                class="p-button-rounded p-button-success p-button-text">
             </button>
         </ng-template>
         <div class="flex">
@@ -23,17 +23,17 @@
     </p-toolbar>
     <p-table #dt [value]="listado" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
-        [(selection)]="selectedUser" dataKey="id"
+        [(selection)]="selected" dataKey="id" 
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'userName','realName']">
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'plu','descripcion','rubro']">
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 4rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
-                <th pSortableColumn="userName" style="width:15%">User <p-sortIcon field="userName"></p-sortIcon></th>
-                <th pSortableColumn="realName" style="width:30%">Nombre <p-sortIcon field="realName"></p-sortIcon></th>
-                <th pSortableColumn="roleName" style="width:15%">Rol <p-sortIcon field="roleName"></p-sortIcon></th>
-                <th pSortableColumn="endOfLife" style="width:15%">Vence <p-sortIcon field="endOfLife"></p-sortIcon></th>
-                <th pSortableColumn="active" style="width:15%">Activo <p-sortIcon field="active"></p-sortIcon></th>
+                <th pSortableColumn="cantidad" style="width:10%">Cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
+                <th pSortableColumn="plu" style="width:10%">Plu <p-sortIcon field="plu"></p-sortIcon></th>
+                <th pSortableColumn="descripcion" style="width:40%">Descripcion <p-sortIcon field="descripcion"></p-sortIcon></th>
+                <th pSortableColumn="rubroName" style="width:15%">Rubro <p-sortIcon field="rubroName"></p-sortIcon></th>
+                <th pSortableColumn="unitario" style="width:15%">Precio <p-sortIcon field="unitario"></p-sortIcon></th>
                 <th style="width:5%"><i class="pi pi-file-edit"></i></th>
                 <th style="width:5%"><i class="pi pi-trash"></i></th>
             </tr>
@@ -43,29 +43,30 @@
                 <td>
                     <p-tableCheckbox [value]="listado"></p-tableCheckbox>
                 </td>
-                <td>{{listado.userName}}</td>
-                <td>{{listado.realName}}</td>
-                <td>{{listado.roleName}}</td>
-                <td>{{listado.endOfLife | date:'dd/M/yyyy'}}</td>
-                <td>{{listado.active ? 'si' : 'no'}}</td>
+                <td>{{listado.cantidad}}</td>
+                <td>{{listado.plu}}</td>
+                <td>{{listado.descripcion}}</td>
+                <td>{{listado.rubroName}}</td>
+                <td>{{listado.unitario| currency:'USD'}}</td> 
                 <td> <button pButton pRipple type="button" icon="pi pi-pencil"
-                        class="p-button-rounded p-button-success p-button-text" (click)="onEdit(listado)">
+                        class="p-button-rounded p-button-success p-button-text" >
                     </button></td>
                 <td> <button pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteUser(listado.id)">
+                        class="p-button-rounded p-button-danger p-button-text" >
                     </button></td>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="openUserAdd()">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" >
             </p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+            <p-button *ngIf="presupuestando" type="button" icon="pi pi-check-circle" styleClass="p-button-text"
+            (click)="enviarSeleccionados()">
+        </p-button>
         </ng-template>
     </p-table>
     <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-</p-card>
-<ng-container #editUserContainer></ng-container> 
-<ng-container #addUserContainer></ng-container>  
+
+</p-dialog>
