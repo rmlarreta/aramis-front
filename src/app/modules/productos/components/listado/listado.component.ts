@@ -11,7 +11,6 @@ import { ProductosService } from '../../productos.service';
   styleUrls: ['./listado.component.css']
 })
 export class ListadoComponent implements OnInit {
-  visible: boolean = false;
   presupuestando: boolean = false;
   listado: ProductoSummaryDto[] = [];
   selected: ProductoSummaryDto[] = [];
@@ -39,7 +38,6 @@ export class ListadoComponent implements OnInit {
       )
       .subscribe({
         next: (data: ProductoSummaryDto[]) => {
-          // Acciones completadas después de obtener los usuarios
           this.listado = data;
         },
         error: (error) => {
@@ -48,9 +46,30 @@ export class ListadoComponent implements OnInit {
       });
   }
 
+  deleteProducto(id: string): void {
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de que deseas eliminar este producto?',
+      accept: () => {
+        this.productoService.deleteProducto(id)
+          .pipe(
+            tap(() => {
+              this.messageService.add({ severity: 'success', summary: 'Aviso', detail: "Producto Eliminado" });
+            })
+          )
+          .subscribe({
+            next: () => {
+              this.getAll();
+            },
+            error: (error) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+            }
+          });
+      }
+    });
+  }
+
   enviarSeleccionados() {
     this.productoService.setProductosSeleccionados(this.selected);
-    this.visible = false;
   }
 
   next() {

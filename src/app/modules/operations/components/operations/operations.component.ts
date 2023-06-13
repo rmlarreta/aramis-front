@@ -35,7 +35,7 @@ export class OperationsComponent implements OnInit {
       )
       .subscribe({
         next: (operations: BusOperacionSumaryDto[]) => {
-          this.listado = operations;
+          this.listado = operations; 
         },
         error: (error) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
@@ -82,5 +82,29 @@ export class OperationsComponent implements OnInit {
 
       return (event.order! * result);
     });
+  }
+
+  deleteDetallePresupuesto(guid: string) {
+    this.operacionsService.deleteDetallePresupuesto(guid)
+      .subscribe({
+        next: () => {
+          this.getAllPresupuestos();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+        }
+      });
+  }
+
+  deletePresupuesto(guid: string) {
+    this.operacionsService.deletePresupuesto(guid)
+      .subscribe({
+        next: () => {
+          this.getAllPresupuestos();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+        }
+      });
   }
 }

@@ -51,8 +51,9 @@
                     </button>
                 </td>
                 <td>
-                    <button pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text"></button>
+                    <button *ngIf="listado.tipoDocName==='PRESUPUESTO'" pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deletePresupuesto(listado.id)">
+                    </button>
                 </td>
             </tr>
         </ng-template>
@@ -70,15 +71,16 @@
                 <th style="width: 4rem"></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-detalle>
+        <ng-template pTemplate="body" let-detalles>
             <tr>
-                <td hidden>{{detalle.id}}</td>
-                <td>{{detalle.cantidad}}</td>
-                <td>{{detalle.detalle}}</td>
-                <td>{{detalle.total | currency:'USD'}}</td>
+                <td hidden>{{detalles.id}}</td>
+                <td>{{detalles.cantidad}}</td>
+                <td>{{detalles.detalle}}</td>
+                <td>{{detalles.total | currency:'USD'}}</td>
                 <td>
-                    <button pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text"></button>
+                    <button *ngIf="listado.tipoDocName==='PRESUPUESTO'" pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteDetallePresupuesto(detalles.id)">
+                    </button>
                 </td>
             </tr>
         </ng-template>

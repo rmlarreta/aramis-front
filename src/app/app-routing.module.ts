@@ -5,15 +5,11 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'operaciones',
+    redirectTo: 'operations',
   },
   {
     path: 'security',
     loadChildren: () => import('./modules/security/security.module').then(m => m.SecurityModule)
-  },
-  {
-    path: 'operaciones',
-    loadChildren: () => import('./modules/operaciones/operaciones.module').then(m => m.OperacionesModule)
   },
   {
     path: 'stock',
@@ -37,6 +33,10 @@ const routes: Routes = [
   {
     path: 'operations',
     loadChildren: () => import('./modules/operations/operations.module').then(m => m.OperationsModule)
+  },
+  {
+    path: 'productos',
+    loadChildren: () => import('./modules/productos/productos.module').then(m => m.ProductosModule)
   },
   {
     path: '**',

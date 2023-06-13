@@ -1,3 +1,4 @@
+<p-card>
 <p-toast></p-toast>
 <p-toolbar>
     <ng-template pTemplate="left">
@@ -26,10 +27,7 @@
 
 <p-table *ngIf="operacion" [value]="operacion.detalles" dataKey="id" editMode="row" [(selection)]="selectedDetalles">
     <ng-template pTemplate="header">
-        <tr class="header-table">
-            <th style="width: 4rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
+        <tr class="header-table"> 
             <th>Cantidad</th>
             <th>Detalle</th>
             <th>Unitario</th>
@@ -44,24 +42,21 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-detalles let-editing="editing" let-ri="rowIndex">
-        <tr [pEditableRow]="detalles">
-            <td>
-                <p-tableCheckbox [value]="detalles"></p-tableCheckbox>
-            </td>
-            <td>
+        <tr [pEditableRow]="detalles"> 
+            <td style="text-align:center">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number">
+                        <input pInputText type="number" [(ngModel)]="detalles.cantidad">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{detalles.cantidadDisponible}}
+                        {{detalles.cantidad}}
                     </ng-template>
                 </p-cellEditor>
             </td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="text">
+                        <input pInputText type="text" [(ngModel)]="detalles.detalle">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{detalles.detalle}}
@@ -71,7 +66,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number">
+                        <input pInputText type="number" [(ngModel)]="detalles.unitario">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{detalles.unitario | currency:'USD'}}
@@ -84,7 +79,7 @@
             <td style="text-align:center">
                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                     (click)="onRowEditInit(detalles)" class="p-button-rounded p-button-text"></button>
-                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(detalles)"
+                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(detalles,ri)"
                     class="p-button-rounded p-button-text p-button-success p-mr-2">
                 </button>                 
                 <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
@@ -94,11 +89,14 @@
             </td>
             <td style="text-align:center">
                 <button pButton pRipple type="button" class="p-button-rounded p-button-text p-button-danger p-mr-2"
-                    icon="pi pi-trash">
+                (click)="deleteDetalle(detalles.id)" icon="pi pi-trash">
                 </button>
             </td>
         </tr>
     </ng-template>
 </p-table> 
+</p-card>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-<ng-container #addDetallesContainer></ng-container>
+<p-dialog  header="Productos" [(visible)]="visibleProductos" [style]="{width: '80vw', height: 'auto'}" position="right">  
+    <ng-container #addDetallesContainer></ng-container>
+</p-dialog>

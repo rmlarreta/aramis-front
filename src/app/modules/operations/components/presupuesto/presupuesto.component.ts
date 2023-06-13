@@ -52,6 +52,7 @@ export class PresupuestoComponent implements OnInit {
 
   @ViewChild('addDetallesContainer', { read: ViewContainerRef }) addDetallesContainer!: ViewContainerRef;
   addDetalles!: ComponentRef<ListadoComponent>;
+  visibleProductos: boolean = false;
   private productosSeleccionadosSubscription!: Subscription;
 
   constructor(
@@ -70,8 +71,9 @@ export class PresupuestoComponent implements OnInit {
 
     this.productosSeleccionadosSubscription = this.productoService.getProductosSeleccionadosSubject()
       .subscribe(productosSeleccionados => {
+        this.visibleProductos = false;
         if (productosSeleccionados.length > 0)
-        this.insertDetalles(productosSeleccionados);        
+          this.insertDetalles(productosSeleccionados);
       });
   }
 
@@ -131,10 +133,10 @@ export class PresupuestoComponent implements OnInit {
     this.editedRow[detalle.id!] = { ...detalle };
   }
 
-  onRowEditSave(detalle: BusOperacionDetalleSumaryDto) {
+  onRowEditSave(detalle: BusOperacionDetalleSumaryDto, index: number) {
     if (detalle.cantidad! > 0 && detalle.unitario! > 0) {
       let det: BusOperacionDetalleDto = {
-        id: '',
+        id: detalle.id,
         operacionId: detalle.operacionId,
         cantidad: detalle.cantidad,
         productoId: detalle.productoId,
@@ -146,12 +148,20 @@ export class PresupuestoComponent implements OnInit {
         internos: detalle.internos,
         facturado: detalle.facturado
       }
-
+      this.operationsService.updateDetallePresupuesto(detalle)
+        .subscribe({
+          next: () => {
+            this.productoService.setProductosSeleccionados([]);
+            this.getOperacion();
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          }
+        });
     }
     else {
-      delete this.editedRow[detalle.id!];
-      this.messageService.add({ key: 'tc', severity: 'error', summary: 'Error', detail: 'Cantidad y Precio, deben ser mayores a 0' });
-
+      this.onRowEditCancel(detalle, index);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cantidad y Precio, deben ser mayores a 0' });
     }
   }
 
@@ -164,7 +174,7 @@ export class PresupuestoComponent implements OnInit {
     this.addDetallesContainer.clear();
     this.addDetalles = this.addDetallesContainer.createComponent(ListadoComponent);
     this.addDetalles.instance.presupuestando = true;
-    this.addDetalles.instance.visible = true;
+    this.visibleProductos = true;
   }
 
   insertDetalles(listado: ProductoSummaryDto[]) {
@@ -186,15 +196,28 @@ export class PresupuestoComponent implements OnInit {
       detalles.push(detalle);
     });
 
-    this.operationsService.insertDetalles(detalles) 
-    .subscribe({
-      next: () => { 
-        this.productoService.setProductosSeleccionados([]);
-        this.getOperacion();
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
-      }
-    });
+    this.operationsService.insertDetallesPresupuesto(detalles)
+      .subscribe({
+        next: () => {
+          this.productoService.setProductosSeleccionados([]);
+          this.getOperacion();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+        }
+      });
+  }
+
+  deleteDetalle(guid: string) {
+    this.operationsService.deleteDetallePresupuesto(guid)
+      .subscribe({
+        next: () => {
+          this.productoService.setProductosSeleccionados([]);
+          this.getOperacion();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+        }
+      });
   }
 }

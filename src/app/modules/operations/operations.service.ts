@@ -30,8 +30,24 @@ export class OperationsService {
     return this.http.get<DataResponse<BusOperacionSumaryDto>>(url);
   }
 
-  insertDetalles(detalles: BusOperacionDetalleDto[]): Observable<any> {
+  updateDetallePresupuesto(detalles: BusOperacionDetalleDto): Observable<any> {
+    const url = `${this.baseUrl}/presupuestos/UpdateDetalle`;
+    return this.http.put<any>(url, detalles);
+  }
+
+  insertDetallesPresupuesto(detalles: BusOperacionDetalleDto[]): Observable<any> {
     const url = `${this.baseUrl}/presupuestos/InsertDetalles`;
     return this.http.post<any>(url, detalles);
   }
+
+  deleteDetallePresupuesto(guid: string): Observable<any> {
+    const url = `${this.baseUrl}/presupuestos/DeleteDetalle/${guid}`;
+    return this.http.delete<any>(url);
+  }
+
+  deletePresupuesto(guid: string): Observable<any> {
+    const url = `${this.baseUrl}/presupuestos/DeletePresupuesto/${guid}`;
+    return this.http.delete<any>(url);
+  }
+
 }

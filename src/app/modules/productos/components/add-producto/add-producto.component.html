@@ -1,0 +1,78 @@
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }"
+    styleClass="p-fluid" header="Nuevo Producto">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-4">
+                <label for="cantidad">Cantidad</label>
+                <input type="number" pInputText id="cantidad" formControlName="cantidad"
+                    [ngClass]="{ 'p-error': submitted && f['cantidad'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['cantidad'].errors">
+                    <span *ngIf="f['cantidad'].errors['required']">Cantidad is required</span>
+                </div>
+            </div>
+            <div class="field col-8">
+                <label for="descripcion">Descripción</label>
+                <input type="text" pInputText id="descripcion" formControlName="descripcion"
+                    [ngClass]="{ 'p-error': submitted && f['descripcion'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['descripcion'].errors">
+                    <span *ngIf="f['descripcion'].errors['required']">Descripción is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="rubro">Rubro</label>
+                <p-dropdown [options]="rubroOptions" formControlName="rubro" placeholder="Select Rubro" optionLabel="name"
+                    optionValue="id" [ngClass]="{ 'p-error': submitted && f['rubro'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['rubro'].errors">
+                    <span *ngIf="f['rubro'].errors['required']">Rubro is required</span>
+                </div>
+            </div>
+            <div class="col-6 ">
+                <label for="iva">IVA</label>
+                <p-dropdown [options]="ivaOptions" formControlName="iva" placeholder="Select IVA" optionLabel="name"
+                    optionValue="id" [ngClass]="{ 'p-error': submitted && f['iva'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['iva'].errors">
+                    <span *ngIf="f['iva'].errors['required']">IVA is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-4">
+                <label for="neto">Neto</label>
+                <input type="number" pInputText id="neto" formControlName="neto"
+                    [ngClass]="{ 'p-error': submitted && f['neto'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['neto'].errors">
+                    <span *ngIf="f['neto'].errors['required']">Neto is required</span>
+                </div>
+            </div>
+            <div class="field col-4">
+                <label for="internos">Internos</label>
+                <input type="number" pInputText id="internos" formControlName="internos"
+                    [ngClass]="{ 'p-error': submitted && f['internos'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['internos'].errors">
+                    <span *ngIf="f['internos'].errors['required']">Internos is required</span>
+                </div>
+            </div>
+            <div class="field col-4">
+                <label for="tasa">Tasa</label>
+                <input type="number" pInputText id="tasa" formControlName="tasa"
+                    [ngClass]="{ 'p-error': submitted && f['tasa'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['tasa'].errors">
+                    <span *ngIf="f['tasa'].errors['required']">Tasa is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="servicio">Servicio</label>
+            <p-checkbox id="servicio" formControlName="servicio"></p-checkbox>
+        </div>
+        <button pButton pRipple [disabled]="submitted" icon="pi pi-check" class="p-button-rounded p-button-text">
+            <span *ngIf="submitted">
+                <p-progressSpinner [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+                    strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+            </span>
+            <span *ngIf="!submitted">Enviar</span>
+        </button>
+    </form>
+</p-dialog>
