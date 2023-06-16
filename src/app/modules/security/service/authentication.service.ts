@@ -39,7 +39,7 @@ export class AuthenticationService {
     }
 
     changepassword(userRequest: UserRequest) {
-        return this.http.put<DataResponse<UserAuth>>(`${this.baseUrl}/users/changePassword`, userRequest)
+        return this.http.put<DataResponse<UserAuth>>(`${this.baseUrl}/security/changePassword`, userRequest)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user.data));

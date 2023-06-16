@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first } from 'rxjs'; 
+import { first } from 'rxjs';
 import { AuthenticationService } from 'src/app/modules/security/service/authentication.service';
 import { UserRequest } from '../../dtos/userRequest.interface copy';
 
@@ -12,10 +12,9 @@ import { UserRequest } from '../../dtos/userRequest.interface copy';
 })
 export class ChangepasswordComponent implements OnInit {
   loginForm!: FormGroup;
-  loading = false;
   submitted = false;
   error = '';
-  
+
   userRequest: UserRequest = {
     user: null,
     password: null,
@@ -39,7 +38,7 @@ export class ChangepasswordComponent implements OnInit {
       password: [null, [Validators.required, Validators.minLength(4)]],
       npassword: [null, [Validators.required, Validators.minLength(4)]]
     });
-
+    this.loginForm.setValidators(this.passwordMatchValidator);
   }
 
   // convenience getter for easy access to form fields
@@ -47,18 +46,7 @@ export class ChangepasswordComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.f['password'].value === this.f['npassword'].value) {
-      this.error = 'La nueva contraseña debe ser diferente a la anterior';
-      this.loading = false;
-      return;
-    }
-    // stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
-    }
-
     this.error = '';
-    this.loading = true;
     this.userRequest.user = this.f['username'].value;
     this.userRequest.password = this.f['password'].value;
     this.userRequest.nPassword = this.f['npassword'].value;
@@ -68,7 +56,7 @@ export class ChangepasswordComponent implements OnInit {
         next: (user) => {
           // get return url from route parameters or default to '/' 
           if (user == null) {
-            this.loading = false;
+            this.submitted = false;
             this.error = 'Verifique los datos ingresados';
             return;
           }
@@ -77,8 +65,20 @@ export class ChangepasswordComponent implements OnInit {
         },
         error: error => {
           this.error = error;
-          this.loading = false;
+          this.submitted = false;
         }
       });
   }
+
+  private passwordMatchValidator: ValidatorFn = (formGroup: AbstractControl): ValidationErrors | null => {
+    const password = this.f['password'].value;
+    const npassword = this.f['npassword'].value;
+
+    if (password === npassword) {
+      this.error = 'Las constraseñas no pueden ser iguales';
+      return { passwordMatch: true };
+    }
+
+    return null;
+  };
 }

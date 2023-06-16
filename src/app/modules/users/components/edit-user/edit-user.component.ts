@@ -56,7 +56,6 @@ export class EditUserComponent {
 
     // Stop here if the form is invalid
     if (this.editForm.invalid) {
-      this.submitted = false;
       return;
     }
 

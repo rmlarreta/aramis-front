@@ -1,48 +1,45 @@
-<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }"
-    styleClass="p-fluid" header="Nuevo Usuario">
-    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-        <div class="formgrid grid">
-            <div class="field col-4">
-                <label for="userName">Username</label>
-                <input type="text" pInputText id="userName" formControlName="userName"
-                    [ngClass]="{ 'p-error': submitted && f['userName'].errors }" />
-                <div class="p-error" *ngIf="submitted && f['userName'].errors">
-                    <span *ngIf="f['userName'].errors['required']">Username is required</span>
-                </div>
-            </div>
-            <div class="field col-8">
-                <label for="realName">Real Name</label>
-                <input type="text" pInputText id="realName" formControlName="realName"
-                    [ngClass]="{ 'p-error': submitted && f['realName'].errors }" />
-                <div class="p-error" *ngIf="submitted && f['realName'].errors">
-                    <span *ngIf="f['realName'].errors['required']">Real Name is required</span>
-                </div>
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }" styleClass="p-fluid"
+    header="Nuevo Usuario">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-grid">
+        <div class="form-field">
+            <label for="userName">Username</label>
+            <input type="text" pInputText id="userName" formControlName="userName"
+                [ngClass]="{ 'p-error': submitted && f['userName'].errors }" />
+            <div class="p-error" *ngIf="submitted && f['userName'].errors">
+                <span *ngIf="f['userName'].errors['required']">Username is required</span>
             </div>
         </div>
-        <div class="formgrid grid">
-            <div class="field col-6">
-                <label for="role">Role</label>
-                <p-dropdown [options]="roleOptions" formControlName="role" placeholder="Select Role" optionLabel="name"
-                    optionValue="id" [ngClass]="{ 'p-error': submitted && f['role'].errors }"></p-dropdown>
-                <div class="p-error" *ngIf="submitted && f['role'].errors">
-                    <span *ngIf="f['role'].errors['required']">Role is required</span>
-                </div>
-            </div>
-            <div class="col-6 ">
-                <label for="passWord">PassWord</label>
-                <input type="password" pInputText id="passWord" formControlName="passWord"
-                    [ngClass]="{ 'p-error': submitted && f['passWord'].errors }" />
-                <div class="p-error" *ngIf="submitted && f['passWord'].errors">
-                    <span *ngIf="f['passWord'].errors['required']">PassWord is required</span>
-                </div>
+        <div class="form-field">
+            <label for="realName">Real Name</label>
+            <input type="text" pInputText id="realName" formControlName="realName"
+                [ngClass]="{ 'p-error': submitted && f['realName'].errors }" />
+            <div class="p-error" *ngIf="submitted && f['realName'].errors">
+                <span *ngIf="f['realName'].errors['required']">Real Name is required</span>
             </div>
         </div>
-        <button pButton pRipple [disabled]="submitted" icon="pi pi-check" class="p-button-rounded p-button-text">
-            <span *ngIf="submitted">
-                <p-progressSpinner [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
-                    strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
-            </span>
-            <span *ngIf="!submitted">Enviar</span>
-        </button>
+        <div class="form-field">
+            <label for="role">Role</label>
+            <p-dropdown [options]="roleOptions" formControlName="role" placeholder="Select Role" optionLabel="name"
+                optionValue="id" [ngClass]="{ 'p-error': submitted && f['role'].errors }"></p-dropdown>
+            <div class="p-error" *ngIf="submitted && f['role'].errors">
+                <span *ngIf="f['role'].errors['required']">Role is required</span>
+            </div>
+        </div>
+        <div class="form-field">
+            <label for="passWord">Password</label>
+            <input type="password" pInputText id="passWord" formControlName="passWord"
+                [ngClass]="{ 'p-error': submitted && f['passWord'].errors }" />
+            <div class="p-error" *ngIf="submitted && f['passWord'].errors">
+                <span *ngIf="f['passWord'].errors['required']">Password is required</span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+              class="p-button-rounded p-button-text">
+              Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+              strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+          </div>
     </form>
 </p-dialog>

@@ -20,13 +20,14 @@
         </div>
         <div class="col-12 " *ngIf="submitted && f['password'].errors" class="p-error block">
             <span *ngIf="f['password'].errors['required'  || 'minLength']">Password is required</span>
-        </div>
-        <button pButton pRipple [disabled]="loading" icon="pi pi-check" class="p-button-rounded p-button-text">
-            <span *ngIf="loading">
-                <p-progressSpinner [style]="{width: '25px', height: '25px'}" styleClass="custom-spinner" strokeWidth="8"
-                    fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
-            </span>
-        </button>
-        <div *ngIf="error" class="p-error block">{{error}}</div>
+        </div> 
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!loginForm.valid" icon="pi pi-check"
+              class="p-button-rounded p-button-text">
+              Loguin
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+              strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+          </div>
     </form>
 </div>

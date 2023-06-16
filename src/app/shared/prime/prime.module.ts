@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
@@ -24,6 +25,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+
 @NgModule({
   declarations: [],
   exports: [
@@ -51,7 +53,8 @@ import { ToolbarModule } from 'primeng/toolbar';
     CheckboxModule,
     SplitterModule,
     SelectButtonModule,
-    CalendarModule
+    CalendarModule,
+    AutoCompleteModule
   ]
 })
 export class PrimeModule { }

@@ -12,8 +12,7 @@ import { UserRequest } from '../../dtos/userRequest.interface copy';
 
 })
 export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-  loading = false;
+  loginForm!: FormGroup; 
   submitted = false;
   error = '';
 
@@ -52,8 +51,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.error = '';
-    this.loading = true;
+    this.error = ''; 
 
     this.userRequest.user = this.f['username'].value;
     this.userRequest.password = this.f['password'].value;
@@ -62,9 +60,9 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (user) => {
           // get return url from route parameters or default to '/' 
-          if (user == null) {
-            this.loading = false;
+          if (user == null) { 
             this.error = 'Verifique los datos ingresados';
+            this.submitted = false;
             return;
           }
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -72,7 +70,7 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.error = error;
-          this.loading = false;
+          this.submitted = false;
         }
       });
   }

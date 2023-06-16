@@ -181,7 +181,7 @@ export class PresupuestoComponent implements OnInit {
     const detalles: BusOperacionDetalleDto[] = [];
     listado.forEach((producto) => {
       const detalle: BusOperacionDetalleDto = {
-        productoId: producto.id,
+        productoId: producto.id!,
         cantidad: 1,
         codigo: producto.plu,
         id: null,

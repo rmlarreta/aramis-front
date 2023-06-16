@@ -97,6 +97,6 @@
 </p-table> 
 </p-card>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-<p-dialog  header="Productos" [(visible)]="visibleProductos" [style]="{width: '80vw', height: 'auto'}" position="right">  
+<p-dialog  [showHeader]="false" [(visible)]="visibleProductos" [style]="{width: '80vw', height: 'auto'}" position="right">  
     <ng-container #addDetallesContainer></ng-container>
 </p-dialog>

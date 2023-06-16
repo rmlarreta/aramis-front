@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
-import { map, tap } from 'rxjs';
+import { Subscription, map, tap } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
+import { ProductoDto } from '../../dtos/productoDto.interface';
 import { ProductoSummaryDto } from '../../dtos/productoSummaryDto.interface';
 import { ProductosService } from '../../productos.service';
+import { AddProductoComponent } from '../add-producto/add-producto.component';
 
 @Component({
   selector: 'app-listado',
@@ -17,6 +19,11 @@ export class ListadoComponent implements OnInit {
   first = 0;
   rows = 10;
 
+  @ViewChild('addProductoContainer', { read: ViewContainerRef }) addProductoContainer!: ViewContainerRef;
+  addProducto!: ComponentRef<AddProductoComponent>;
+
+  productoUpdateSubscription: Subscription = new Subscription;
+
   constructor(
     private productoService: ProductosService,
     private messageService: MessageService,
@@ -24,6 +31,11 @@ export class ListadoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.productoUpdateSubscription = this.productoService._productosUpdated$
+      .subscribe(() => {
+        this.getAll()
+      });
+
     this.getAll();
   }
 
@@ -70,6 +82,21 @@ export class ListadoComponent implements OnInit {
 
   enviarSeleccionados() {
     this.productoService.setProductosSeleccionados(this.selected);
+  }
+
+  // Otros métodos y propiedades del componente...
+  openProductoAdd() {
+    this.addProductoContainer.clear();
+    this.addProducto = this.addProductoContainer.createComponent(AddProductoComponent);
+    this.addProducto.instance.visible = true;
+  }
+
+  openProductoEdit(producto: ProductoDto) {
+    this.addProductoContainer.clear();
+    this.addProducto = this.addProductoContainer.createComponent(AddProductoComponent);
+    this.addProducto.instance.visible = true;
+    this.addProducto.instance.editing = true;
+    this.addProducto.instance.producto = producto; // Pasar el producto a editar al componente hijo
   }
 
   next() {

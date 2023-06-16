@@ -41,12 +41,13 @@
                 <span *ngIf="f['endOfLife'].errors['required']">End of Life is required</span>
             </div>
         </div>
-        <button pButton pRipple [disabled]="submitted" icon="pi pi-check" class="p-button-rounded p-button-text">
-            <span *ngIf="submitted">
-                <p-progressSpinner [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
-                    strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
-            </span>
-            <span *ngIf="!submitted">Actualizar</span>
-        </button>
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+              class="p-button-rounded p-button-text">
+              Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+              strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+          </div>
     </form>
 </p-dialog>

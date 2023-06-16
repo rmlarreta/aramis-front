@@ -6,7 +6,7 @@
     <p-toolbar>
         <ng-template pTemplate="right">
             <button *ngIf="!presupuestando" pButton pRipple type="button" icon="pi pi-plus"
-                class="p-button-rounded p-button-success p-button-text">
+            (click)="openProductoAdd()"  class="p-button-rounded p-button-success p-button-text">
             </button>
         </ng-template>
         <div class="flex">
@@ -47,17 +47,16 @@
                 <td>{{listado.rubroName}}</td>
                 <td>{{listado.unitario| currency:'USD'}}</td>
                 <td *ngIf="!presupuestando"> <button pButton pRipple type="button" icon="pi pi-pencil"
-                        class="p-button-rounded p-button-success p-button-text">
+                        class="p-button-rounded p-button-success p-button-text" (click)="openProductoEdit(listado)">
                     </button></td>
                 <td *ngIf="!presupuestando"> <button pButton pRipple type="button" icon="pi pi-trash"
-                        class="p-button-rounded p-button-danger p-button-text"
-                        (click)="deleteProducto(listado.id)">
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteProducto(listado.id)">
                     </button></td>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="openProductoAdd()">
             </p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">
@@ -68,3 +67,4 @@
     </p-table>
 </p-card>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<ng-container #addProductoContainer></ng-container>
