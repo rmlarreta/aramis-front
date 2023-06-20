@@ -38,7 +38,7 @@ export class OperationsComponent implements OnInit {
           this.listado = operations; 
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
         }
       });
   }
@@ -91,7 +91,7 @@ export class OperationsComponent implements OnInit {
           this.getAllPresupuestos();
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
         }
       });
   }
@@ -103,7 +103,7 @@ export class OperationsComponent implements OnInit {
           this.getAllPresupuestos();
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
         }
       });
   }

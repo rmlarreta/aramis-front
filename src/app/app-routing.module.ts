@@ -12,14 +12,6 @@ const routes: Routes = [
     loadChildren: () => import('./modules/security/security.module').then(m => m.SecurityModule)
   },
   {
-    path: 'stock',
-    loadChildren: () => import('./modules/stock/stock.module').then(m => m.StockModule)
-  },
-  {
-    path: 'clientes',
-    loadChildren: () => import('./modules/customers/customers.module').then(m => m.CustomersModule)
-  },
-  {
     path: 'reportes',
     loadChildren: () => import('./modules/reports/reports.module').then(m => m.ReportsModule)
   },
@@ -39,9 +31,13 @@ const routes: Routes = [
     loadChildren: () => import('./modules/productos/productos.module').then(m => m.ProductosModule)
   },
   {
+    path: 'clientes',
+    loadChildren: () => import('./modules/clientes/clientes.module').then(m => m.ClientesModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./modules/operations/operations.module').then(m => m.OperationsModule)
-  },
+  }
 ];
 
 @NgModule({

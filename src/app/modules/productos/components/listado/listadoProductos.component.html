@@ -56,7 +56,7 @@
         </ng-template>
 
         <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="openProductoAdd()">
+            <p-button *ngIf="!presupuestando" type="button" icon="pi pi-plus" styleClass="p-button-text" (click)="openProductoAdd()">
             </p-button>
         </ng-template>
         <ng-template pTemplate="paginatorright">

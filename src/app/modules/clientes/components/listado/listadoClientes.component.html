@@ -1,0 +1,64 @@
+<p-card>
+    <p-toast *ngIf="!presupuestando" class="custom-toast" position="top-center" [showTransformOptions]="'translateY(100%)'"
+        [showTransitionOptions]="'1000ms'" [hideTransitionOptions]="'1000ms'"
+        [showTransformOptions]="'translateX(100%)'">
+    </p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus" (click)="openClienteAdd()"
+                class="p-button-rounded p-button-success p-button-text">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-table #dt [value]="listado" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [tableStyle]="{'min-width': '50rem'}"
+        [(selection)]="selected" dataKey="id" selectionMode="single" (onRowSelect)="onRowSelect($event.data)"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'cui','razon']">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"></th>
+                <th pSortableColumn="cui" style="width:20%">Cui <p-sortIcon field="cui"></p-sortIcon></th>
+                <th pSortableColumn="razon" style="width:40%">Razón <p-sortIcon field="razon"></p-sortIcon></th>
+                <th pSortableColumn="respName" style="width:25%">Resp. <p-sortIcon field="respName"></p-sortIcon></th>
+                <th *ngIf="!presupuestando" style="width:5%"><i class="pi pi-dollar"></i></th>
+                <th style="width:5%"><i class="pi pi-file-edit"></i></th>
+                <th *ngIf="!presupuestando" style="width:5%"><i class="pi pi-trash"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="listado"></p-tableCheckbox>
+                </td>
+                <td>{{listado.cui}}</td>
+                <td>{{listado.razon}}</td>
+                <td>{{listado.respName}}</td>
+                <td *ngIf="!presupuestando"> <button pButton pRipple type="button" icon="pi pi-dollar"
+                        class="p-button-rounded p-button-info p-button-text" (click)="onConciliar()">
+                    </button></td>
+                <td> <button pButton pRipple type="button" icon="pi pi-check"
+                        class="p-button-rounded p-button-success p-button-text" (click)="openClienteEdit(listado)">
+                    </button></td>
+                <td *ngIf="!presupuestando"> <button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="deleteCliente(listado.id)">
+                    </button></td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                (click)="openClienteAdd()">
+            </p-button>
+        </ng-template> 
+    </p-table>
+</p-card>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<ng-container #addCLienteContainer></ng-container>

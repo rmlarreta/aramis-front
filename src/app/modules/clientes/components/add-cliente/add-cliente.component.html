@@ -1,0 +1,91 @@
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }" styleClass="p-fluid"
+    header="Clientes">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="cui">CUI</label>
+                <input type="text" pInputText id="cui" formControlName="cui"
+                    [ngClass]="{ 'p-error': submitted && f['cui'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['cui'].errors">
+                    <span *ngIf="f['cui'].errors['required']">CUI is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="resp">Respons.</label>
+                <p-dropdown [options]="respsOptions" formControlName="resp" placeholder="Select Responsable"
+                    optionLabel="name" optionValue="id" [filter]="true" filterBy="name"
+                    [ngClass]="{ 'p-error': submitted && f['resp'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['resp'].errors">
+                    <span *ngIf="f['resp'].errors['required']">Responsable is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label for="razon">Razón Social</label>
+                <input type="text" pInputText id="razon" formControlName="razon"
+                    [ngClass]="{ 'p-error': submitted && f['razon'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['razon'].errors">
+                    <span *ngIf="f['razon'].errors['required']">Razón Social is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="gender">Género</label>
+                <p-dropdown [options]="gendersOptions" formControlName="gender" placeholder="Select Género"
+                    optionLabel="name" optionValue="id" [filter]="true" filterBy="value"
+                    [ngClass]="{ 'p-error': submitted && f['gender'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['gender'].errors">
+                    <span *ngIf="f['gender'].errors['required']">Género is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="pais">País</label>
+                <p-dropdown [options]="paisesOptions" formControlName="pais" placeholder="Select País" optionLabel="name"
+                    optionValue="id" [filter]="true" filterBy="name"
+                    [ngClass]="{ 'p-error': submitted && f['pais'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['pais'].errors">
+                    <span *ngIf="f['pais'].errors['required']">País is required</span>
+                </div>
+            </div> 
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <label for="domicilio">Domicilio</label>
+                <input type="text" pInputText id="domicilio" formControlName="domicilio"
+                    [ngClass]="{ 'p-error': submitted && f['domicilio'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['domicilio'].errors">
+                    <span *ngIf="f['domicilio'].errors['required']">Domicilio is required</span>
+                </div>
+            </div> 
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="contacto">Contacto</label>
+                <input type="text" pInputText id="contacto" formControlName="contacto"
+                    [ngClass]="{ 'p-error': submitted && f['contacto'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['contacto'].errors">
+                    <span *ngIf="f['contacto'].errors['required']">Contacto is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="mail">Correo Electrónico</label>
+                <input type="mail" pInputText id="mail" formControlName="mail"
+                    [ngClass]="{ 'p-error': submitted && f['mail'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['mail'].errors">
+                    <span *ngIf="f['mail'].errors['required']">Correo Electrónico is required</span>
+                    <span *ngIf="f['mail'].errors['email']">Invalid email format</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+                class="p-button-rounded p-button-text">
+                Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+                strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </form> 
+</p-dialog>

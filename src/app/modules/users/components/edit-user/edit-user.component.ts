@@ -82,7 +82,7 @@ export class EditUserComponent {
       },
       error: error => {
         // Manejar el error, si ocurre 
-        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: error.error.errorResponse.message });
+        this.messageService.add({ severity: 'error', summary: 'Aviso', detail: error.errorResponse.message });
       }
     });
   }

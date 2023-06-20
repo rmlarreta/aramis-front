@@ -54,7 +54,7 @@ export class UsersComponent implements OnInit {
           this.listado = users;
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
         }
       });
   }
@@ -78,7 +78,7 @@ export class UsersComponent implements OnInit {
               this.getAllUsers();
             },
             error: (error) => {
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
             }
           });
         }

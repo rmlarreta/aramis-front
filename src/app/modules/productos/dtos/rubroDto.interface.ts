@@ -1,4 +1,4 @@
 export interface RubroDto {
-	id: string;
+	id: string | null;
 	name: string;
 }

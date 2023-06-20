@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { environment } from 'src/environments/environment';
 import { BusOperacionDetalleDto } from './dtos/busOperacionDetalleDto.interface';
+import { BusOperacionInsert } from './dtos/busOperacionInsert.interface';
 import { BusOperacionSumaryDto } from './dtos/busOperacionSummaryDto.interface';
 
 @Injectable({
@@ -50,4 +51,21 @@ export class OperationsService {
     return this.http.delete<any>(url);
   }
 
+  updatePresupuesto(presupuesto: BusOperacionInsert): Observable<any> {
+    const url = `${this.baseUrl}/presupuestos/UpdatePresupuesto`;
+    return this.http.put<any>(url, presupuesto);
+  }
+
+  imprimirPresupuesto(guid: string): Observable<any> {
+    const url = `${this.baseUrl}/presupuestos/Imprimir/${guid}`;
+    return this.http.get(url, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }
+        ));
+  }
 }

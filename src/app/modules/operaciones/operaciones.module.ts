@@ -8,7 +8,7 @@ import { OperacionesRoutingModule } from './operaciones-routing.module';
 import { EstadosdropdownComponent } from './pages/components/estadodropdown/estadosdropdown.component';
 import { GridoperacionesComponent } from './pages/components/gridoperaciones/gridoperaciones.component';
 import { ListadocustomersComponent } from './pages/components/listadocustomers/listadocustomers.component';
-import { ListadoComponent } from './pages/components/listadostock/listado.component';
+ 
 import { TipodropdownComponent } from './pages/components/tipodropdown/tipodropdown.component';
 import { OperacionComponent } from './pages/operacion/operacion.component';
 import { OperacionesComponent } from './pages/operaciones/operaciones.component';
@@ -18,8 +18,7 @@ import { OperacionesComponent } from './pages/operaciones/operaciones.component'
     OperacionesComponent,
     OperacionComponent,
     GridoperacionesComponent,
-    TipodropdownComponent,
-    ListadoComponent,
+    TipodropdownComponent, 
     ListadocustomersComponent,
     EstadosdropdownComponent
   ],

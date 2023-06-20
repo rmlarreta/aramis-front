@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -17,7 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                     // auto logout if 401 Unauthorized or 403 Forbidden response returned from API
                     this.authenticationService.logout();
                 }
-                throw err; // Lanza el error para que pueda ser manejado por el siguiente interceptor o el código que llamó a la solicitud
+                if ([500].includes(err.status)) {
+                    throw new HttpResponse({ status: err.status, body: err.error });
+                }
+                throw err;// Lanza el error para que pueda ser manejado por el siguiente interceptor o el código que llamó a la solicitud
             })
         );
     }

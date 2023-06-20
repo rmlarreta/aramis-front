@@ -10,7 +10,7 @@ import { OperacionesService } from 'src/app/service/operaciones/operaciones.serv
 import { PagosService } from 'src/app/service/pagos/pagos.service';
 import { ReportsService } from 'src/app/service/reports/reports.service';
 import { ListadocustomersComponent } from '../components/listadocustomers/listadocustomers.component';
-import { ListadoComponent } from '../components/listadostock/listado.component';
+
 import { BusDetalleDevolucion } from 'src/app/model/busDetallesDevolucionInsert.interface';
 
 @Component({
@@ -26,9 +26,6 @@ export class OperacionComponent implements OnInit {
 
   @ViewChild(CobroComponent)
   childCob!: CobroComponent;
-
-  @ViewChild(ListadoComponent)
-  childProd!: ListadoComponent;
 
   operacion: BusOperacionesDto = {
     id: '',
@@ -77,7 +74,7 @@ export class OperacionComponent implements OnInit {
 
   editedRow: { [s: string]: BusDetallesOperacionesDto; } = {};
 
-  afipresponse$: Observable<BusOperacionesDto>; 
+  afipresponse$: Observable<BusOperacionesDto>;
   constructor(
     private opservice: OperacionesService,
     private pagoservice: PagosService,
@@ -109,8 +106,7 @@ export class OperacionComponent implements OnInit {
     this.loading = true;
     this.opservice.nuevaoperacion.subscribe(x => {
       this.operacion = x,
-        this.childProd.operacion = x.id,
-        this.childProd.operador = x.operador,
+
         this.childCus.operacion = x
     });
     this.loading = false;
@@ -120,8 +116,7 @@ export class OperacionComponent implements OnInit {
     this.loading = true;
     this.opservice.operacion(id).subscribe(x => {
       this.operacion = x,
-        this.childProd.operacion = x.id,
-        this.childProd.operador = x.operador,
+
         this.childCus.operacion = x,
         this.totalRemito = this.operacion.total;
     })
@@ -133,8 +128,7 @@ export class OperacionComponent implements OnInit {
     this.opservice.operacion(this.operacion.id).subscribe({
       next: (x) => {
         this.operacion = x,
-          this.childProd.operacion = x.id,
-          this.childProd.operador = x.operador,
+
           this.childCus.operacion = x,
           this.totalRemito = this.operacion.total;
       }
@@ -167,7 +161,7 @@ export class OperacionComponent implements OnInit {
     this.editedRow[detalle.id!] = { ...detalle };
   }
 
-  onRowEditSave(detalle: BusDetallesOperacionesDto) { 
+  onRowEditSave(detalle: BusDetallesOperacionesDto) {
     if (detalle.cantidadDisponible! > 0 && detalle.unitario! > 0) {
       let det: BusDetalleOperacionesInsert = {
         id: detalle.id,
@@ -181,7 +175,7 @@ export class OperacionComponent implements OnInit {
         ivaValue: detalle.ivaValue,
         internos: detalle.internos,
         facturado: detalle.facturado,
-        operador: this.childProd.operador
+        operador: "this.childProd.operador"
       }
       this.opservice.updatedetalle(det).subscribe({
         next: (x) => {
@@ -200,7 +194,7 @@ export class OperacionComponent implements OnInit {
   }
 
   onRowEditSaveRemito(detalle: BusDetallesOperacionesDto, index: number) {
- 
+
     if (detalle.cantidadDisponible > this.operacion.detalles[index].cantidad) {
       this.onRowEditCancel(detalle, index);
       this.messageService.add({ key: 'tc', severity: 'warn', summary: 'Error', detail: 'No de puede facturar mas de lo que está pendiente' });
@@ -333,11 +327,11 @@ export class OperacionComponent implements OnInit {
     }
   }
 
-  devolver(detalles: any) { 
+  devolver(detalles: any) {
     if (!Array.isArray(detalles)) {
       this.selectedDetalls.push(detalles);
     }
-    this.selectedDetalls.forEach(x => { 
+    this.selectedDetalls.forEach(x => {
       this.devolucion.push({
         id: x.id,
         operacionId: x.operacionId,
@@ -361,7 +355,7 @@ export class OperacionComponent implements OnInit {
       accept: () => {
         this.opservice.devolucion(this.devolucion)
           .subscribe({
-            next: (x) => { 
+            next: (x) => {
               this.limpiar();
               this.operacion.id = '';
               this.reportservice.remito(x.id).subscribe(x => {
@@ -375,10 +369,10 @@ export class OperacionComponent implements OnInit {
       }
     });
   }
-  private limpiar(){
-    this.selectedDetalls=[];
-    this.factura =[];
-    this.devolucion=[];
+  private limpiar() {
+    this.selectedDetalls = [];
+    this.factura = [];
+    this.devolucion = [];
   }
 }
 

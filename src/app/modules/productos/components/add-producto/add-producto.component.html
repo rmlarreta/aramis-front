@@ -29,8 +29,11 @@
                     <span *ngIf="f['rubro'].errors['required']">Rubro is required</span>
                 </div>
             </div>
-            <div class="field col-1">
-                <p-button icon="pi pi-plus" styleClass="p-button-rounded p-button-success p-button-text"></p-button>
+            <div class="rubro-actions col-1">
+                <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-text"
+                    (click)="openRubroEdit()"></button>
+                <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-text"
+                    (click)="openRubroDelete()"></button>
             </div>
             <div class="field col-4">
                 <label for="iva">Iva</label>
@@ -83,8 +86,9 @@
                 <br />
                 <p-checkbox id="servicio" [binary]="true" formControlName="servicio"></p-checkbox>
             </div>
-            <div class="field col-4"> <label>Abm</label>
-                <p-button label="Rubros" styleClass="p-button-outlined p-button-info"></p-button>
+            <div class="field col-4"> <label>Insertar</label>
+                <p-button label="Rubros" styleClass="p-button-outlined p-button-info"
+                    (onClick)="openRubroAdd()"></p-button>
             </div>
         </div>
         <div class="form-actions">
@@ -96,4 +100,5 @@
                 strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
         </div>
     </form>
+    <ng-container #addRubroContainer></ng-container>
 </p-dialog>

@@ -8,11 +8,11 @@ import { ProductosService } from '../../productos.service';
 import { AddProductoComponent } from '../add-producto/add-producto.component';
 
 @Component({
-  selector: 'app-listado',
-  templateUrl: './listado.component.html',
-  styleUrls: ['./listado.component.css']
+  selector: 'app-listadoProductos',
+  templateUrl: './listadoProductos.component.html',
+  styleUrls: ['./listadoProductos.component.css']
 })
-export class ListadoComponent implements OnInit {
+export class ListadoProductosComponent implements OnInit {
   presupuestando: boolean = false;
   listado: ProductoSummaryDto[] = [];
   selected: ProductoSummaryDto[] = [];
@@ -53,7 +53,7 @@ export class ListadoComponent implements OnInit {
           this.listado = data;
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
         }
       });
   }
@@ -73,7 +73,7 @@ export class ListadoComponent implements OnInit {
               this.getAll();
             },
             error: (error) => {
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
             }
           });
       }

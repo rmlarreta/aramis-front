@@ -84,7 +84,7 @@ export class AddDocumentComponent implements OnInit {
     }
 
     this.document.proveedorId = this.selectedCustomer.id || '',
-      this.document.razon = this.selectedCustomer.razon,
+      this.document.razon = this.selectedCustomer.razon!,
       this.document.tipoDocId = this.f['tipoDocId'].value;
     this.document.estadoId = this.estado;
     this.document.pos = this.f['pos'].value;
@@ -118,7 +118,7 @@ export class AddDocumentComponent implements OnInit {
   }
 
   public razon() {
-    this.document.razon = this.selectedCustomer.razon;
+    this.document.razon = this.selectedCustomer.razon!;
   }
 
   private hideDialog() {

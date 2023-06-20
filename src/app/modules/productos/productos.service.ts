@@ -18,6 +18,8 @@ export class ProductosService {
   private _productosSeleccionadosSubject: BehaviorSubject<ProductoSummaryDto[]> = new BehaviorSubject<ProductoSummaryDto[]>([]);
   private _productosUpdatedSubject: Subject<void> = new Subject<void>();
   public _productosUpdated$: Observable<void> = this._productosUpdatedSubject.asObservable();
+  private _rubrosUpdatedSubject: Subject<void> = new Subject<void>();
+  public _rubrosUpdated$: Observable<void> = this._rubrosUpdatedSubject.asObservable();
   constructor(private http: HttpClient) { }
 
   getProductosSeleccionadosSubject(): BehaviorSubject<ProductoSummaryDto[]> {
@@ -63,6 +65,39 @@ export class ProductosService {
         tap(() => {
           // Emitir el evento de actualización desde el servicio
           this._productosUpdatedSubject.next();
+        })
+      ); 
+  }
+
+  insertRubro(rubro: RubroDto): Observable<any> {
+    const url = `${this.baseUrl}/auxProductos/insertRubro`;
+    return this.http.post(url, rubro)
+      .pipe(
+        tap(() => {
+          // Emitir el evento de actualización desde el servicio
+          this._rubrosUpdatedSubject.next();
+        })
+      );
+  }
+
+  deleteRubro(id: string): Observable<any> {
+    const url = `${this.baseUrl}/auxProductos/deleteRubro/${id}`;
+    return this.http.delete(url)
+      .pipe(
+        tap(() => {
+          // Emitir el evento de actualización desde el servicio
+          this._rubrosUpdatedSubject.next();
+        })
+      );
+  }
+
+  updateRubro(rubro: RubroDto): Observable<any> {
+    const url = `${this.baseUrl}/auxProductos/updateRubro`;
+    return this.http.put(url, rubro)
+      .pipe(
+        tap(() => {
+          // Emitir el evento de actualización desde el servicio
+          this._rubrosUpdatedSubject.next();
         })
       ); 
   }

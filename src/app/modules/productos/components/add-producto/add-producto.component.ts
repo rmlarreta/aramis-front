@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { map, tap } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription, map, tap } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { IvaDto } from '../../dtos/ivaDto.interface';
 import { ProductoDto } from '../../dtos/productoDto.interface';
 import { RubroDto } from '../../dtos/rubroDto.interface';
 import { ProductosService } from '../../productos.service';
+import { AddRubroComponent } from '../add-rubro/add-rubro.component';
 
 @Component({
   selector: 'app-add-producto',
@@ -22,12 +23,19 @@ export class AddProductoComponent implements OnInit {
   totalControl!: FormControl;
   submitted = false;
   editing = false;
-  error = ''; 
+  error = '';
+
+  //Rubros
+  @ViewChild('addRubroContainer', { read: ViewContainerRef }) addRubroContainer!: ViewContainerRef;
+  addRubro!: ComponentRef<AddRubroComponent>;
+
+  rubroUpdateSubscription: Subscription = new Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private productoService: ProductosService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +70,12 @@ export class AddProductoComponent implements OnInit {
     this.editForm.get('neto')!.valueChanges.subscribe(() => {
       this.calcular();
     });
+
+    this.rubroUpdateSubscription = this.productoService._rubrosUpdated$
+      .subscribe(() => {
+        this.loadRubroOptions()
+      });
+
   }
 
   calcular() {
@@ -168,5 +182,47 @@ export class AddProductoComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error });
         }
       });
+  }
+
+  openRubroAdd() {
+    this.addRubroContainer.clear();
+    this.addRubro = this.addRubroContainer.createComponent(AddRubroComponent);
+    this.addRubro.instance.visible = true;
+  }
+
+  openRubroEdit() {
+    const rubroId = this.editForm.get('rubro')?.value || 0;
+    if (rubroId === 0) return;
+    const selectedOption = this.rubroOptions.find(i => i.id === rubroId)?.name;
+
+    const rubro: RubroDto = {
+      id: rubroId,
+      name: selectedOption!
+    }
+    this.addRubroContainer.clear();
+    this.addRubro = this.addRubroContainer.createComponent(AddRubroComponent);
+    this.addRubro.instance.editing = true;
+    this.addRubro.instance.rubro = rubro; // Pasar el rubro a editar al componente hijo
+    this.addRubro.instance.visible = true;
+  }
+
+  openRubroDelete() {
+    const rubroId = this.editForm.get('rubro')?.value || 0;
+    if (rubroId === 0) return;
+    const selectedOption = this.rubroOptions.find(i => i.id === rubroId)?.name;
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de que deseas eliminar el rubro? ${selectedOption}`,
+      accept: () => {
+        this.productoService.deleteRubro(rubroId)
+          .subscribe({
+            next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Aviso', detail: 'Rubro Eliminado' });            
+            },
+            error: error => {
+              this.messageService.add({ severity: 'error', summary: 'Aviso', detail: error.body.errorResponse.message });
+            }
+          });
+      }
+    });
   }
 }

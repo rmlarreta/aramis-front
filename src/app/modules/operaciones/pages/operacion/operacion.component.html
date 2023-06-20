@@ -1,6 +1,6 @@
 <p-toast position="top-center" key="tc"></p-toast>
 <app-cobro></app-cobro>
-<app-listado (booleanEvent)="actualizaroperacion()"></app-listado>
+ 
 <app-listadocustomers (booleanEvent)="actualizaroperacion()"></app-listadocustomers>
 <p-toolbar>
     <ng-template pTemplate="left">
@@ -58,7 +58,7 @@
             <th style="text-align:center"><button
                     *ngIf="(operacion.tipoDocName==='PRESUPUESTO' || operacion.tipoDocName=== 'ORDEN') " pButton pRipple
                     type="button" icon="pi pi-plus" class="p-button-rounded p-button-info p-button-text p-button-sm"
-                    (click)="childProd.visible=true"></button></th>
+                    ></button></th>
             <th style="text-align:center"></th>
             <th style="text-align:center"><button
                 *ngIf="(operacion.tipoDocName==='REMITO' || operacion.tipoDocName?.includes('FACTURA'))&& selectedDetalls.length > 0" pButton pRipple

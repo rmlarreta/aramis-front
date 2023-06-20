@@ -2,12 +2,16 @@ import { Component, ComponentRef, OnInit, ViewChild, ViewContainerRef } from '@a
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription, map, tap } from 'rxjs';
-import { ListadoComponent } from 'src/app/modules/productos/components/listado/listado.component';
+import { ClientesService } from 'src/app/modules/clientes/clientes.service';
+import { ListadoClientesComponent } from 'src/app/modules/clientes/components/listado/listadoClientes.component';
+import { OpCustomerDto } from 'src/app/modules/clientes/dtos/opCustomerDto.interface';
+import { ListadoProductosComponent } from 'src/app/modules/productos/components/listado/listadoProductos.component';
 import { ProductoSummaryDto } from 'src/app/modules/productos/dtos/productoSummaryDto.interface';
 import { ProductosService } from 'src/app/modules/productos/productos.service';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { BusOperacionDetalleDto } from '../../dtos/busOperacionDetalleDto.interface';
 import { BusOperacionDetalleSumaryDto } from '../../dtos/busOperacionDetalleSummaryDto.interface';
+import { BusOperacionInsert } from '../../dtos/busOperacionInsert.interface';
 import { BusOperacionSumaryDto } from '../../dtos/busOperacionSummaryDto.interface';
 import { OperationsService } from '../../operations.service';
 
@@ -51,13 +55,19 @@ export class PresupuestoComponent implements OnInit {
   selectedDetalles: BusOperacionDetalleSumaryDto[] = [];
 
   @ViewChild('addDetallesContainer', { read: ViewContainerRef }) addDetallesContainer!: ViewContainerRef;
-  addDetalles!: ComponentRef<ListadoComponent>;
+  addDetalles!: ComponentRef<ListadoProductosComponent>;
   visibleProductos: boolean = false;
   private productosSeleccionadosSubscription!: Subscription;
+
+  @ViewChild('listadoClientesContainer', { read: ViewContainerRef }) listadoClientesContainer!: ViewContainerRef;
+  changeCliente!: ComponentRef<ListadoClientesComponent>;
+  visibleClientes: boolean = false;
+  private clienteSeleccionadoSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private operationsService: OperationsService,
+    private clientesService: ClientesService,
     private productoService: ProductosService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
@@ -75,10 +85,21 @@ export class PresupuestoComponent implements OnInit {
         if (productosSeleccionados.length > 0)
           this.insertDetalles(productosSeleccionados);
       });
+
+    this.clienteSeleccionadoSubscription = this.clientesService.getClienteSeleccionadoSubject()
+      .subscribe(clienteSeleccionado => {
+        this.visibleClientes = false;
+        if (clienteSeleccionado !== null) {
+          this.updateClienteDelRemito(clienteSeleccionado);
+        }
+      });
   }
 
   ngOnDestroy() {
+    this.clientesService.setClienteSeleccionado(null);
+    this.productoService.setProductosSeleccionados([]);
     this.productosSeleccionadosSubscription.unsubscribe();
+    this.clienteSeleccionadoSubscription.unsubscribe();
   }
 
   nuevaOperacion(): void {
@@ -100,7 +121,7 @@ export class PresupuestoComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
         }
       });
   }
@@ -124,7 +145,7 @@ export class PresupuestoComponent implements OnInit {
           }
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
         }
       });
   }
@@ -155,7 +176,7 @@ export class PresupuestoComponent implements OnInit {
             this.getOperacion();
           },
           error: (error) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
           }
         });
     }
@@ -172,7 +193,7 @@ export class PresupuestoComponent implements OnInit {
 
   openDetallesAdd() {
     this.addDetallesContainer.clear();
-    this.addDetalles = this.addDetallesContainer.createComponent(ListadoComponent);
+    this.addDetalles = this.addDetallesContainer.createComponent(ListadoProductosComponent);
     this.addDetalles.instance.presupuestando = true;
     this.visibleProductos = true;
   }
@@ -203,7 +224,7 @@ export class PresupuestoComponent implements OnInit {
           this.getOperacion();
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
         }
       });
   }
@@ -216,8 +237,49 @@ export class PresupuestoComponent implements OnInit {
           this.getOperacion();
         },
         error: (error) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errorResponse.message });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.errorResponse.message });
         }
       });
+  }
+
+  openListadoClientes() {
+    this.listadoClientesContainer.clear();
+    this.changeCliente = this.listadoClientesContainer.createComponent(ListadoClientesComponent);
+    this.changeCliente.instance.presupuestando = true;
+    this.visibleClientes = true;
+  }
+
+  updateClienteDelRemito(cliente: OpCustomerDto) {
+    const presupuesto: BusOperacionInsert = {
+      id: this.operacion.id,
+      clienteId: cliente.id!,
+      fecha: this.operacion.fecha,
+      vence: this.operacion.vence,
+      razon: cliente.razon,
+      codAut: this.operacion.codAut,
+      tipoDocId: this.operacion.tipoDocId,
+      estadoId: this.operacion.estadoId,
+      pos: this.operacion.pos,
+      operador: this.operacion.operador,
+      numero: this.operacion.numero
+    }
+    this.operationsService.updatePresupuesto(presupuesto)
+      .subscribe({
+        next: () => {
+          this.clientesService.setClienteSeleccionado(null);
+          this.getOperacion();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.body.errorResponse.message });
+        }
+      });
+  }
+
+  onPrint() {
+    this.operationsService.imprimirPresupuesto(this.operacion.id)
+      .subscribe(x => {
+        const fileURL = URL.createObjectURL(x);
+        window.open(fileURL, '_blank');
+      })
   }
 }
