@@ -39,6 +39,10 @@ export class ListadoProductosComponent implements OnInit {
     this.getAll();
   }
 
+  ngOnDestroy() { 
+    this.productoUpdateSubscription.unsubscribe();
+  }
+
   getAll(): void {
     this.productoService.getAllProductos()
       .pipe(

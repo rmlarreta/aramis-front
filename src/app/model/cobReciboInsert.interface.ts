@@ -1,3 +1,4 @@
+import { CobReciboDetallesInsert } from "../modules/cobranzas/dtos/cobReciboDetallesInsert.interface";
 import { CobReciboDetalle } from "./cobReciboDetalles.interface";
 
 export interface ReciboInsert {
@@ -6,5 +7,5 @@ export interface ReciboInsert {
     clienteId: string;
     fecha: Date | null;
     operador: string | null;
-    detalles: CobReciboDetalle[];
+    detalles: CobReciboDetallesInsert[];
 }

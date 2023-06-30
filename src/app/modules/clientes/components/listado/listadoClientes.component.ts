@@ -38,6 +38,11 @@ export class ListadoClientesComponent implements OnInit {
     this.getAll();
   }
 
+  ngOnDestroy() { 
+    this.clienteUpdateSubscription.unsubscribe();
+  }
+
+
   onRowSelect(customer: OpCustomerDto): void {
     this.selected = customer;
     this.enviarSeleccionados();

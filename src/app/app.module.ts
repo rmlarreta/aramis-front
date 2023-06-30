@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClientesModule } from './modules/clientes/clientes.module';
+import { CobranzasModule } from './modules/cobranzas/cobranzas.module';
 import { OperationsModule } from './modules/operations/operations.module';
 import { ProductosModule } from './modules/productos/productos.module';
 import { ReportsModule } from './modules/reports/reports.module';
@@ -32,7 +33,8 @@ import { PrimeModule } from './shared/prime/prime.module';
     SuppliersModule,
     UsersModule,
     OperationsModule,
-    ProductosModule
+    ProductosModule,
+    CobranzasModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

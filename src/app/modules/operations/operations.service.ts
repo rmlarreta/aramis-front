@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { environment } from 'src/environments/environment';
 import { BusOperacionDetalleDto } from './dtos/busOperacionDetalleDto.interface';
 import { BusOperacionInsert } from './dtos/busOperacionInsert.interface';
 import { BusOperacionSumaryDto } from './dtos/busOperacionSummaryDto.interface';
+import { RequestDto } from './dtos/requestDto.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,19 @@ import { BusOperacionSumaryDto } from './dtos/busOperacionSummaryDto.interface';
 export class OperationsService {
 
   private baseUrl = environment.baseUrl; // Establece la URL base del BFF 
+  private _remitoUpdated!: BusOperacionSumaryDto | null;
+  private __remitoUpdatedUpdatedSubject: BehaviorSubject<BusOperacionSumaryDto | null> = new BehaviorSubject<BusOperacionSumaryDto | null>(null);
+
   constructor(private http: HttpClient) { }
 
+  get nuevoremito$() {
+    return this.__remitoUpdatedUpdatedSubject.asObservable();
+  }
+
+  setnuevoremito$(remito: BusOperacionSumaryDto | null) {
+    this._remitoUpdated = remito;
+    this.__remitoUpdatedUpdatedSubject.next(this._remitoUpdated);
+  }
 
   getAllPresupuestos(): Observable<DataResponse<BusOperacionSumaryDto[]>> {
     const url = `${this.baseUrl}/presupuestos/getAllPresupuestos`;
@@ -67,5 +79,23 @@ export class OperationsService {
           return new Blob([res.body], { type: 'application/pdf' });
         }
         ));
+  }
+
+  imprimirRemito(guid: string): Observable<any> {
+    const url = `${this.baseUrl}/Remitos/Imprimir/${guid}`;
+    return this.http.get(url, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }
+        ));
+  }
+
+  nuevoRemito(request: RequestDto): Observable<DataResponse<BusOperacionSumaryDto>> {
+    const url = `${this.baseUrl}/remitos/NuevoRemito`;
+    return this.http.post<DataResponse<BusOperacionSumaryDto>>(url, request);
   }
 }

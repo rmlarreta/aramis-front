@@ -75,7 +75,10 @@ export class AddProductoComponent implements OnInit {
       .subscribe(() => {
         this.loadRubroOptions()
       });
+  }
 
+  ngOnDestroy() { 
+    this.rubroUpdateSubscription.unsubscribe();
   }
 
   calcular() {

@@ -1,0 +1,51 @@
+<p-dialog [(visible)]="visible" appendTo="body" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '40vw' }"
+    styleClass="p-fluid" header="Nuevo Pago">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-grid">
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="monto">Monto</label>
+                <input type="number" pInputText id="monto" formControlName="monto"
+                    [ngClass]="{ 'p-error': submitted && f['monto'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['monto'].errors">
+                    <span *ngIf="f['monto'].errors['required']">Monto is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="tipo">Tipo</label>
+                <p-dropdown [options]="tipoPagosOption" formControlName="tipo" placeholder="Select Tipo"
+                    optionLabel="name" optionValue="id" [showClear]="true"
+                    [ngClass]="{ 'p-error': submitted && f['tipo'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['tipo'].errors">
+                    <span *ngIf="f['tipo'].errors['required']">Tipo is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="observacion">Observacion</label>
+                <input type="text" pInputText id="observacion" formControlName="observacion"
+                    [ngClass]="{ 'p-error': submitted && f['observacion'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['observacion'].errors">
+                    <span *ngIf="f['observacion'].errors['required']">Observacion is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="posId">Pos</label>
+                <p-dropdown [options]="posOption" formControlName="posId" placeholder="Select Pos" optionLabel="name"
+                    [showClear]="true" optionValue="id"
+                    [ngClass]="{ 'p-error': submitted && f['posId'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['posId'].errors">
+                    <span *ngIf="f['posId'].errors['required']">Pos is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+                class="p-button-rounded p-button-text">
+                Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+                strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </form>
+</p-dialog>

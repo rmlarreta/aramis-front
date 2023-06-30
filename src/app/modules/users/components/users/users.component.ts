@@ -39,6 +39,10 @@ export class UsersComponent implements OnInit {
     this.getAllUsers();
   }
 
+  ngOnDestroy() { 
+    this.userUpdateSubscription.unsubscribe();
+  }
+
   getAllUsers(): void {
     this.userService.getAllUsers()
       .pipe(

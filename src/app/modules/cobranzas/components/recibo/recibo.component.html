@@ -1,0 +1,55 @@
+<p-card>
+    <p-toast *ngIf="!presupuestando" class="custom-toast" position="top-center"
+        [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'1000ms'"
+        [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'">
+    </p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="left">
+            <button *ngIf="presupuestando" pButton pRipple type="button" icon="pi pi-user"
+                class="p-button-rounded p-button-info p-button-text p-button-sm" label="{{razon}}">
+            </button>
+            <button *ngIf="!presupuestando && total >0" pButton pRipple type="button" icon="pi pi-print"
+                (click)="onSubmit()" class="p-button-rounded p-button-info p-button-text p-button-sm">
+            </button>
+            <button *ngIf="presupuestando && total >0 && pendiente ===0" pButton pRipple type="button"
+                (click)="onSubmit()" icon="pi pi-print"
+                class="p-button-rounded p-button-info p-button-text p-button-sm">
+            </button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" class="p-button-rounded p-button-info p-button-text p-button-sm"
+                (click)="onAddDetalles()">Pendiente: {{pendiente | currency:'USD'}}
+            </button>
+            <button pButton pRipple type="button"
+                class="p-button-rounded p-button-info p-button-text p-button-sm">Total: {{total | currency:'USD'}}
+            </button>
+        </ng-template>
+    </p-toolbar>
+    <p-divider></p-divider>
+    <p-table *ngIf="recibo.detalles" #dt [value]="recibo.detalles" [paginator]="false" [rows]="10"
+        [showCurrentPageReport]="true" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="observacion" style="width:75%">Observacion <p-sortIcon
+                        field="observacion"></p-sortIcon></th>
+                <th pSortableColumn="monto" style="width:20%">Monto <p-sortIcon field="monto"></p-sortIcon></th>
+                <th style="width:5%"><i class="pi pi-trash"></i></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-listado>
+            <tr>
+                <td>{{listado.observacion}}</td>
+                <td>{{listado.monto| currency:'USD'}}</td>
+                <td><button pButton pRipple type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-text" (click)="onDelete(listado)">
+                    </button></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<ng-container #addDetallesContainer></ng-container>
+<p-dialog [visible]="cobrando" [modal]="true" closeIcon="pi pi-trash" [style]="{width: '50vw'}">
+    <p>Cobrando...</p>
+    <p-progressBar mode="indeterminate"></p-progressBar>
+</p-dialog>
