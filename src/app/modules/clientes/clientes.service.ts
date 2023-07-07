@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { OpPaiDto } from 'src/app/model/opClientesAttributes.interface';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { environment } from 'src/environments/environment';
 import { OpCustomerDto } from './dtos/opCustomerDto.interface';
-import { OpRespDto } from './dtos/opRespDto.interface';
-import { OpPaiDto } from 'src/app/model/opClientesAttributes.interface';
-import { OpGenderDto } from './dtos/opGenderDto.interface';
 import { OpCustomerInsert } from './dtos/opCustomerInsert.interface';
+import { OpGenderDto } from './dtos/opGenderDto.interface';
+import { OpRespDto } from './dtos/opRespDto.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +66,11 @@ export class ClientesService {
           this._clientesUpdatedSubject.next();
         })
       );
+  }
+
+  getConciliacion(customer: string): Observable<any> {
+    const url = `${this.baseUrl}/clientes/GetConciliacion/${customer}`;
+    return this.http.get(url);
   }
 
   getAllResps(): Observable<DataResponse<OpRespDto[]>> {

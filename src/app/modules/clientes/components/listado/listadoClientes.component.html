@@ -42,7 +42,7 @@
                 <td>{{listado.razon}}</td>
                 <td>{{listado.respName}}</td>
                 <td *ngIf="!presupuestando"> <button pButton pRipple type="button" icon="pi pi-dollar"
-                        class="p-button-rounded p-button-info p-button-text" (click)="onConciliar()">
+                        class="p-button-rounded p-button-info p-button-text" (click)="onConciliar(listado.id)">
                     </button></td>
                 <td> <button pButton pRipple type="button" icon="pi pi-check"
                         class="p-button-rounded p-button-success p-button-text" (click)="openClienteEdit(listado)">
@@ -62,3 +62,4 @@
 </p-card>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 <ng-container #addCLienteContainer></ng-container>
+<ng-container #conciliacionContainer></ng-container>

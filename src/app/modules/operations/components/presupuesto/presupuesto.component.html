@@ -13,7 +13,7 @@
                 class="p-button-rounded p-button-info p-button-text p-button-sm" label="{{operacion.resp}}"
                 (click)="openListadoClientes()">
             </button>
-            <button pButton pRipple type="button" icon="pi pi-print" id="print-btn"
+            <button *ngIf="operacion.total>0" pButton pRipple type="button" icon="pi pi-print" id="print-btn"
                 class="p-button-rounded p-button-info p-button-text p-button-sm"
                 label="Imprimir {{operacion.tipoDocName}}" (click)="onPrint()">
             </button>
@@ -21,8 +21,8 @@
 
         <ng-template pTemplate="right">
             <button pButton pRipple type="button" class="p-button-rounded p-button-success p-button-text"
-            (click)="openPay()">
-                {{operacion.total | currency:'USD'}} 
+                (click)="openPay()">
+                {{operacion.total | currency:'USD'}}
             </button>
             <button pButton pRipple type="button" class="p-button-rounded p-button-info p-button-text">
             </button>
@@ -109,6 +109,7 @@
 <p-dialog [showHeader]="false" [(visible)]="visibleClientes" [style]="{width: '80vw', height: 'auto'}" position="right">
     <ng-container #listadoClientesContainer></ng-container>
 </p-dialog>
-<p-dialog [showHeader]="false" appendTo="body" [(visible)]="visibleRecibo" [style]="{width: '80vw', height: 'auto'}" position="right">
+<p-dialog [showHeader]="false" appendTo="body" [(visible)]="visibleRecibo" [style]="{width: '80vw', height: 'auto'}"
+    position="right">
     <ng-container #recibosContainer></ng-container>
 </p-dialog>

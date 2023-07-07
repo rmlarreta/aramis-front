@@ -51,7 +51,8 @@ export class PresupuestoComponent implements OnInit {
     estadoId: '',
     pos: 0,
     operador: '',
-    numero: 0
+    numero: 0,
+    saldosPendientes: 0
   };
   operacionId!: string;
   editedRow: { [s: string]: BusOperacionDetalleSumaryDto; } = {};
@@ -88,8 +89,7 @@ export class PresupuestoComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.operacionId = params.get('id')!;
     });
-    this.operacionId ? this.getOperacion() : this.nuevaOperacion();
-
+    this.operacionId ? this.getOperacion() : this.nuevaOperacion(); 
     this.productosSeleccionadosSubscription = this.productoService.getProductosSeleccionadosSubject()
       .subscribe(productosSeleccionados => {
         this.visibleProductos = false;
@@ -110,6 +110,7 @@ export class PresupuestoComponent implements OnInit {
         this.visibleRecibo = false;
         if (recibo !== null) {
           this.onEmitirRemito(recibo);
+          this.cobranzaService.setnuevaCobranza$(null);
         }
       });
 
@@ -125,6 +126,7 @@ export class PresupuestoComponent implements OnInit {
     this.clientesService.setClienteSeleccionado(null);
     this.productoService.setProductosSeleccionados([]);
     this.operationsService.setnuevoremito$(null);
+    this.cobranzaService.setnuevaCobranza$(null);
     this.productosSeleccionadosSubscription.unsubscribe();
     this.clienteSeleccionadoSubscription.unsubscribe();
     this.reciboUpdateSubscription.unsubscribe();
@@ -145,6 +147,7 @@ export class PresupuestoComponent implements OnInit {
         next: (response: BusOperacionSumaryDto | null) => {
           if (response) {
             this.operacion = response;
+            this.operacionId = response.id;
           } else {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se cargó el documento' });
           }

@@ -62,6 +62,7 @@ export class ReciboComponent {
 
   ngOnDestroy() {
     this.detallesSubscription.unsubscribe();
+    this.cobranzasService.setnuevoDetalle$(null);
   }
 
   loadTipoPagosOptions(): void {
@@ -111,6 +112,8 @@ export class ReciboComponent {
   }
 
   hideDialog() {
+    this.recibo.detalles = [];
+    this.cobranzasService.setnuevaCobranza$(null);
     this.submitted = false;
     this.visible = false;
   }

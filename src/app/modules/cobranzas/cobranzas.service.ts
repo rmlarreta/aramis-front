@@ -27,12 +27,12 @@ export class CobranzasService {
     return this.__detalleUpdatedSubject.asObservable();
   }
 
-  setnuevoDetalle$(detalle: CobReciboDetallesInsert) {
+  setnuevoDetalle$(detalle: CobReciboDetallesInsert | null) {
     this._detalleUpdated = detalle;
     this.__detalleUpdatedSubject.next(this._detalleUpdated);
   }
 
-  setnuevaCobranza$(recibo: string) {
+  setnuevaCobranza$(recibo: string | null) {
     this._nuevaCobranzaUpdated = recibo;
     this._nuevaCobranzaSubject.next(this._nuevaCobranzaUpdated);
   }

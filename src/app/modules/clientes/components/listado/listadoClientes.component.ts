@@ -5,6 +5,7 @@ import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { ClientesService } from '../../clientes.service';
 import { OpCustomerDto } from '../../dtos/opCustomerDto.interface';
 import { AddClienteComponent } from '../add-cliente/add-cliente.component';
+import { ConciliacionComponent } from '../conciliacion/conciliacion.component';
 
 @Component({
   selector: 'app-listadoClientes',
@@ -23,6 +24,9 @@ export class ListadoClientesComponent implements OnInit {
 
   clienteUpdateSubscription: Subscription = new Subscription;
 
+  @ViewChild('conciliacionContainer', { read: ViewContainerRef }) conciliacionContainer!: ViewContainerRef;
+  conciliacionCliente!: ComponentRef<ConciliacionComponent>;
+
   constructor(
     private clientesService: ClientesService,
     private messageService: MessageService,
@@ -38,7 +42,7 @@ export class ListadoClientesComponent implements OnInit {
     this.getAll();
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     this.clienteUpdateSubscription.unsubscribe();
   }
 
@@ -108,6 +112,13 @@ export class ListadoClientesComponent implements OnInit {
     this.addCliente.instance.cliente = cliente; // Pasar el producto a editar al componente hijo
   }
 
+  onConciliar(cliente: string) {
+    this.conciliacionContainer.clear();
+    this.conciliacionCliente = this.conciliacionContainer.createComponent(ConciliacionComponent);
+    this.conciliacionCliente.instance.visible = true;
+    this.conciliacionCliente.instance.cliente = cliente;
+  }
+
   next() {
     this.first = this.first + this.rows;
   }
@@ -147,9 +158,5 @@ export class ListadoClientesComponent implements OnInit {
 
       return (event.order! * result);
     });
-  }
-
-  onConciliar() {
-    console.log("A componente")
   }
 }

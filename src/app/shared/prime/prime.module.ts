@@ -25,7 +25,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-
+import { AccordionModule } from 'primeng/accordion';
 @NgModule({
   declarations: [],
   exports: [
@@ -54,7 +54,8 @@ import { ToolbarModule } from 'primeng/toolbar';
     SplitterModule,
     SelectButtonModule,
     CalendarModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    AccordionModule
   ]
 })
 export class PrimeModule { }

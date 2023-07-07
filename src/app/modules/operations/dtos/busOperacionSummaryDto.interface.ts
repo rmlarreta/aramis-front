@@ -15,4 +15,5 @@ export interface BusOperacionSumaryDto extends BusOperacionDto {
     detalles: BusOperacionDetalleSumaryDto[];
     observaciones: BusOperacionesObservacionDto[];
     empresa?: SysEmpresaDto;
+    saldosPendientes: number | null;
 }
