@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { environment } from 'src/environments/environment';
+import { RequestDto } from '../operations/dtos/requestDto.interface';
 import { CobReciboDetallesInsert } from './dtos/cobReciboDetallesInsert.interface';
 import { CobReciboInsert } from './dtos/cobReciboInsert.interface';
 import { CobTipoPagoDto } from './dtos/cobTipoPagoDto.interface';
@@ -42,6 +43,16 @@ export class CobranzasService {
     return this.http.post<DataResponse<string>>(url, recibo);
   }
 
+  nuevoPago(request: RequestDto): Observable<any> {
+    const url = `${this.baseUrl}/Cobranzas/SaldarPago`;
+    return this.http.post<DataResponse<string>>(url, request);
+  }
+
+  imputarAlone(request: RequestDto): Observable<any> {
+    const url = `${this.baseUrl}/Cobranzas/ImputarAlone`;
+    return this.http.post<DataResponse<string>>(url, request);
+  }
+
   getAllTipoPagos(): Observable<DataResponse<CobTipoPagoDto[]>> {
     const url = `${this.baseUrl}/Cobranzas/GetTipoPagos`;
     return this.http.get<DataResponse<CobTipoPagoDto[]>>(url);
@@ -50,5 +61,18 @@ export class CobranzasService {
   getAllPos(): Observable<DataResponse<PosDto[]>> {
     const url = `${this.baseUrl}/Cobranzas/GetPos`;
     return this.http.get<DataResponse<PosDto[]>>(url);
+  }
+
+  imprimirRecibo(guid: string): Observable<any> {
+    const url = `${this.baseUrl}/Cobranzas/Imprimir/${guid}`;
+    return this.http.get(url, {
+      responseType: 'blob',
+      observe: 'response'
+    })
+      .pipe(
+        map((res: any) => {
+          return new Blob([res.body], { type: 'application/pdf' });
+        }
+        ));
   }
 }

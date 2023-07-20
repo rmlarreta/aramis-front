@@ -26,6 +26,8 @@ export class ReciboComponent {
   };
   cobrando = false;
   presupuestando = false;
+  saldando = false;
+  alone =false;
   tipoPagosOption: CobTipoPagoDto[] = [];
   posOption: PosDto[] = [];
   submitted = false;
@@ -119,9 +121,16 @@ export class ReciboComponent {
   }
 
   onAddDetalles() {
+    if (this.saldando || this.alone) {
+      const index = this.tipoPagosOption.findIndex(opcion => opcion.name === "CUENTA CORRIENTE");
+      if (index !== -1) {
+        this.tipoPagosOption.splice(index, 1);
+      }
+    }
+     
     this.addDetallesContainer.clear();
     this.addDetalles = this.addDetallesContainer.createComponent(AddDetalleComponent);
-    this.addDetalles.instance.maxmonto = this.pendiente;
+    this.addDetalles.instance.maxmonto = this.alone ? 1000000000000 : this.pendiente;
     this.addDetalles.instance.posOption = this.posOption;
     this.addDetalles.instance.tipoPagosOption = this.tipoPagosOption;
     this.addDetalles.instance.visible = true;
@@ -141,7 +150,7 @@ export class ReciboComponent {
     }
     this.confirmationService.confirm({
       message: '¿Emite el recibo?',
-      accept: () => {
+      accept: () => { 
         this.cobrando = true;
         this.cobranzasService.nuevaCobranza(this.recibo)
           .subscribe({

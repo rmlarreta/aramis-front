@@ -60,6 +60,6 @@
         </ng-template> 
     </p-table>
 </p-card>
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-confirmDialog *ngIf="!conciliando" [style]="{width: '450px'}"></p-confirmDialog>
 <ng-container #addCLienteContainer></ng-container>
 <ng-container #conciliacionContainer></ng-container>

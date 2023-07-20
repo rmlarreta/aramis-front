@@ -13,7 +13,8 @@ import { ConciliacionComponent } from '../conciliacion/conciliacion.component';
   styleUrls: ['./listadoClientes.component.css']
 })
 export class ListadoClientesComponent implements OnInit {
-  presupuestando: boolean = false;
+  presupuestando: boolean = false; 
+  conciliando: boolean = false;
   listado: OpCustomerDto[] = [];
   selected!: OpCustomerDto;
   first = 0;
@@ -116,7 +117,8 @@ export class ListadoClientesComponent implements OnInit {
     this.conciliacionContainer.clear();
     this.conciliacionCliente = this.conciliacionContainer.createComponent(ConciliacionComponent);
     this.conciliacionCliente.instance.visible = true;
-    this.conciliacionCliente.instance.cliente = cliente;
+    this.conciliacionCliente.instance.cliente = cliente; 
+    this.conciliando = true;
   }
 
   next() {

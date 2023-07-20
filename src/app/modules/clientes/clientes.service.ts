@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
-import { OpPaiDto } from 'src/app/model/opClientesAttributes.interface';
 import { DataResponse } from 'src/app/shared/dtos/dataResponse.interface';
 import { environment } from 'src/environments/environment';
 import { OpCustomerDto } from './dtos/opCustomerDto.interface';
 import { OpCustomerInsert } from './dtos/opCustomerInsert.interface';
 import { OpGenderDto } from './dtos/opGenderDto.interface';
 import { OpRespDto } from './dtos/opRespDto.interface';
+import { OpPaisDto } from './dtos/opPais.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -78,9 +78,9 @@ export class ClientesService {
     return this.http.get<DataResponse<OpRespDto[]>>(url);
   }
 
-  GetAllPaises(): Observable<DataResponse<OpPaiDto[]>> {
+  GetAllPaises(): Observable<DataResponse<OpPaisDto[]>> {
     const url = `${this.baseUrl}/auxClientes/getAllPaises`;
-    return this.http.get<DataResponse<OpPaiDto[]>>(url);
+    return this.http.get<DataResponse<OpPaisDto[]>>(url);
   }
 
   getAllGenders(): Observable<DataResponse<OpGenderDto[]>> {

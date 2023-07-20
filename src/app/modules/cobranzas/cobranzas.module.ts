@@ -4,6 +4,7 @@ import { ReciboComponent } from './components/recibo/recibo.component';
 import { PrimeModule } from 'src/app/shared/prime/prime.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddDetalleComponent } from './components/add-detalle/add-detalle.component';
+import { CobranzasRoutingModule } from './cobranzas-routing.module';
 
 
 
@@ -17,6 +18,7 @@ import { AddDetalleComponent } from './components/add-detalle/add-detalle.compon
     PrimeModule,
     FormsModule,
     ReactiveFormsModule,
+    CobranzasRoutingModule
   ]
 })
 export class CobranzasModule { }

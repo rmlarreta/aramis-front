@@ -1,6 +1,6 @@
-<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{width: '60vw', height: 'auto'}" styleClass="p-fluid"
-    header="Estado de Cuenta Saldo: {{conciliacion.balance | currency:'USD'}}">
-    <p-accordion class="w-full">
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{width: '60vw', height: 'auto'}"
+    styleClass="p-fluid" header="Estado de Cuenta Saldo: {{conciliacion.balance | currency:'USD'}}">
+    <p-accordion class="w-full" *ngIf="!(conciliacion.customer?.cui==='0')">
         <p-accordionTab>
             <ng-template pTemplate="header">
                 <div class="flex align-items-center">
@@ -17,7 +17,6 @@
                         [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'cui','razon']">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 4rem"></th>
                                 <th pSortableColumn="fecha" style="width:20%">Fecha <p-sortIcon
                                         field="fecha"></p-sortIcon></th>
                                 <th pSortableColumn="numero" style="width:20%">Numero <p-sortIcon
@@ -31,15 +30,12 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-listado>
                             <tr>
-                                <td>
-                                    <p-tableCheckbox [value]="listado"></p-tableCheckbox>
-                                </td>
                                 <td>{{listado.fecha | date:'dd/M/yyyy'}}</td>
                                 <td>{{listado.numero}}</td>
                                 <td>{{listado.total | currency:'USD'}}</td>
                                 <td>{{listado.saldosPendientes | currency:'USD'}}</td>
                                 <td> <button pButton pRipple type="button" icon="pi pi-dollar"
-                                        class="p-button-rounded p-button-info p-button-text">
+                                        (click)="openPay(listado)" class="p-button-rounded p-button-info p-button-text">
                                     </button></td>
                             </tr>
                         </ng-template>
@@ -52,22 +48,23 @@
                 <div class="flex align-items-center">
                     <i class="pi pi-dollar mr-2"></i>
                     <span class="vertical-align-middle">Recibos sin Imputar</span>
-                </div><button pButton pRipple type="button" icon="pi pi-dollar"
+                </div><button pButton pRipple type="button" icon="pi pi-dollar" (click)="openPayAlone()"
                     class="p-button-rounded p-button-info p-button-text" (click)="$event.stopPropagation()">
                 </button>
             </ng-template>
             <ng-template pTemplate="content">
                 <p class="m-0">
-                    <p-table *ngIf="conciliacion.recibosNoImputados" #dt [value]="conciliacion.recibosNoImputados"
-                        [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [customSort]="true" dataKey="id"
-                        selectionMode="single"
+                    <p-table *ngIf="conciliacion.recibosNoImputados && !(conciliacion.customer?.cui==='0')" #dt
+                        [value]="conciliacion.recibosNoImputados" [paginator]="true" [rows]="10"
+                        [showCurrentPageReport]="true" [customSort]="true" dataKey="id" selectionMode="single"
                         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
                         [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'cui','razon']">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="width: 4rem"></th>
                                 <th pSortableColumn="fecha" style="width:45%">Fecha <p-sortIcon
                                         field="fecha"></p-sortIcon></th>
+                                <th pSortableColumn="numero" style="width:55%">Numero <p-sortIcon
+                                        field="numero"></p-sortIcon></th>
                                 <th pSortableColumn="total" style="width:55%">Total <p-sortIcon
                                         field="total"></p-sortIcon></th>
                                 <th style="width:5%"><i class="pi pi-cog"></i></th>
@@ -75,13 +72,15 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-listado>
                             <tr>
-                                <td>
-                                    <p-tableCheckbox [value]="listado"></p-tableCheckbox>
-                                </td>
                                 <td>{{listado.fecha | date:'dd/M/yyyy'}}</td>
+                                <td>{{listado.numero}}</td>
                                 <td>{{listado.total | currency:'USD'}}</td>
-                                <td> <button pButton pRipple type="button" icon="pi pi-cog"
+                                <td> <button pButton pRipple type="button" icon="pi pi-print"
+                                        (click)="onPrint(listado.id)"
                                         class="p-button-rounded p-button-info p-button-text">
+                                    </button></td>
+                                <td> <button pButton pRipple type="button" icon="pi pi-cog"
+                                    (click)="onImputarAlone(listado.id)"     class="p-button-rounded p-button-info p-button-text">
                                     </button></td>
                             </tr>
                         </ng-template>
@@ -90,4 +89,9 @@
             </ng-template>
         </p-accordionTab>
     </p-accordion>
+    <p-confirmDialog *ngIf="!visibleRecibo" [style]="{width: '450px'}"></p-confirmDialog>
+    <p-dialog [showHeader]="false" [modal]="true" appendTo="body" [(visible)]="visibleRecibo"
+        [style]="{width: '80vw', height: 'auto'}" position="right">
+        <ng-container #recibosContainer></ng-container>
+    </p-dialog>
 </p-dialog>

@@ -10,14 +10,16 @@ import { OperationsService } from '../../operations.service';
   templateUrl: './operations.component.html',
   styleUrls: ['./operations.component.css']
 })
+
 export class OperationsComponent implements OnInit {
   listado: BusOperacionSumaryDto[] = [];
   selectedOperations: BusOperacionSumaryDto[] = [];
   first = 0;
   rows = 10;
+  
   constructor(
-    private operacionsService: OperationsService,
-    private messageService: MessageService,
+    private operacionsService: OperationsService, 
+    private messageService : MessageService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
