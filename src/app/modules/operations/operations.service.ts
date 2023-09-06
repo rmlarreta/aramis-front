@@ -7,6 +7,7 @@ import { BusOperacionDetalleDto } from './dtos/busOperacionDetalleDto.interface'
 import { BusOperacionInsert } from './dtos/busOperacionInsert.interface';
 import { BusOperacionSumaryDto } from './dtos/busOperacionSummaryDto.interface';
 import { RequestDto } from './dtos/requestDto.interface';
+import { TipoOperacionDto } from './dtos/tipoOperacionDto.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -97,5 +98,10 @@ export class OperationsService {
   nuevoRemito(request: RequestDto): Observable<DataResponse<BusOperacionSumaryDto>> {
     const url = `${this.baseUrl}/remitos/NuevoRemito`;
     return this.http.post<DataResponse<BusOperacionSumaryDto>>(url, request);
+  }
+
+  getAllTipos(): Observable<DataResponse<TipoOperacionDto[]>> {
+    const url = `${this.baseUrl}/auxOperaciones/GetAllTipos`;
+    return this.http.get<DataResponse<TipoOperacionDto[]>>(url);
   }
 }

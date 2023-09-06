@@ -87,8 +87,7 @@ export class ListadoProductosComponent implements OnInit {
   enviarSeleccionados() {
     this.productoService.setProductosSeleccionados(this.selected);
   }
-
-  // Otros métodos y propiedades del componente...
+ 
   openProductoAdd() {
     this.addProductoContainer.clear();
     this.addProducto = this.addProductoContainer.createComponent(AddProductoComponent);

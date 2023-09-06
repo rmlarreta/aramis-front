@@ -16,6 +16,7 @@ import { JwtInterceptor } from './modules/security/service/jwt-interceptor.servi
 import { UsersModule } from './modules/users/users.module';
 import { MaterialModule } from './shared/material/material.module';
 import { PrimeModule } from './shared/prime/prime.module';
+import { ProvidersModule } from './modules/providers/providers.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +32,8 @@ import { PrimeModule } from './shared/prime/prime.module';
     UsersModule,
     ProductosModule,
     CobranzasModule,
-    OperationsModule
+    OperationsModule,
+    ProvidersModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

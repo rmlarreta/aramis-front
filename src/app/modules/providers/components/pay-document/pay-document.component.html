@@ -1,0 +1,26 @@
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }" styleClass="p-fluid"
+    header="Pago de documentos">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid"> 
+            <div class="field col-12">
+                <label for="tipoDoc">Tipo</label>
+                <p-dropdown [options]="tipoPagosOption" formControlName="tipoPago" placeholder="Select Tipo"
+                    optionLabel="name" optionValue="id" [filter]="true" filterBy="name"
+                    appendTo="body"
+                    [ngClass]="{ 'p-error': submitted && f['tipoPago'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['tipoPago'].errors">
+                    <span *ngIf="f['tipoPago'].errors['required']">Tipo is required</span>
+                </div>
+            </div>
+        </div> 
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+                class="p-button-rounded p-button-text">
+                Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+                strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </form> 
+</p-dialog>
+

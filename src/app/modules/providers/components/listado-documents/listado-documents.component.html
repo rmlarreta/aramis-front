@@ -1,0 +1,65 @@
+<p-card>
+    <p-toast class="custom-toast" position="top-center" [showTransformOptions]="'translateY(100%)'"
+        [showTransitionOptions]="'1000ms'" [hideTransitionOptions]="'1000ms'"
+        [showTransformOptions]="'translateX(100%)'">
+    </p-toast>
+    <p-toolbar>
+        <ng-template pTemplate="right">
+            <button pButton pRipple type="button" icon="pi pi-plus"
+                class="p-button-rounded p-button-success p-button-text" (click)="openDocumentoAdd()">
+            </button>
+        </ng-template>
+        <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="onSearch($any($event.target).value)"
+                    placeholder="Búsqueda..." />
+            </span>
+        </div>
+    </p-toolbar>
+    <p-accordion>
+        <ng-container *ngFor="let supplier of listadoFiltered">
+            <p-accordionTab [header]="supplier.proveedor.razon + ' Saldo $:' +supplier.total">
+                <ng-template pTemplate="content">
+                    <p class="m-0">
+                        <p-table #dt [value]="supplier.documentos" [paginator]="true" [rows]="10"
+                            [showCurrentPageReport]="true" [customSort]="true" dataKey="id" selectionMode="single"
+                            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                            [rowsPerPageOptions]="[10,25,50]" [rowHover]="true" [globalFilterFields]="[ 'cui','razon']">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th pSortableColumn="fecha" style="width:10%">Fecha <p-sortIcon
+                                            field="fecha"></p-sortIcon></th>
+                                    <th pSortableColumn="tipoDoc.name" style="width:30%">Tipo <p-sortIcon
+                                            field="tipoDoc.name"></p-sortIcon></th>
+                                    <th pSortableColumn="pos" style="width:5ch">Pos <p-sortIcon
+                                            field="pos"></p-sortIcon></th>
+                                    <th pSortableColumn="numero" style="width:15%">Numero <p-sortIcon
+                                            field="numero"></p-sortIcon></th>
+                                    <th pSortableColumn="monto" style="width:15%">Monto <p-sortIcon
+                                            field="monto"></p-sortIcon></th>
+                                    <th style="width:5%"><i class="pi pi-dollar"></i></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-listado>
+                                <tr>
+                                    <td>{{listado.fecha | date:'dd/M/yyyy'}}</td>
+                                    <td>{{listado.tipoDoc.name}}</td>
+                                    <td>{{listado.pos}}</td>
+                                    <td>{{listado.numero}}</td>
+                                    <td>{{listado.monto | currency:'USD'}}</td>
+                                    <td> <button pButton pRipple type="button" icon="pi pi-dollar"
+                                    (click)="onPago(listado)" class="p-button-rounded p-button-info p-button-text">
+                                        </button></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p>
+                </ng-template>
+            </p-accordionTab>
+        </ng-container>
+    </p-accordion>
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</p-card>
+<ng-container #payDocumentContainer></ng-container>
+<ng-container #addDocumentContainer></ng-container>

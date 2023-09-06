@@ -1,5 +1,5 @@
 <p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }" styleClass="p-fluid"
-    header="Clientes">
+    header="Clientes" appendTo="body">
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
         <div class="formgrid grid">
             <div class="field col-6">

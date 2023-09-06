@@ -26,6 +26,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AccordionModule } from 'primeng/accordion';
+import { TabViewModule } from 'primeng/tabview';
 @NgModule({
   declarations: [],
   exports: [
@@ -55,7 +56,8 @@ import { AccordionModule } from 'primeng/accordion';
     SelectButtonModule,
     CalendarModule,
     AutoCompleteModule,
-    AccordionModule
+    AccordionModule,
+    TabViewModule
   ]
 })
 export class PrimeModule { }

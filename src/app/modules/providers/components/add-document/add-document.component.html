@@ -1,0 +1,77 @@
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '450px' }" styleClass="p-fluid"
+    header="Gastos">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="formgrid grid">
+            <div class="field col-6">
+                <label for="fecha">Fecha</label>
+                <p-calendar formControlName="fecha" placeholder="Select Fecha" dateFormat="dd/mm/yy" appendTo="body"
+                    [ngClass]="{ 'p-error': submitted && f['fecha'].errors }"></p-calendar>
+                <div class="p-error" *ngIf="submitted && f['fecha'].errors">
+                    <span *ngIf="f['fecha'].errors['required']">Fecha is required</span>
+                </div>
+            </div>
+            <div class="field col-6">
+                <label for="tipoDoc">Tipo</label>
+                <p-dropdown [options]="tipoOptions" formControlName="tipoDoc" placeholder="Select Tipo"
+                    optionLabel="name" optionValue="id" [filter]="true" filterBy="name"
+                    [ngClass]="{ 'p-error': submitted && f['tipoDoc'].errors }"></p-dropdown>
+                <div class="p-error" *ngIf="submitted && f['tipoDoc'].errors">
+                    <span *ngIf="f['tipoDoc'].errors['required']">Tipo is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-10">
+                <label for="razon">Proveedor</label>
+                <input type="text" pInputText id="razon" formControlName="razon"
+                    [ngClass]="{ 'p-error': submitted && f['razon'].errors }" readonly />
+                <div class="p-error" *ngIf="submitted && f['razon'].errors">
+                    <span *ngIf="f['razon'].errors['required']">Proveedor is required</span>
+                </div>
+            </div>
+            <div class="rubro-actions col-2">
+                <label for="btnaddusr">Buscar</label>
+                <button pButton type="button" id="btnaddusr" icon="pi pi-user" class="p-button-rounded p-button-text"
+                    (click)="openListadoClientes()"></button>
+            </div>
+        </div>
+        <div class="formgrid grid">
+            <div class="field col-3">
+                <label for="pos">Pos</label>
+                <input type="number" pInputText id="pos" formControlName="pos"
+                    [ngClass]="{ 'p-error': submitted && f['pos'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['pos'].errors">
+                    <span *ngIf="f['pos'].errors['required']">Pos is required</span>
+                </div>
+            </div>
+
+            <div class="field col-4">
+                <label for="numero">Número</label>
+                <input type="number" pInputText id="numero" formControlName="numero"
+                    [ngClass]="{ 'p-error': submitted && f['numero'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['numero'].errors">
+                    <span *ngIf="f['numero'].errors['required']">Número is required</span>
+                </div>
+            </div>
+            <div class="field col-5">
+                <label for="monto">Monto</label>
+                <input type="number" pInputText id="monto" formControlName="monto"
+                    [ngClass]="{ 'p-error': submitted && f['monto'].errors }" />
+                <div class="p-error" *ngIf="submitted && f['monto'].errors">
+                    <span *ngIf="f['monto'].errors['required']">Monto is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button *ngIf="!submitted" pButton pRipple [disabled]="!editForm.valid" icon="pi pi-check"
+                class="p-button-rounded p-button-text">
+                Enviar
+            </button>
+            <p-progressSpinner *ngIf="submitted" [style]="{ width: '25px', height: '25px' }" styleClass="custom-spinner"
+                strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog [showHeader]="false" [(visible)]="visibleClientes" [style]="{width: '80vw', height: 'auto'}" position="right">
+    <ng-container #listadoClientesContainer></ng-container>
+</p-dialog>
